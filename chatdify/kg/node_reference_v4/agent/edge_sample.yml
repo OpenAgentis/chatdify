@@ -1,0 +1,25 @@
+edges:
+- - data:
+      isInIteration: false
+      sourceType: start
+      targetType: agent
+    id: 1740638793787-source-1740645185279-target
+    selected: false
+    source: '1740638793787'
+    sourceHandle: source
+    target: '1740645185279'
+    targetHandle: target
+    type: custom
+    zIndex: 0
+  - data:
+      isInIteration: false
+      sourceType: agent
+      targetType: answer
+    id: 1740645185279-source-answer-target
+    selected: false
+    source: '1740645185279'
+    sourceHandle: source
+    target: answer
+    targetHandle: target
+    type: custom
+    zIndex: 0

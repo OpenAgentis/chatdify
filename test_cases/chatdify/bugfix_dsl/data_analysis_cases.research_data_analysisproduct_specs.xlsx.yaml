@@ -1,0 +1,360 @@
+app:
+  mode: workflow
+  name: research_data_analysisproduct_specs.xlsx
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: code
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: code
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 10000004-source-10000005-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000005-source-10000006-target
+      source: '10000005'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的研究数据文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 研究数据文件
+          max_length: 5
+          required: true
+          type: file
+          variable: input_file
+        version: '1'
+      height: 90
+      id: '10000001'
+      parentId: null
+      position:
+        x: 188.7248052101171
+        y: -533.8248412275507
+      positionAbsolute:
+        x: 188.7248052101171
+        y: -533.8248412275507
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从上传的文件中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '10000001'
+        - input_file
+        version: '1'
+      height: 90
+      id: '10000002'
+      parentId: null
+      position:
+        x: 500
+        y: -400
+      positionAbsolute:
+        x: 500
+        y: -400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nimport re\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef clean_text(text: str)\
+          \ -> str:\n    \"\"\"文本清洗函数\"\"\"\n    # 去除HTML标签\n    text = re.sub(r'<[^>]+>',\
+          \ '', text)\n    # 去除特殊字符\n    text = re.sub(r'[\\x00-\\x1f\\x7f-\\x9f]',\
+          \ '', text)\n    # 去除多余空格\n    text = ' '.join(text.split())\n    return\
+          \ text.strip()\n\ndef main(input_text: str) -> dict:\n    try:\n       \
+          \ # 预处理输入\n        json_text = extract_json_from_markdown(input_text)\n\
+          \        \n        # 解析JSON数据\n        data = json.loads(json_text)\n  \
+          \      \n        # 文本清洗处理\n        if isinstance(data, dict):\n        \
+          \    cleaned_data = {k: clean_text(str(v)) if isinstance(v, str) else v\
+          \ for k, v in data.items()}\n        elif isinstance(data, list):\n    \
+          \        cleaned_data = [clean_text(str(item)) if isinstance(item, str)\
+          \ else item for item in data]\n        else:\n            cleaned_data =\
+          \ clean_text(str(data))\n        \n        # 返回处理结果\n        return {\n\
+          \            \"error\": \"\",\n            \"cleaned_data\": cleaned_data,\n\
+          \            \"original_data\": data\n        }\n        \n    except Exception\
+          \ as e:\n        return {\n            \"error\": str(e),\n            \"\
+          cleaned_data\": None,\n            \"original_data\": None\n        }"
+        code_language: python3
+        desc: 对提取的文本数据进行预处理和清洗
+        outputs:
+          cleaned_data:
+            children: null
+            type: object
+          error:
+            children: null
+            type: string
+          original_data:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        timeout: 60
+        title: 文本预处理
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: input_text
+        version: '1'
+      height: 90
+      id: '10000003'
+      parentId: null
+      position:
+        x: 800
+        y: -400
+      positionAbsolute:
+        x: 800
+        y: -400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nimport pandas as pd\nfrom io import StringIO\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(input_text: str)\
+          \ -> dict:\n    try:\n        # 预处理输入\n        json_text = extract_json_from_markdown(input_text)\n\
+          \        \n        # 读取数据为DataFrame\n        df = pd.read_json(StringIO(json_text))\n\
+          \        \n        # 执行描述性统计分析\n        numeric_stats = df.describe().to_dict()\n\
+          \        \n        # 计算缺失值\n        missing_values = df.isnull().sum().to_dict()\n\
+          \        \n        # 计算唯一值数量\n        unique_counts = df.nunique().to_dict()\n\
+          \        \n        # 返回统计结果\n        return {\n            \"error\": \"\
+          \",\n            \"statistics\": numeric_stats,\n            \"missing_values\"\
+          : missing_values,\n            \"unique_counts\": unique_counts,\n     \
+          \       \"sample_data\": df.head(5).to_dict(orient='records')\n        }\n\
+          \        \n    except Exception as e:\n        return {\n            \"\
+          error\": str(e),\n            \"statistics\": {},\n            \"missing_values\"\
+          : {},\n            \"unique_counts\": {},\n            \"sample_data\":\
+          \ []\n        }"
+        code_language: python3
+        desc: 执行描述性统计分析，包括基本统计量、缺失值和唯一值计数
+        outputs:
+          error:
+            children: null
+            type: string
+          missing_values:
+            children: null
+            type: object
+          sample_data:
+            children: null
+            type: array[object]
+          statistics:
+            children: null
+            type: object
+          unique_counts:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        timeout: 60
+        title: 描述性统计分析
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: input_text
+        version: '1'
+      height: 90
+      id: '10000004'
+      parentId: null
+      position:
+        x: 800
+        y: -400
+      positionAbsolute:
+        x: 800
+        y: -400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据分析结果生成可视化图表和解释报告
+        model:
+          completion_params:
+            max_tokens: 2000
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的数据分析师，负责根据提供的数据统计结果和可视化图表生成详细的分析报告。报告需要包含以下内容：
+
+
+            1. 数据概况：简要描述数据集的基本情况
+
+            2. 统计分析：解读描述性统计结果
+
+            3. 可视化分析：解释图表展示的关键发现
+
+            4. 结论与建议：基于分析结果提出有价值的见解
+
+
+            报告要求：
+
+            - 使用专业但易懂的语言
+
+            - 重点突出关键发现
+
+            - 保持客观中立
+
+            - 结构清晰，层次分明'
+        - role: user
+          text: '请根据以下数据生成详细的分析报告：
+
+
+            <统计数据>
+
+            {{#10000004.statistics#}}
+
+            </统计数据>
+
+
+            <缺失值统计>
+
+            {{#10000004.missing_values#}}
+
+            </缺失值统计>
+
+
+            <唯一值统计>
+
+            {{#10000004.unique_counts#}}
+
+            </唯一值统计>'
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        title: 数据分析报告
+        type: llm
+        variables:
+        - value_selector:
+          - '10000004'
+          - statistics
+          variable: statistics
+        - value_selector:
+          - '10000004'
+          - missing_values
+          variable: missing_values
+        - value_selector:
+          - '10000004'
+          - unique_counts
+          variable: unique_counts
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '10000005'
+      parentId: null
+      position:
+        x: 1400
+        y: -400
+      positionAbsolute:
+        x: 1400
+        y: -400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出工作流的最终分析结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000005'
+          - text
+          variable: analysis_report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: End
+        type: end
+        version: '1'
+      height: 90
+      id: '10000006'
+      parentId: null
+      position:
+        x: 1600
+        y: -400
+      positionAbsolute:
+        x: 1600
+        y: -400
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

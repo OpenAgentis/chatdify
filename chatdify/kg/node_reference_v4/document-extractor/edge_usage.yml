@@ -1,0 +1,25 @@
+edge_usage:
+  节点类型: document-extractor
+  使用规范:
+      - 文档提取器节点（document-extractor）是一个信息处理中心，通过识别并读取输入变量中的文件，提取信息后转化为string类型输出变量，供下游节点调用
+      - 仅能提取文档类型文件（TXT、Markdown、PDF、HTML、DOCX,CSV,XLSX,XLS,PPTX,PPT），无法处理图片、音频、视频等格式文件
+      - 必须配置variable_selector变量选择器，不能为空
+      - 需要注意输入一定要为文件类型，不接受字符串等其他类型作为输入
+      - document-extractor输入上游节点类型通常是start节点类型。不能接受的上游节点类型有：question-classifier, llm，code, parameter-extractor,tool_tavily_search, tool, tool_xxx。
+
+  应用场景:
+    适用场景:
+      - 构建能够与文件进行互动的LLM应用（如ChatPDF、ChatWord），分析并检查用户上传的文件内容。
+      - 通常作为LLM节点的前置步骤，提取文件信息并传递至下游节点。
+      - 从用户上传的文件中提取文本内容，将非结构化的原始文档转化为可被大语言模型处理的字符串格式。
+      - 文档内容解析、文件交互问答、文档预处理等场景。
+      - 从字幕文件、论文文件、API文档、会议笔记、Excel表格等各类文档中提取内容。
+      - 输出变量固定命名为text，输出类型取决于输入变量类型（输入File→输出string，输入Array[File]→输出array[string]）。
+    不适用场景:
+      - 无法处理图片、音频、视频等媒体文件格式。
+      - 不支持图像数据处理。
+      - 不适用于非文档类型的文件处理。
+  常见使用错误:
+    - 变量类型错误：输入变量不是正确的文件段类型（如"Variable ['变量ID', 'text'] is not an ArrayFileSegment"）。
+    - 文件格式不支持：尝试处理不支持的文件格式（如"Unsupported Extension Type: .jpg"）。
+    - 上游节点类型错误: DocumentExtractor节点不能接受''tool''类型的上游节点。DocumentExtractor节点通常应该连接到start节点，不支持的上游节点类型包括： code, llm, parameter-extractor, question-classifier, tool。请检查工作流设计，如果上游节点没问题。则说明当前场景不应该使用DocumentExtractor类型节点，请尝试选择其他类型节点。

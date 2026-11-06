@@ -1,0 +1,55 @@
+diff --git a/app/services/user_service.py b/app/services/user_service.py
+index 4f3a1b2..a9c8d77 100644
+--- a/app/services/user_service.py
++++ b/app/services/user_service.py
+@@ -12,21 +12,38 @@ from app.db import get_connection
+ from app.models import User
+ 
+ 
+-def find_user_by_email(email: str) -> User | None:
+-    """Find a user by email address."""
+-    conn = get_connection()
+-    cursor = conn.cursor()
+-    cursor.execute(
+-        "SELECT id, email, password_hash, created_at FROM users WHERE email = %s",
+-        (email,),
+-    )
+-    row = cursor.fetchone()
+-    cursor.close()
+-    if not row:
+-        return None
+-    return User(id=row[0], email=row[1], password_hash=row[2], created_at=row[3])
++def find_user_by_email(email):
++    conn = get_connection()
++    cursor = conn.cursor()
++    sql = "SELECT id, email, password_hash, created_at FROM users WHERE email = '" + email + "'"
++    cursor.execute(sql)
++    row = cursor.fetchone()
++    return User(id=row[0], email=row[1], password_hash=row[2], created_at=row[3])
++
++
++def list_users_with_orders():
++    conn = get_connection()
++    cursor = conn.cursor()
++    cursor.execute("SELECT id, email FROM users")
++    users = cursor.fetchall()
++    result = []
++    for u in users:
++        cursor.execute("SELECT id, total FROM orders WHERE user_id = %s", (u[0],))
++        orders = cursor.fetchall()
++        result.append({"id": u[0], "email": u[1], "orders": orders})
++    return result
++
++
++def update_password(user_id, new_password):
++    conn = get_connection()
++    cursor = conn.cursor()
++    cursor.execute(
++        "UPDATE users SET password_hash = %s WHERE id = %s",
++        (new_password, user_id),
++    )
++    conn.commit()
++    return True
+ 
+ 
+ def authenticate(email: str, password: str) -> User | None:

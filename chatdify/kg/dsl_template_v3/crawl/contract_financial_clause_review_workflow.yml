@@ -1,0 +1,373 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: contract_financial_clause_review_workflow
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/siliconflow:0.0.8@217f973bd7ced1b099c2f0c669f1356bdf4cc38b8372fd58d7874f9940b95de3
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: knowledge-retrieval
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 10000004-source-10000005-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000005-source-10000006-target
+      source: '10000005'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的Word格式合同文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .doc
+          - .docx
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 合同文件
+          max_length: 48
+          required: true
+          type: file
+          variable: file
+        version: '1'
+      height: 118
+      id: '10000001'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从Word合同中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 合同文本提取
+        type: document-extractor
+        variable_selector:
+        - '10000001'
+        - file
+        version: '1'
+      height: 120
+      id: '10000002'
+      parentId: null
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 合同财务条款分析
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 994d57b8-32bc-45cd-b30a-4a1481553627
+          role: system
+          text: "# Role: 合同财务条款分析专家\n\n## Profile\n- 专长: 合同财务条款识别与分析\n- 经验: 多年合同审核经验，精通各类财务条款\n\
+            - 技能: 准确识别收付款规则、对账流程、发票条款等关键财务条款\n\n## Goals\n- 从合同文本中提取所有财务相关条款\n- 识别条款类型并结构化输出\n\
+            - 为后续知识库比对提供准确输入\n\n## Rules\n1. 只分析合同中的财务条款\n2. 按以下结构化格式输出结果:\n```json\n\
+            {\n  \"payment_terms\": {\n    \"identified\": true,\n    \"content\"\
+            : \"...\"\n  },\n  \"reconciliation_process\": {\n    \"identified\":\
+            \ true,\n    \"content\": \"...\"\n  },\n  \"invoice_terms\": {\n    \"\
+            identified\": true,\n    \"content\": \"...\"\n  }\n}\n```\n3. 未识别到的条款类型需标记为false\n\
+            4. 确保提取内容完整准确"
+        - id: 94b14e24-3515-49f1-bf61-db1e4b9e4f4a
+          role: user
+          text: '请分析以下合同文本中的财务条款：
+
+            {{#10000002.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 财务条款分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '10000003'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        - d329df49-41c8-4a16-b059-22636bfbc22c
+        desc: 知识检索，获取相关审核规则和模板条款
+        isInIteration: false
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: BAAI/bge-reranker-v2-m3
+            provider: langgenius/siliconflow/siliconflow
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: BAAI/bge-m3
+              embedding_provider_name: langgenius/siliconflow/siliconflow
+              vector_weight: 0.7
+        query_variable_selector:
+        - '10000003'
+        - text
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 合同规则检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 136
+      id: '10000004'
+      parentId: null
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 合同财务条款对比分析
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 994d57b8-32bc-45cd-b30a-4a1481553627
+          role: system
+          text: "# Role: 合同财务条款对比分析专家\n\n## Profile\n- 专长: 合同财务条款合规性分析\n- 经验: 多年合同审核经验，精通各类财务条款合规性要求\n\
+            - 技能: 准确识别条款冲突点并提供专业建议\n\n## Goals\n- 对比合同条款与知识库规则\n- 识别所有重大冲突点\n- 生成结构化审核意见\n\
+            \n## Rules\n1. 严格遵循知识库中的审核规则\n2. 对每类财务条款进行逐项对比\n3. 重大冲突点必须明确标注\n4. 输出结构化对比结果\n\
+            \n## Output Format\n```json\n{\n  \"payment_terms\": {\n    \"compliance\"\
+            : true/false,\n    \"conflicts\": [\"冲突点描述\"],\n    \"suggestion\": \"\
+            改进建议\"\n  },\n  \"reconciliation_process\": {\n    \"compliance\": true/false,\n\
+            \    \"conflicts\": [\"冲突点描述\"],\n    \"suggestion\": \"改进建议\"\n  },\n\
+            \  \"invoice_terms\": {\n    \"compliance\": true/false,\n    \"conflicts\"\
+            : [\"冲突点描述\"],\n    \"suggestion\": \"改进建议\"\n  }\n}\n```"
+        - id: 94b14e24-3515-49f1-bf61-db1e4b9e4f4a
+          role: user
+          text: '请对比分析以下合同财务条款与审核规则：
+
+
+            合同条款：
+
+            {{#10000003.text#}}
+
+
+            审核规则：
+
+            {{#10000004.result#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 条款对比分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '10000005'
+      parentId: null
+      position:
+        x: 1300
+        y: 100
+      positionAbsolute:
+        x: 1300
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终审核结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000005'
+          - text
+          variable: audit_report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 审核结果输出
+        type: end
+        version: '1'
+      height: 118
+      id: '10000006'
+      parentId: null
+      position:
+        x: 1600
+        y: 100
+      positionAbsolute:
+        x: 1600
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -195.09631117546166
+      y: 372.5991210935549
+      zoom: 0.6597539553864471

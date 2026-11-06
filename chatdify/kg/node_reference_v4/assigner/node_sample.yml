@@ -1,0 +1,69 @@
+nodes:
+- data:
+    desc: 多轮对话维护轮次状态：把本轮 LLM 问题追加到 history（array[string]），并将 current_round（number）自增 1
+    selected: false
+    title: 更新对话历史与轮次
+    type: assigner
+    version: '2'
+    items:
+    - input_type: variable
+      operation: append
+      value:
+      - sys
+      - query
+      variable_selector:
+      - conversation
+      - history
+      write_mode: append
+    - input_type: constant
+      operation: +=
+      value: 1
+      variable_selector:
+      - conversation
+      - current_round
+  id: '10000005'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: ''
+    isInIteration: false
+    isInLoop: true
+    items:
+    - input_type: variable
+      operation: over-write
+      value:
+      - '1744689117088'
+      - score
+      variable_selector:
+      - '1744689095698'
+      - score
+      write_mode: over-write
+    - input_type: variable
+      operation: over-write
+      value:
+      - '1744689106273'
+      - text
+      variable_selector:
+      - '1744689095698'
+      - reason
+      write_mode: over-write
+    - input_type: variable
+      operation: over-write
+      value:
+      - '1744689100689'
+      - text
+      variable_selector:
+      - '1744689095698'
+      - result
+      write_mode: over-write
+    loop_id: '1744689095698'
+    selected: false
+    title: 变量赋值
+    type: assigner
+    version: '2'
+  id: '1744689142737'
+  parentId: '1744689095698'
+  selected: true
+  type: custom
+  zIndex: 1002

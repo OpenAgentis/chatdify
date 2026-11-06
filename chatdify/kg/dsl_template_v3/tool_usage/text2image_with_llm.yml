@@ -1,0 +1,552 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: test
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: leo-digital/doubao-seedream:1.0.1@64e137c5ea8e2eef9348ca4af0776ef6019208b3fec8ea89556d9f527e4fe2f4
+kind: app
+version: 0.3.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        sourceType: start
+        targetType: llm
+      id: 1779788517302-llm
+      source: '1779788517302'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: tool
+      id: llm-source-1779793234417-target
+      source: llm
+      sourceHandle: source
+      target: '1779793234417'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: answer
+      id: 1779793234417-source-1779793260967-target
+      source: '1779793234417'
+      sourceHandle: source
+      target: '1779793260967'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables: []
+      height: 52
+      id: '1779788517302'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3.2
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: f34a6977-b394-46ef-83f5-a8fc79b3efed
+          role: system
+          text: 生成一段宣传语，不超过一百字
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        desc: ''
+        is_team_authorization: true
+        output_schema:
+          properties:
+            images:
+              items:
+                properties:
+                  size:
+                    type: string
+                  url:
+                    type: string
+                type: object
+              type: array
+          type: object
+        paramSchemas:
+        - auto_generate: null
+          default: 0
+          form: form
+          human_description:
+            en_US: Whether to generate a group of images (up to 15). True for group,
+              False for single.
+            ja_JP: Whether to generate a group of images (up to 15). True for group,
+              False for single.
+            pt_BR: Whether to generate a group of images (up to 15). True for group,
+              False for single.
+            zh_Hans: True 为生成组图，False 为单图。默认生成单图
+          label:
+            en_US: Whether to generate a group images
+            ja_JP: Whether to generate a group images
+            pt_BR: Whether to generate a group images
+            zh_Hans: 是否生成组图
+          llm_description: True means generating a group of images, False means generating
+            a single image. By default, a single image is generated.
+          max: null
+          min: null
+          name: sequential_image_generation
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: boolean
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: Prompt words for image generation, supporting both Chinese and
+              English.
+            ja_JP: Prompt words for image generation, supporting both Chinese and
+              English.
+            pt_BR: Prompt words for image generation, supporting both Chinese and
+              English.
+            zh_Hans: 文本提示词，用于生成图像的提示词
+          label:
+            en_US: Prompt words for image generation
+            ja_JP: Prompt words for image generation
+            pt_BR: Prompt words for image generation
+            zh_Hans: 文本提示词
+          llm_description: Prompt words for image generation.
+          max: null
+          min: null
+          name: prompt
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: Pass in the list of node images.
+            ja_JP: Pass in the list of node images.
+            pt_BR: Pass in the list of node images.
+            zh_Hans: 传入节点图片列表
+          label:
+            en_US: Image list
+            ja_JP: Image list
+            pt_BR: Image list
+            zh_Hans: 图片列表
+          llm_description: Pass in the list of node images.
+          max: null
+          min: null
+          name: image
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: files
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: Pass in the list of image URLs to be used as references for image
+              generation, separated by half-width commas.eg. https://a.cn/img.png,https://a.cn/img2.png
+            ja_JP: Pass in the list of image URLs to be used as references for image
+              generation, separated by half-width commas.eg. https://a.cn/img.png,https://a.cn/img2.png
+            pt_BR: Pass in the list of image URLs to be used as references for image
+              generation, separated by half-width commas.eg. https://a.cn/img.png,https://a.cn/img2.png
+            zh_Hans: 传入要用作图像生成参考的图片URL列表，使用半角逗号分隔，eg. https://a.cn/img.png,https://a.cn/img2.png
+          label:
+            en_US: Image URLs
+            ja_JP: Image URLs
+            pt_BR: Image URLs
+            zh_Hans: 图片URL列表
+          llm_description: Pass in the URL of the image to be used as a reference
+            for image generation.
+          max: null
+          min: null
+          name: image_urls
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: 2K
+          form: form
+          human_description:
+            en_US: 'Image size. Common values: 2K, 4K. Selecting ''customize'' allows
+              you to customize the image width and height. Default value: 2K'
+            ja_JP: 'Image size. Common values: 2K, 4K. Selecting ''customize'' allows
+              you to customize the image width and height. Default value: 2K'
+            pt_BR: 'Image size. Common values: 2K, 4K. Selecting ''customize'' allows
+              you to customize the image width and height. Default value: 2K'
+            zh_Hans: 图片尺寸。常用值：2K、4K。选择自定义可自定义图片宽高。默认值：2K
+          label:
+            en_US: Size
+            ja_JP: Size
+            pt_BR: Size
+            zh_Hans: 尺寸
+          llm_description: 'Image size. Common values: 2K, 4K. Selecting ''customize''
+            allows you to customize the image width and height. Default value: 2K.'
+          max: null
+          min: null
+          name: size
+          options:
+          - icon: ''
+            label:
+              en_US: 2K
+              ja_JP: 2K
+              pt_BR: 2K
+              zh_Hans: 2K
+            value: 2K
+          - icon: ''
+            label:
+              en_US: 4K
+              ja_JP: 4K
+              pt_BR: 4K
+              zh_Hans: 4K
+            value: 4K
+          - icon: ''
+            label:
+              en_US: 1:1[2048x2048]
+              ja_JP: 1:1[2048x2048]
+              pt_BR: 1:1[2048x2048]
+              zh_Hans: 1:1[2048x2048]
+            value: 2048x2048
+          - icon: ''
+            label:
+              en_US: 4:3[2304x1728]
+              ja_JP: 4:3[2304x1728]
+              pt_BR: 4:3[2304x1728]
+              zh_Hans: 4:3[2304x1728]
+            value: 2304x1728
+          - icon: ''
+            label:
+              en_US: 3:4[1728x2304]
+              ja_JP: 3:4[1728x2304]
+              pt_BR: 3:4[1728x2304]
+              zh_Hans: 3:4[1728x2304]
+            value: 1728x2304
+          - icon: ''
+            label:
+              en_US: 16:9[2560x1440]
+              ja_JP: 16:9[2560x1440]
+              pt_BR: 16:9[2560x1440]
+              zh_Hans: 16:9[2560x1440]
+            value: 2560x1440
+          - icon: ''
+            label:
+              en_US: 9:16[1440x2560]
+              ja_JP: 9:16[1440x2560]
+              pt_BR: 9:16[1440x2560]
+              zh_Hans: 9:16[1440x2560]
+            value: 1440x2560
+          - icon: ''
+            label:
+              en_US: 3:2[2496x1664]
+              ja_JP: 3:2[2496x1664]
+              pt_BR: 3:2[2496x1664]
+              zh_Hans: 3:2[2496x1664]
+            value: 2496x1664
+          - icon: ''
+            label:
+              en_US: 2:3[1664x2496]
+              ja_JP: 2:3[1664x2496]
+              pt_BR: 2:3[1664x2496]
+              zh_Hans: 2:3[1664x2496]
+            value: 1664x2496
+          - icon: ''
+            label:
+              en_US: 21:9[3024x1296]
+              ja_JP: 21:9[3024x1296]
+              pt_BR: 21:9[3024x1296]
+              zh_Hans: 21:9[3024x1296]
+            value: 3024x1296
+          - icon: ''
+            label:
+              en_US: customize
+              ja_JP: customize
+              pt_BR: customize
+              zh_Hans: 自定义
+            value: customize
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: Customize the image width. The total pixel range of width * height
+              is [3686400, 16777216], and the range of width/height is [1/16, 16].
+            ja_JP: Customize the image width. The total pixel range of width * height
+              is [3686400, 16777216], and the range of width/height is [1/16, 16].
+            pt_BR: Customize the image width. The total pixel range of width * height
+              is [3686400, 16777216], and the range of width/height is [1/16, 16].
+            zh_Hans: 自定义图片宽度，宽度*高度的总像素范围 [3686400, 16777216]，宽度/高度的范围 [1/16, 16]
+          label:
+            en_US: Custom width
+            ja_JP: Custom width
+            pt_BR: Custom width
+            zh_Hans: 自定义宽度
+          llm_description: Customize the image width.
+          max: null
+          min: null
+          name: width
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: number
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: Customize the image height. The total pixel range of width * height
+              is [3686400, 16777216], and the range of width/height is [1/16, 16].
+            ja_JP: Customize the image height. The total pixel range of width * height
+              is [3686400, 16777216], and the range of width/height is [1/16, 16].
+            pt_BR: Customize the image height. The total pixel range of width * height
+              is [3686400, 16777216], and the range of width/height is [1/16, 16].
+            zh_Hans: 自定义图片高度，宽度*高度的总像素范围 [3686400, 16777216]，宽度/高度的范围 [1/16, 16]
+          label:
+            en_US: Custom height
+            ja_JP: Custom height
+            pt_BR: Custom height
+            zh_Hans: 自定义高度
+          llm_description: Customize the image height.
+          max: null
+          min: null
+          name: height
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: number
+        - auto_generate: null
+          default: 0
+          form: form
+          human_description:
+            en_US: Whether to add watermark.
+            ja_JP: Whether to add watermark.
+            pt_BR: Whether to add watermark.
+            zh_Hans: 生成图片是否包含水印，True 为生成，False为不生成，默认为不生成
+          label:
+            en_US: Watermark
+            ja_JP: Watermark
+            pt_BR: Watermark
+            zh_Hans: 水印
+          llm_description: 'Whether to add watermark. Default: false.'
+          max: null
+          min: null
+          name: watermark
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: boolean
+        params:
+          height: ''
+          image: ''
+          image_urls: ''
+          prompt: ''
+          sequential_image_generation: ''
+          size: ''
+          watermark: ''
+          width: ''
+        provider_id: leo-digital/doubao-seedream/doubao-seedream
+        provider_name: leo-digital/doubao-seedream/doubao-seedream
+        provider_type: builtin
+        selected: false
+        title: ImageGenerations
+        tool_configurations:
+          height:
+            type: constant
+            value: null
+          image:
+            type: constant
+            value: null
+          image_urls:
+            type: mixed
+            value: null
+          prompt:
+            type: mixed
+            value: '{{#llm.text#}}'
+          sequential_image_generation:
+            type: constant
+            value: false
+          size:
+            type: constant
+            value: 2K
+          watermark:
+            type: constant
+            value: false
+          width:
+            type: constant
+            value: null
+        tool_description: Use doubao-seedream-4.5 model to generate images
+        tool_label: ImageGenerations
+        tool_name: ImageGenerations
+        tool_parameters: {}
+        type: tool
+        version: '2'
+      height: 313
+      id: '1779793234417'
+      position:
+        x: 683
+        y: 282
+      positionAbsolute:
+        x: 683
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        answer: '{{#1779793234417.text#}}'
+        desc: ''
+        selected: false
+        title: Answer
+        type: answer
+        variables: []
+      height: 103
+      id: '1779793260967'
+      position:
+        x: 986
+        y: 282
+      positionAbsolute:
+        x: 986
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    viewport:
+      x: -426.84471363445687
+      y: 140.43886049924026
+      zoom: 1.00618032833811

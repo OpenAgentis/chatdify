@@ -1,0 +1,62 @@
+nodes:
+- data:
+    dataset_ids:
+    - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+    desc: ''
+    isInIteration: true
+    iteration_id: '1739189441547'
+    multiple_retrieval_config:
+      reranking_enable: true
+      reranking_mode: weighted_score
+      reranking_model:
+        model: ''
+        provider: ''
+      score_threshold: null
+      top_k: 6
+      weights:
+        keyword_setting:
+          keyword_weight: 0.3
+        vector_setting:
+          embedding_model_name: text-embedding-bge-m3
+          embedding_provider_name: openai_api_compatible
+          vector_weight: 0.7
+    query_variable_selector:
+    - '1739189441547'
+    - item
+    retrieval_mode: multiple
+    selected: false
+    title: 知识检索
+    type: knowledge-retrieval
+  id: '1739288338449'
+  parentId: '1739189441547'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    dataset_ids:
+    - 8c4620fa-15d7-464f-9cb9-561f1a59eb3f
+    desc: ''
+    multiple_retrieval_config:
+      reranking_enable: true
+      reranking_mode: weighted_score
+      reranking_model:
+        model: ''
+        provider: ''
+      score_threshold: null
+      top_k: 6
+      weights:
+        keyword_setting:
+          keyword_weight: 0.3
+        vector_setting:
+          embedding_model_name: text-embedding-bge-m3
+          embedding_provider_name: openai_api_compatible
+          vector_weight: 0.7
+    query_variable_selector:
+    - '1720794829558'
+    - input
+    retrieval_mode: multiple
+    selected: false
+    title: Knowledge Retrieval 4
+    type: knowledge-retrieval
+  id: '1720839679262'
+  type: custom

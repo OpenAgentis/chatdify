@@ -1,0 +1,273 @@
+app:
+  mode: workflow
+  name: travel_plan_agent
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: agent
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: agent
+        targetType: llm
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 收集用户初始输入信息，包括旅行目的地、时长和预算等参数
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 旅行计划输入
+        type: start
+        variables:
+        - label: 旅行目的地
+          max_length: 100
+          required: true
+          type: text-input
+          variable: destination
+        - label: 旅行时长(天)
+          max_length: 10
+          required: true
+          type: text-input
+          variable: duration
+        - label: 预算(元)
+          max_length: 20
+          required: true
+          type: text-input
+          variable: budget
+        version: '1'
+      height: 200
+      id: '1'
+      parentId: null
+      position:
+        x: 80
+        y: 80
+      positionAbsolute:
+        x: 80
+        y: 80
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        agent_parameters:
+          model:
+            type: constant
+            value:
+              completion_params: {}
+              mode: chat
+              model: gpt-4
+              model_type: llm
+              provider: langgenius/openai/openai
+              type: model-selector
+          query:
+            type: mixed
+            value: '{{#1.destination#}} {{#1.duration#}} {{#1.budget#}}'
+          storage_key:
+            type: constant
+            value: '{{#sys.conversation_id#}}'
+          task_schema:
+            type: constant
+            value: "{\n  \"fields\": [\n    {\n      \"name\": \"destination\",\n\
+              \      \"question\": \"请问您想去哪里旅行？\",\n      \"required\": true\n   \
+              \ },\n    {\n      \"name\": \"duration\",\n      \"question\": \"您计划旅行多长时间？\"\
+              ,\n      \"required\": true\n    },\n    {\n      \"name\": \"budget\"\
+              ,\n      \"question\": \"您的预算大约是多少？\",\n      \"required\": true\n \
+              \   },\n    {\n      \"name\": \"travel_type\",\n      \"question\"\
+              : \"您更喜欢哪种旅行方式？（自由行/跟团游/自驾游）\",\n      \"required\": false\n    },\n\
+              \    {\n      \"name\": \"interests\",\n      \"question\": \"您对哪些活动感兴趣？（美食/购物/自然风光/历史文化/娱乐活动）\"\
+              ,\n      \"required\": false\n    }\n  ]\n}"
+        agent_strategy_label: 多轮对话
+        agent_strategy_name: TOD
+        agent_strategy_provider_name: afeaad50-3ca8-4d6b-8e95-ca6993bb2951/agent/agent
+        desc: 通过多轮对话收集完整的旅行需求信息
+        max_iterations: 5
+        output_schema: null
+        plugin_unique_identifier: afeaad50-3ca8-4d6b-8e95-ca6993bb2951/agent:0.0.1@041f354ba09c869b9e16a69d6a5dfea1f46acdb24fedd355e26a93c9bbc3b531
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 旅行需求收集
+        tools: []
+        type: agent
+        version: '1'
+      height: 180
+      id: '2'
+      parentId: null
+      position:
+        x: 300
+        y: 80
+      positionAbsolute:
+        x: 300
+        y: 80
+      type: custom
+      width: 280
+      zIndex: 1
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据收集到的旅行需求生成个性化旅行建议
+        model:
+          completion_params:
+            max_tokens: 1000
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的旅行规划师，擅长根据用户需求提供个性化的旅行建议。请根据用户提供的旅行信息，综合考虑目的地、时长、预算、旅行方式和兴趣偏好等因素，生成详细且实用的旅行建议。建议应包括行程安排、景点推荐、餐饮建议和预算分配等内容。
+        - role: user
+          text: '请根据以下旅行需求生成个性化建议：
+
+
+            {{#2.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 旅行建议生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 180
+      id: '3'
+      parentId: null
+      position:
+        x: 600
+        y: 80
+      positionAbsolute:
+        x: 600
+        y: 80
+      type: custom
+      width: 280
+      zIndex: 2
+    - data:
+        desc: 将LLM生成的旅行建议格式化为结构化输出
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: "{\n  \"destination\": \"{{ destination }}\",\n  \"duration\": \"\
+          {{ duration }}\",\n  \"budget\": \"{{ budget }}\",\n  \"travel_type\": \"\
+          {{ travel_type }}\",\n  \"interests\": \"{{ interests }}\",\n  \"recommendations\"\
+          : \"{{ recommendations }}\",\n  \"dining_suggestions\": \"{{ dining_suggestions\
+          \ }}\",\n  \"budget_allocation\": \"{{ budget_allocation }}\"\n}"
+        title: 旅行计划格式化
+        type: template-transform
+        variables:
+        - value_selector:
+          - '3'
+          - text
+          variable: destination
+        - value_selector:
+          - '3'
+          - text
+          variable: duration
+        - value_selector:
+          - '3'
+          - text
+          variable: budget
+        - value_selector:
+          - '3'
+          - text
+          variable: travel_type
+        - value_selector:
+          - '3'
+          - text
+          variable: interests
+        - value_selector:
+          - '3'
+          - text
+          variable: recommendations
+        - value_selector:
+          - '3'
+          - text
+          variable: dining_suggestions
+        - value_selector:
+          - '3'
+          - text
+          variable: budget_allocation
+        version: '1'
+      height: 180
+      id: '4'
+      parentId: null
+      position:
+        x: 900
+        y: 80
+      positionAbsolute:
+        x: 900
+        y: 80
+      type: custom
+      width: 280
+      zIndex: 3
+    - data:
+        desc: 输出最终旅行计划
+        output_type: object
+        outputs:
+        - value_selector:
+          - '4'
+          - output
+          variable: travel_plan
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 旅行计划输出
+        type: end
+        version: '1'
+      height: 120
+      id: '5'
+      parentId: null
+      position:
+        x: 1200
+        y: 80
+      positionAbsolute:
+        x: 1200
+        y: 80
+      type: custom
+      width: 280
+      zIndex: 4
+    type: custom

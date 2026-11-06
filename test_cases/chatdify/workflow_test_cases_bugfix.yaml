@@ -1,0 +1,371 @@
+agent_cases:
+  travel_plan_agent:
+    dsl: agent_cases.travel_plan_agent.yaml
+    feedback: |-
+      - 节点ID: 2, 节点类型: agent, 错误类型: runtime
+        错误信息: Failed to get agent strategy: PluginNotFoundError: plugin not found
+    prompt: |-
+      生成一个旅行规划Agent工作流，通过多轮对话收集用户旅行需求，包括目的地、旅行时长和预算等信息。
+      要求：
+      1. 支持多轮对话交互
+      2. 收集必要旅行信息
+      3. 根据用户需求生成个性化旅行建议
+      4. 输出结构化旅行计划
+business_analysis:
+  financial_report_analysis:
+    dsl: business_analysis.financial_report_analysis.yaml
+    feedback: |
+      - 节点ID: 10000004, 节点类型: code, 错误类型: runtime
+        错误信息: Traceback (most recent call last):
+        File "/var/sandbox/sandbox-python/tmp/836774fb_5e59_46e6_ad2d_084d6284d5d6.py", line 48, in <module>
+        File "<string>", line 4, in <module>
+      ModuleNotFoundError: No module named 'pandas'
+      error: exit status 255
+    prompt: |-
+      生成一个财务报告分析工作流，输入公司名称或股票代码，自动获取最新财务报告并生成分析报告。
+      要求：
+      1. 从公开数据源获取财务报表
+      2. 计算关键财务比率（如流动比率、资产负债率等）
+      3. 进行同比和环比分析
+      4. 识别财务风险点
+      5. 生成可视化图表建议
+business_cases:
+  financial_advisor_chatbot:
+    dsl: business_cases.financial_advisor_chatbot.yaml
+    feedback: |
+      - 节点ID: 9, 节点类型: template-transform, 错误类型: runtime
+        错误信息: Traceback (most recent call last):
+        File "/var/sandbox/sandbox-python/tmp/1174bc8d_b95e_4ec5_a044_b70aefb1b7bc.py", line 48, in <module>
+        File "<string>", line 30, in <module>
+        File "<string>", line 21, in main
+        File "/usr/local/lib/python3.10/site-packages/jinja2/environment.py", line 1291, in render
+          self.environment.handle_exception()
+        File "/usr/local/lib/python3.10/site-packages/jinja2/environment.py", line 925, in handle_exception
+          raise rewrite_traceback_stack(source=source)
+        File "<template>", line 14, in top-level template code
+        File "/usr/local/lib/python3.10/site-packages/jinja2/environment.py", line 474, in getattr
+          return getattr(obj, attribute)
+      jinja2.exceptions.UndefinedError: 'now' is undefined
+      error: exit status 255
+    input_file: financial_data.xlsx
+    prompt: |-
+      生成一个金融顾问聊天机器人工作流，用于提供个人理财和投资建议。
+      要求：
+      1. 支持多轮对话理解用户财务目标和风险偏好
+      2. 自动分类咨询类型（储蓄、投资、保险等）
+      3. 提供标准理财话术库支持
+      4. 可查询金融知识库获取专业解答
+      5. 记录对话历史并生成个性化理财建议报告
+  market_analysis_report:
+    dsl: business_cases.market_analysis_report.yaml
+    feedback: |-
+      - 节点ID: 10000009, 节点类型: question-classifier, 错误类型: runtime
+        错误信息: 1 validation error for LLMNodeChatModelMessage
+      text
+        Input should be a valid string [type=string_type, input_value=File(dify_model_identity=...ctet-stream', size=9449), input_type=File]
+          For further information visit https://errors.pydantic.dev/2.9/v/string_type
+    input_file: financial_report.xlsx
+    prompt: |-
+      生成一个市场分析报告工作流，帮助企业分析市场趋势和竞争对手。
+      要求：
+      1. 支持多种行业领域（科技、零售、金融等）
+      2. 解析用户输入的市场数据或报告
+      3. 提供详细的市场趋势分析和竞争对手评估
+      4. 支持图表和数据的可视化展示
+      5. 记录用户的历史查询和分析结果
+code_translation_cases:
+  claude3_code_translation:
+    dsl: code_translation_cases.claude3_code_translation.yaml
+    feedback: |
+      - 节点ID: 10000003, 节点类型: code, 错误类型: runtime
+        错误信息: Traceback (most recent call last):
+        File "/var/sandbox/sandbox-python/tmp/70e1fc83_baf8_4278_a6e2_d77a1129b5d8.py", line 48, in <module>
+        File "<string>", line 4, in <module>
+      ModuleNotFoundError: No module named 'yaml'
+      error: exit status 255
+    prompt: |-
+      生成一个代码翻译工作流，将源代码从一种编程语言翻译到另一种编程语言。
+      要求：
+      1. 支持多种编程语言互译（如Python、Java等）
+      2. 分两阶段生成代码：
+         a) 首先生成代码结构（包括import、类/函数签名等）
+         b) 然后生成具体实现代码
+      3. 支持相关依赖代码分析
+      4. 输出完整的目标语言代码
+      5. 严格遵循目标语言的语法规范
+content_creation_cases:
+  audio_script:
+    dsl: content_creation_cases.audio_script.yaml
+    feedback: |-
+      - 节点ID: 10000004, 节点类型: tool, 错误类型: runtime
+        错误信息: Unknown error
+    prompt: |
+      音频生成工作流，根据主题生成音频脚本和音频。
+      要求：
+      1. 生成音频大纲
+      2. 生成音频脚本
+      3. 生成音频, 支持多种音频格式
+  automated_tutorial_generation:
+    dsl: content_creation_cases.automated_tutorial_generation.yaml
+    feedback: |-
+      - 节点ID: 3, 节点类型: code, 错误类型: runtime
+        错误信息: The length of output variable `result` must be less than 30 elements.
+    prompt: |-
+      生成一个自动化教程生成工作流，根据用户输入的教程名称，自动生成完整的教程内容。
+      要求：
+      1. 生成教程大纲
+      2. 为每个章节生成详细内容
+      3. 包含示例代码和专家级分析
+      4. 输出结构化教程内容
+  social_media_operation:
+    dsl: content_creation_cases.social_media_operation.yaml
+    feedback: "- 节点ID: 10000014, 节点类型: http-request, 错误类型: runtime\n  错误信息: Failed to parse JSON: {\n    \"width\": 1920,\n    \"height\": 1080,\n    \"backgroundColor\": \"#ffffff\",\n    \"borderColor\": \"#ffffff\",\n    \"borderWidth\": 0,\n    \"borderRadius\": 0,\n    \"borderTopLeftRadius\": 0,\n    \"borderTopRightRadius\": 0,\n    \"borderBottomLeftRadius\": 0,\n    \"borderBottomRightRadius\": 0,\n    \"texts\": [\n        {\n            \"x\": 240,\n            \"y\": 220,\n            \"text\": \"Youtube video description:\n\U0001F951 谁说健康饮食一定要吃草？今天分享我的\"懒人养生法\"，连厨房小白都能轻松上手！从早餐到晚餐，5分钟搞定的牛油果吐司、微波炉叮一下的午餐便当，再到外卖也能吃得健康的三文鱼刺身，这些都不用开火，再也不用担心油烟味和香水打架啦～偷偷告诉你，下午茶把奶茶换成抹茶拿铁加一勺超级食物粉，老板以为我在养生，其实我在偷偷变美 \U0001F485 \n\n✨ 视频亮点：\n- 5分钟快手早餐：牛油果吐司的3种创意吃法\n- 办公室午餐：微波炉就能搞定的健康便当\n- 外卖也能吃得健康：三文鱼刺身搭配小技巧\n- 下午茶替代方案：抹茶拿铁+超级食物粉的秘密配方\n\n这些简单又美味的健康食谱，让你不用牺牲味蕾也能保持好身材！记得点赞收藏，下次不知道吃什么的时候就翻出来看看吧～\n\n主页还有更多关于健康生活和美食的内容，记得来看看 \U0001F440 一起变美变健康～\n\n#健康饮食 #办公室美食 #超级食物 #快手菜 #轻食主义 #职场养生 #变美小技巧 #懒人食谱 #有机生活\",\n            \"width\": 1440,\n            \"font\": \"Alibaba-PuHuiTi-Heavy\",\n            \"fontSize\": \"0.0\",\n            \"lineHeight\": 24,\n            \"lineSpacing\": 1.3,\n            \"color\": \"Bilibili 视频简介（详细准确地提供信息）：\n\n\U0001F951 都市女孩的健康饮食日记 | 不用吃草也能美美哒 ✨\n\n谁说健康饮食=无聊沙拉？今天分享我的\"偷懒式\"养生法，连厨房杀手都能轻松get！从早餐到晚餐，5分钟搞定的牛油果吐司、微波炉叮一下的午餐便当，再到外卖也能吃得健康的三文鱼刺身，这些都不用开火，再也不用担心油烟味和香水打架啦！偷偷告诉你，下午茶把奶茶换成抹茶拿铁加一勺超级食物粉，老板以为我在养生，其实我在偷偷变美 \U0001F485 快来一起get这些简单又美味的健康食谱吧！\n\n#健康饮食 #办公室美食 #超级食物 #快手菜 #轻食主义 #职场养生 #变美小技巧 #懒人食谱 #有机生活\n\nBilibili 置顶评论（不要太长，简短友好即可）：\n\n主页有更多关于健康生活和美食的内容，记得来看看 \U0001F440 一起变美变健康~\",\n            \"textAlign\": \"left\",\n            \"zIndex\": 1\n        },\n        {\n            \"x\": 960,\n            \"y\": 860,\n            \"text\": \"Bilibili 视频简介（详细准确地提供信息）：\n\n\U0001F951 都市女孩的健康饮食日记 | 不用吃草也能美美哒 ✨\n\n谁说健康饮食=无聊沙拉？今天分享我的\"偷懒式\"养生法，连厨房杀手都能轻松get！从早餐到晚餐，5分钟搞定的牛油果吐司、微波炉叮一下的午餐便当，再到外卖也能吃得健康的三文鱼刺身，这些都不用开火，再也不用担心油烟味和香水打架啦！偷偷告诉你，下午茶把奶茶换成抹茶拿铁加一勺超级食物粉，老板以为我在养生，其实我在偷偷变美 \U0001F485 快来一起get这些简单又美味的健康食谱吧！\n\n#健康饮食 #办公室美食 #超级食物 #快手菜 #轻食主义 #职场养生 #变美小技巧 #懒人食谱 #有机生活\n\nBilibili 置顶评论（不要太长，简短友好即可）：\n\n主页有更多关于健康生活和美食的内容，记得来看看 \U0001F440 一起变美变健康~\",\n            \"width\": 800,\n            \"font\": \"Alibaba-PuHuiTi-Heavy\",\n            \"fontSize\": 60,\n            \"lineHeight\": 24,\n            \"lineSpacing\": 1.3,\n            \"color\": \"Bilibili 视频简介（详细准确地提供信息）：\n\n\U0001F951 都市女孩的健康饮食日记 | 不用吃草也能美美哒 ✨\n\n谁说健康饮食=无聊沙拉？今天分享我的\"偷懒式\"养生法，连厨房杀手都能轻松get！从早餐到晚餐，5分钟搞定的牛油果吐司、微波炉叮一下的午餐便当，再到外卖也能吃得健康的三文鱼刺身，这些都不用开火，再也不用担心油烟味和香水打架啦！偷偷告诉你，下午茶把奶茶换成抹茶拿铁加一勺超级食物粉，老板以为我在养生，其实我在偷偷变美 \U0001F485 快来一起get这些简单又美味的健康食谱吧！\n\n#健康饮食 #办公室美食 #超级食物 #快手菜 #轻食主义 #职场养生 #变美小技巧 #懒人食谱 #有机生活\n\nBilibili 置顶评论（不要太长，简短友好即可）：\n\n主页有更多关于健康生活和美食的内容，记得来看看 \U0001F440 一起变美变健康~\",\n            \"textAlign\": \"center\",\n            \"zIndex\": 1\n        }\n    ],\n    \"images\": [\n        {\n            \"x\": 0,\n            \"y\": 0,\n            \"width\": 1920,\n            \"height\": 1080,\n            \"url\": \"Bilibili 视频简介（详细准确地提供信息）：\n\n\U0001F951 都市女孩的健康饮食日记 | 不用吃草也能美美哒 ✨\n\n谁说健康饮食=无聊沙拉？今天分享我的\"偷懒式\"养生法，连厨房杀手都能轻松get！从早餐到晚餐，5分钟搞定的牛油果吐司、微波炉叮一下的午餐便当，再到外卖也能吃得健康的三文鱼刺身，这些都不用开火，再也不用担心油烟味和香水打架啦！偷偷告诉你，下午茶把奶茶换成抹茶拿铁加一勺超级食物粉，老板以为我在养生，其实我在偷偷变美 \U0001F485 快来一起get这些简单又美味的健康食谱吧！\n\n#健康饮食 #办公室美食 #超级食物 #快手菜 #轻食主义 #职场养生 #变美小技巧 #懒人食谱 #有机生活\n\nBilibili 置顶评论（不要太长，简短友好即可）：\n\n主页有更多关于健康生活和美食的内容，记得来看看 \U0001F440 一起变美变健康~\",\n            \"borderColor\": \"#000000\",\n            \"borderWidth\": 0,\n            \"borderRadius\": 0,\n            \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\": 0,\n            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\": 0,\n            \"zIndex\": 0\n        },\n        {\n            \"x\": 860,\n            \"y\": 660,\n            \"width\": 200,\n            \"height\": 200,\n            \"url\": \"Bilibili 视频简介（详细准确地提供信息）：\n\n\U0001F951 都市女孩的健康饮食日记 | 不用吃草也能美美哒 ✨\n\n谁说健康饮食=无聊沙拉？今天分享我的\"偷懒式\"养生法，连厨房杀手都能轻松get！从早餐到晚餐，5分钟搞定的牛油果吐司、微波炉叮一下的午餐便当，再到外卖也能吃得健康的三文鱼刺身，这些都不用开火，再也不用担心油烟味和香水打架啦！偷偷告诉你，下午茶把奶茶换成抹茶拿铁加一勺超级食物粉，老板以为我在养生，其实我在偷偷变美 \U0001F485 快来一起get这些简单又美味的健康食谱吧！\n\n#健康饮食 #办公室美食 #超级食物 #快手菜 #轻食主义 #职场养生 #变美小技巧 #懒人食谱 #有机生活\n\nBilibili 置顶评论（不要太长，简短友好即可）：\n\n主页有更多关于健康生活和美食的内容，记得来看看 \U0001F440 一起变美变健康~\",\n            \"borderColor\": \"#000000\",\n            \"borderWidth\": 0,\n            \"borderRadius\": 100,\n            \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\": 0,\n            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\": 0,\n            \"zIndex\": 1\n        }\n    ]\n}"
+    prompt: |-
+      生成一个社交媒体运营工作流，根据用户输入的基本要求、背景信息和风格偏好，自动生成多个平台的社交媒体内容。
+      要求：
+      1. 生成小红书/微博封面图的基本设置、文本、图片、线条、二维码和矩形修饰
+      2. 生成小红书/微博封面标题
+      3. 生成小红书/微博正文和hashtag
+      4. 生成抖音/视频号正文和hashtag
+      5. 生成X (Twitter) Thread详情和hashtag
+      6. 生成Instagram详情和hashtag
+      7. 生成Bilibili简介和置顶评论
+      8. 生成Youtube详情
+      9. 生成Bilibili/Youtube视频封面的基本设置、文本、图片、线条、二维码和矩形修饰
+      10. 最终输出所有生成的内容和图片URL
+  technical_documentation:
+    dsl: content_creation_cases.technical_documentation.yaml
+    feedback: |-
+      - 节点ID: 4, 节点类型: code, 错误类型: runtime
+        错误信息: Depth limit $5 reached, object too deep.
+    input_file: api_document.docx
+    prompt: |-
+      生成一个技术文档编写工作流，根据用户提供的API接口描述自动生成完整的开发者文档。
+      要求：
+      1. 解析API接口描述
+      2. 生成请求/响应示例
+      3. 编写参数说明表格
+      4. 包含错误代码说明
+      5. 输出为markdown格式
+data_analysis_cases:
+  excel_data_visualization:
+    dsl: data_analysis_cases.excel_data_visualization.yaml
+    feedback: |
+      - 节点ID: 3, 节点类型: code, 错误类型: runtime
+        错误信息: Traceback (most recent call last):
+        File "/var/sandbox/sandbox-python/tmp/2126dfe8_682e_4201_b87c_a7b5130383b8.py", line 48, in <module>
+        File "<string>", line 4, in <module>
+      ModuleNotFoundError: No module named 'pandas'
+      error: exit status 255
+    input_file: financial_report.xlsx
+    prompt: |-
+      创建一个Excel数据分析工作流，自动从上传的Excel文件中提取关键数据并生成可视化图表。
+      要求：
+      1. 支持识别Excel文件中的核心数据表和关键指标
+      2. 自动分析数据分布和趋势
+      3. 生成3种不同类型的图表（柱状图/折线图/饼图）
+      4. 保留原始数据的单位和标签
+      5. 输出结构化分析报告（包含数据摘要、图表和关键发现）
+  general_data_analysis:
+    dsl: data_analysis_cases.general_data_analysis.yaml
+    feedback: |-
+      - 节点ID: 3, 节点类型: code, 错误类型: runtime
+        错误信息: Output cleaned_data is missing.
+    input_file: stock.xlsx
+    prompt: |
+      生成一个数据分析工作流，支持上传文件，且可以通过提问来进行文档分析以及生成报表等。
+      要求：
+      1. 支持Excel、CSV格式
+      2. 支持数据清洗和预处理
+      3. 支持基础统计分析
+      4. 生成可视化报表
+  research_data_analysisproduct_specs.xlsx:
+    dsl: data_analysis_cases.research_data_analysisproduct_specs.xlsx.yaml
+    feedback: |
+      - 节点ID: 10000004, 节点类型: code, 错误类型: runtime
+        错误信息: Traceback (most recent call last):
+        File "/var/sandbox/sandbox-python/tmp/13b2d29d_0ffa_4512_8d89_a89416e1fb33.py", line 48, in <module>
+        File "<string>", line 4, in <module>
+      ModuleNotFoundError: No module named 'pandas'
+      error: exit status 255
+    input_file: research_data.csv
+    prompt: |
+      生成一个研究数据分析工作流，支持上传研究数据文件，进行统计分析和可视化。
+      要求：
+      1. 支持常见研究数据格式
+      2. 执行描述性统计分析
+      3. 生成研究结果可视化
+      4. 输出分析报告
+  stock_data_analysis:
+    dsl: data_analysis_cases.stock_data_analysis.yaml
+    feedback: |-
+      - 节点ID: 10000002, 节点类型: http-request, 错误类型: runtime
+        错误信息: 503 Service Unavailable
+    prompt: |-
+      生成一个股票数据分析工作流，通过API获取股票数据，进行技术分析并生成分析报告。
+      要求：
+      1. 支持获取历史K线数据
+      2. 计算技术指标
+      3. 生成趋势分析
+      4. 输出可视化图表
+doc_workflow_cases:
+  meeting_minutes_process:
+    dsl: doc_workflow_cases.meeting_minutes_process.yaml
+    feedback: |-
+      - 节点ID: , 节点类型: , 错误类型: runtime
+        错误信息: [validate_run_draft_workflow] 运行验证异常: 请求失败: meeting_note_file in input form must be a file
+    input_file: meeting_note.txt
+    prompt: |
+      生成会议纪要处理的工作流，能处理会议文本，得到章节、会议总结，行动项等信息。
+      要求：
+      1. 提取关键议题
+      2. 生成会议总结
+      3. 生成会议行动项
+  translation_quality_evaluation:
+    dsl: doc_workflow_cases.translation_quality_evaluation.yaml
+    feedback: |-
+      - 节点ID: 9, 节点类型: assigner, 错误类型: runtime
+        错误信息: Variable ['translation_score'] not found
+    prompt: |
+      生成一个翻译质量评估工作流。
+      核心功能是通过大模型将用户内容翻译成目标语言，并对翻译质量进行评估。
+      工作流包含以下步骤：
+      1. 使用第一个大模型将用户输入的原文翻译成目标语言
+      2. 使用第二个大模型对翻译结果进行质量评估，从四个维度打分：
+         - 准确性（Accuracy）
+         - 流畅度（Fluency）
+         - 完整性（Completeness）
+         - 风格与用词（Style & Word Choice）
+      3. 通过代码计算综合评分
+      4. 循环评估直到达到指定分数（如20分）或最大循环次数
+      5. 最终输出翻译结果、评分和评估理由
+document_processing:
+  financial_report_analysis:
+    dsl: document_processing.financial_report_analysis.yaml
+    feedback: |-
+      - 节点ID: 10000007, 节点类型: code, 错误类型: runtime
+        错误信息: Output raw_data is not an object, got <class 'str'> instead.
+    input_file: financial_report.xlsx
+    prompt: |-
+      本工作流用于分析上传的财务报表文档，自动提取关键财务指标和趋势分析。
+      主要功能：
+      1. 解析PDF格式的财务报表
+      2. 识别资产负债表、利润表和现金流量表
+      3. 提取关键财务指标（如流动比率、资产负债率、净利润率等）
+      4. 进行同比/环比分析
+      5. 生成可视化图表和结构化数据报告
+
+      技术细节：
+      - 支持PDF表格数据提取
+      - 自动计算财务比率
+      - 可配置行业基准比较
+image_cases:
+  image_chat_assistant:
+    dsl: image_cases.image_chat_assistant.yaml
+    feedback: |-
+      - 节点ID: llm, 节点类型: llm, 错误类型: runtime
+        错误信息: Variable #sys.query# not found
+    input_file: mock_chat.png
+    prompt: |-
+      创建一个图片聊天助手工作流，能够理解用户上传的图片内容并结合用户提问进行智能回答。
+      要求：
+      1. 支持上传图片文件（JPG/JPEG/PNG/GIF/WEBP/SVG格式）
+      2. 分析图片内容并理解视觉信息
+      3. 结合用户提问提供相关解答和建议
+      4. 当提问不清晰时，输出可能的理解方向
+      5. 最终输出包含图片理解和问题解答的完整回复
+  image_process:
+    dsl: image_cases.image_process.yaml
+    feedback: |-
+      - 节点ID: 3, 节点类型: code, 错误类型: runtime
+        错误信息: Object of type File is not JSON serializable
+    input_file: hospital.png
+    prompt: 该工作流核心功能：对图像进行处理，包括图像分割、图像识别。
+research_cases:
+  deep_research_report:
+    dsl: research_cases.deep_research_report.yaml
+    feedback: |-
+      - 节点ID: 3, 节点类型: document-extractor, 错误类型: runtime
+        错误信息: Variable ['2', 'text'] is not an ArrayFileSegment
+    prompt: |
+      生成一个deep research工作流。
+      核心功能：根据用户输入主题内容，通过搜索引擎检索相关内容，对检索内容进行分析整理，
+      最后生成完整的研究报告。要求报告结构完整，包含数据支撑。
+  literature_review:
+    dsl: research_cases.literature_review.yaml
+    feedback: |-
+      - 节点ID: 3, 节点类型: document-extractor, 错误类型: runtime
+        错误信息: Variable ['2', 'text'] is not an ArrayFileSegment
+    prompt: |
+      生成一个文献综述工作流，输入研究主题，自动搜索相关文献并生成综述报告。
+      要求：
+      1. 检索相关学术论文
+      2. 提取关键研究方法和发现
+      3. 分析研究趋势和空白
+      4. 生成结构化综述报告
+  market_trend_analysis:
+    dsl: research_cases.market_trend_analysis.yaml
+    feedback: |
+      - 节点ID: 10000003, 节点类型: code, 错误类型: runtime
+        错误信息: Traceback (most recent call last):
+        File "/var/sandbox/sandbox-python/tmp/0cd97d8d_c0f6_4d2d_894e_0a6fe87749cf.py", line 48, in <module>
+        File "<string>", line 4, in <module>
+      ModuleNotFoundError: No module named 'pandas'
+      error: exit status 255
+    prompt: |-
+      生成一个市场趋势分析工作流，输入行业关键词和时间范围，自动生成市场趋势分析报告。
+      要求：
+      1. 收集指定时间范围内的市场数据
+      2. 分析关键趋势指标
+      3. 识别主要驱动因素
+      4. 生成可视化图表建议
+      5. 提供战略行动建议
+  web_content_summarizer:
+    dsl: research_cases.web_content_summarizer.yaml
+    feedback: |-
+      - 节点ID: 3, 节点类型: document-extractor, 错误类型: runtime
+        错误信息: Variable ['2', 'text'] is not an ArrayFileSegment
+    prompt: |-
+      生成一个网页内容摘要工作流，根据用户提供的URL，自动抓取网页内容并生成摘要。
+      要求：
+      1. 通过搜索引擎获取相关URL
+      2. 提取网页正文内容
+      3. 使用大模型生成摘要
+      4. 将URL和摘要整合成表格输出
+text_processing_cases:
+  english_text_summarization:
+    dsl: text_processing_cases.english_text_summarization.yaml
+    feedback: |
+      - 节点ID: 2, 节点类型: code, 错误类型: runtime
+        错误信息: Traceback (most recent call last):
+        File "/var/sandbox/sandbox-python/tmp/84aec9bf_011d_428e_950a_fa7fd7d85dfd.py", line 48, in <module>
+        File "<string>", line 3, in <module>
+      ModuleNotFoundError: No module named 'nltk'
+      error: exit status 255
+    input_file: deepseek-r1.pdf
+    prompt: |-
+      生成一个英文文本摘要工作流，使用NLTK库进行文本摘要。
+      核心功能：接收用户输入的英文文本，使用NLTK的TF-IDF算法提取关键句子，生成文本摘要。
+      要求：
+      1. 支持任意长度英文文本输入
+      2. 使用TF-IDF算法提取关键句子
+      3. 返回标准化的文本摘要结果
+workflow_cases:
+  data_visualization:
+    dsl: workflow_cases.data_visualization.yaml
+    feedback: |
+      - 节点ID: 10000003, 节点类型: code, 错误类型: runtime
+        错误信息: Traceback (most recent call last):
+        File "/var/sandbox/sandbox-python/tmp/d5168d43_4ace_43aa_9434_21048ee61eb1.py", line 48, in <module>
+        File "<string>", line 4, in <module>
+      ModuleNotFoundError: No module named 'pandas'
+      error: exit status 255
+    input_file: financial_report.xlsx
+    prompt: |-
+      通过工作流实现数据可视化展示。
+      要求：
+      1. 接收上传的数据文件（如Excel或CSV）
+      2. 解析数据内容，识别数据类型和结构
+      3. 根据数据类型自动选择合适的图表类型（如折线图、柱状图、饼图等）
+      4. 生成可视化图表
+      5. 提供图表的简要说明和分析

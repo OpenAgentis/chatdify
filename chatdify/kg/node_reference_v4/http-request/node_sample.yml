@@ -1,0 +1,334 @@
+nodes:
+- data:
+    authorization:
+      config: null
+      type: no-auth
+    body:
+      data:
+      - file:
+        - '1743992797516'
+        - input_file
+        id: key-value-12
+        key: file
+        type: file
+        value: ''
+      - id: key-value-419
+        key: ''
+        type: text
+        value: ''
+      type: form-data
+    desc: ''
+    headers: accept:application/json
+    isInIteration: true
+    isInLoop: false
+    iteration_id: '1744010726469'
+    method: POST
+    params: ''
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 100
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: 文件上传
+    type: http-request
+    url: https://api.example.com/tool/excel_chat/upload
+    variables: []
+  id: '17440175806120'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    authorization:
+      config: null
+      type: no-auth
+    body:
+      data:
+      - file:
+        - '1744102481785'
+        - meeting_audio
+        key: file
+        type: file
+        value: '@meeting_221.wav'
+      - key: num_speakers
+        type: text
+        value: '{{#1744102481785.num_speakers#}}'
+      type: form-data
+    desc: ''
+    headers: Content-Type:multipart/form-data
+    method: POST
+    params: ''
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 100
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: 会议ASR处理
+    type: http-request
+    url: http://127.0.0.1:8000/tool/meeting/transcribe
+    variables: []
+  id: '1744103588410'
+  selected: false
+  type: custom
+- data:
+    authorization:
+      config: null
+      type: no-auth
+    body:
+      data:
+      - file:
+        - '1744966979351'
+        - to_translate_doc
+        id: key-value-127
+        key: file
+        type: file
+        value: ''
+      - id: key-value-128
+        key: ''
+        type: text
+        value: ''
+      type: form-data
+    desc: ''
+    headers: ''
+    method: post
+    params: ''
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 100
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: HTTP 请求
+    type: http-request
+    url: '{{#1745195931468.upload_url#}}'
+    variables: []
+  id: '1745196170859'
+  selected: false
+  type: custom
+- data:
+    authorization:
+      config:
+        api_key: YOUR_API_KEY
+        header: X-API-Key
+        type: custom
+      type: api-key
+    body:
+      data:
+      - id: key-value-35
+        key: ''
+        type: text
+        value: "{\n    \"width\": 1024,\n    \"height\": 1024,\n    \"backgroundColor\"\
+          : \"#ffffff\",\n    \"borderColor\": \"#ffffff\",\n    \"borderWidth\":\
+          \ 0,\n    \"borderRadius\": 0,\n    \"borderTopLeftRadius\": 0,\n    \"\
+          borderTopRightRadius\": 0,\n    \"borderBottomLeftRadius\": 0,\n    \"borderBottomRightRadius\"\
+          : 0,\n    \"texts\": [\n        {\n            \"x\": 224,\n           \
+          \ \"y\": 114,\n            \"text\": \"{{#llm.text#}}\",\n            \"\
+          width\": 600,\n            \"font\": \"Alibaba-PuHuiTi-Heavy\",\n      \
+          \      \"fontSize\": 70,\n            \"lineHeight\": 80,\n            \"\
+          lineSpacing\": 1.3,\n            \"color\": \"#FFA500\",\n            \"\
+          textAlign\": \"left\",\n            \"zIndex\": 1\n        },\n\t\t{\n \
+          \           \"x\": 880,\n            \"y\": 1000,\n            \"text\"\
+          : \"长按识别二维码，扫描获取源码\",\n            \"font\": \"jiangxizhuokai\",\n     \
+          \       \"fontSize\": 22,\n            \"color\": \"#FFFFFF\",\n       \
+          \     \"width\": 580,\n            \"textAlign\": \"center\",\n        \
+          \    \"zIndex\": 1\n        }\n    ],\n    \"images\": [\n        {\n  \
+          \          \"x\": 0,\n            \"y\": 0,\n            \"width\": 1024,\n\
+          \            \"height\": 1024,\n            \"url\": \"{{#1736695833109.result#}}\"\
+          ,\n            \"borderColor\": \"#000000\",\n            \"borderWidth\"\
+          : 0,\n            \"borderRadius\": 0,\n            \"borderTopLeftRadius\"\
+          : 0,\n            \"borderTopRightRadius\": 0,\n            \"borderBottomLeftRadius\"\
+          : 0,\n            \"borderBottomRightRadius\": 0,\n            \"zIndex\"\
+          : 0\n        }\n    ],\n\t\"qrcodes\": [\n        {\n            \"x\":\
+          \ 808,\n            \"y\": 800,\n            \"size\": 200,\n          \
+          \  \"content\": \"https://mypicture-1258720957.cos.ap-nanjing.myqcloud.com/%E4%B8%8B%E8%BD%BD.png\"\
+          ,\n            \"foregroundColor\": \"#000\",\n            \"backgroundColor\"\
+          : \"#fff\",\n            \"zIndex\": 1\n        }\n    ]\n  }"
+      type: json
+    desc: ''
+    headers: Content-Type:application/json
+    method: post
+    params: ''
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 100
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: HTTP 请求
+    type: http-request
+    url: https://api.imgrender.cn/open/v1/pics
+    variables: []
+  id: '1736693844224'
+  selected: false
+  type: custom
+- data:
+    authorization:
+      config: null
+      type: no-auth
+    body:
+      data:
+      - id: key-value-1
+        key: ''
+        type: text
+        value: "{\n  \"filename\": \"{{#1743992797516.input_file.name#}}\",\n  \"\
+          instruction\": \"{{#sys.query#}}\",\n  \"draw_chart\": {{#conversation.draw_chart#}}\n\
+          }"
+      type: json
+    desc: ''
+    headers: accept:application/json
+    isInIteration: true
+    isInLoop: false
+    iteration_id: '17440153692090'
+    method: POST
+    params: ''
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 100
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: 表格响应
+    type: http-request
+    url: https://api.example.com/tool/excel_chat/analyze
+    variables: []
+  id: '17440176430110'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    authorization:
+      config: null
+      type: no-auth
+    body:
+      data:
+      - id: key-value-1
+        key: ''
+        type: text
+        value: '{
+
+          "model":"jimeng-2.1",
+
+          "prompt":"{{#1738651659789.prompt#}}",
+
+          "negativePrompt":"",
+
+          "width":1024,
+
+          "height":1024,
+
+          "sample_strength":0.5
+
+          }'
+      type: json
+    desc: ''
+    headers: Authorization:Bearer {{#env.jimengsessionid#}}
+    method: post
+    params: ''
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 100
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: HTTP 请求
+    type: http-request
+    url: https://jimeng.duckcloud.fun/v1/images/generations
+    variables: []
+  id: '1738651665284'
+  selected: false
+  type: custom
+- data:
+    authorization:
+      config:
+        api_key: YOUR_API_KEY
+        header: X-API-Key
+        type: custom
+      type: api-key
+    body:
+      data: '{{#1721652505347.output#}}'
+      type: json
+    desc: ''
+    headers: Content-Type:application/json
+    method: post
+    params: ''
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: ImgRender - 1
+    type: http-request
+    url: https://api.imgrender.net/open/v1/pics
+    variables: []
+  id: '1721651094996'
+  selected: false
+  type: custom
+- data:
+    authorization:
+      config: null
+      type: no-auth
+    body:
+      data: []
+      type: none
+    desc: ''
+    headers: ''
+    isInIteration: true
+    iteration_id: '1731576069313'
+    method: get
+    params: ''
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: HTTP 请求 2
+    type: http-request
+    url: https://r.jina.ai/{{#1731576098857.output#}}
+    variables: []
+  id: '1731576128205'
+  parentId: '1731576069313'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    authorization:
+      config: null
+      type: no-auth
+    body:
+      data: []
+      type: none
+    desc: ''
+    headers: ''
+    method: get
+    params: ''
+    selected: false
+    timeout:
+      max_connect_timeout: 0
+      max_read_timeout: 0
+      max_write_timeout: 0
+    title: 获取36氪热榜
+    type: http-request
+    url: https://api.vvhan.com/api/hotlist/36Ke
+    variables: []
+  id: '1731575885694'
+  selected: false
+  type: custom

@@ -1,0 +1,4 @@
+Build a translation workflow. The user enters a piece of text and a target language
+(English, Japanese or French). Detect the source language first; if it already equals the
+target language, return the text unchanged, otherwise translate it with an LLM and then let a
+second LLM step polish the translation for fluency. Output the final translation.

@@ -1,0 +1,802 @@
+app:
+  mode: workflow
+  name: financial_advisor_chatbot
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 2-1-3-target
+      source: '2'
+      sourceHandle: '1'
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 2-2-4-target
+      source: '2'
+      sourceHandle: '2'
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 2-3-5-target
+      source: '2'
+      sourceHandle: '3'
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 3-source-6-target
+      source: '3'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 4-source-7-target
+      source: '4'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 5-source-8-target
+      source: '5'
+      sourceHandle: source
+      target: '8'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 6-source-9-target
+      source: '6'
+      sourceHandle: source
+      target: '9'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 7-source-10-target
+      source: '7'
+      sourceHandle: source
+      target: '10'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 8-source-11-target
+      source: '8'
+      sourceHandle: source
+      target: '11'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 9-source-12-target
+      source: '9'
+      sourceHandle: source
+      target: '12'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 10-source-13-target
+      source: '10'
+      sourceHandle: source
+      target: '13'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 11-source-14-target
+      source: '11'
+      sourceHandle: source
+      target: '14'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: answer
+        targetType: end
+      id: 12-source-15-target
+      source: '12'
+      sourceHandle: source
+      target: '15'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: answer
+        targetType: end
+      id: 13-source-16-target
+      source: '13'
+      sourceHandle: source
+      target: '16'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: answer
+        targetType: end
+      id: 14-source-17-target
+      source: '14'
+      sourceHandle: source
+      target: '17'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入并传递给问题分类器
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - label: 用户输入
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: user_input
+        version: '1'
+      height: 52
+      id: '1'
+      parentId: null
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        classes:
+        - id: '1'
+          name: 储蓄类问题
+        - id: '2'
+          name: 投资类问题
+        - id: '3'
+          name: 保险类问题
+        desc: 根据用户输入分类咨询类型
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '1'
+        - user_input
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 问题分类器
+        type: question-classifier
+        version: '1'
+      height: 144
+      id: '2'
+      parentId: null
+      position:
+        x: 382.6767799030139
+        y: 282
+      positionAbsolute:
+        x: 382.6767799030139
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        desc: 从金融知识库检索储蓄相关信息
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: ''
+            provider: ''
+          score_threshold: null
+          top_k: 5
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: text-embedding-bge-m3
+              embedding_provider_name: openai_api_compatible
+              vector_weight: 0.7
+        query_variable_selector:
+        - '2'
+        - class_name
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 金融知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 144
+      id: '3'
+      parentId: null
+      position:
+        x: 685.3535598060278
+        y: 282
+      positionAbsolute:
+        x: 685.3535598060278
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        desc: 从投资知识库检索相关信息
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: ''
+            provider: ''
+          score_threshold: null
+          top_k: 5
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: text-embedding-bge-m3
+              embedding_provider_name: openai_api_compatible
+              vector_weight: 0.7
+        query_variable_selector:
+        - '2'
+        - class_name
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 投资知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 144
+      id: '4'
+      parentId: null
+      position:
+        x: 685.3535598060278
+        y: 282
+      positionAbsolute:
+        x: 685.3535598060278
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        desc: 从保险知识库检索相关信息
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: ''
+            provider: ''
+          score_threshold: null
+          top_k: 5
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: text-embedding-bge-m3
+              embedding_provider_name: openai_api_compatible
+              vector_weight: 0.7
+        query_variable_selector:
+        - '2'
+        - class_name
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 保险知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 144
+      id: '5'
+      parentId: null
+      position:
+        x: 685.3535598060278
+        y: 282
+      positionAbsolute:
+        x: 685.3535598060278
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据金融知识库检索结果生成储蓄建议回复
+        model:
+          completion_params:
+            max_tokens: 1024
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的金融顾问，擅长提供储蓄建议。请根据提供的金融知识库信息，为用户生成专业、清晰且实用的储蓄建议。建议应包含具体方案、注意事项和潜在收益分析。
+        - role: user
+          text: '根据以下金融知识库检索结果，为用户生成储蓄建议：
+
+            {{#3.result#}}
+
+
+            用户需求背景：
+
+            {{#1.user_input#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 储蓄建议生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 144
+      id: '6'
+      parentId: null
+      position:
+        x: 988.0303397090418
+        y: 282
+      positionAbsolute:
+        x: 988.0303397090418
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据投资知识库检索结果生成专业投资建议回复
+        model:
+          completion_params:
+            max_tokens: 1024
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的投资顾问，擅长提供各类投资建议。请根据提供的投资知识库信息，为用户生成专业、清晰且实用的投资建议。建议应包含具体投资方案、风险评估和预期收益分析。
+        - role: user
+          text: '根据以下投资知识库检索结果，为用户生成投资建议：
+
+
+            {{#4.result#}}
+
+
+            用户需求背景：
+
+
+            {{#1.user_input#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 投资建议生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 144
+      id: '7'
+      parentId: null
+      position:
+        x: 988.0303397090418
+        y: 282
+      positionAbsolute:
+        x: 988.0303397090418
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 格式化投资建议，将LLM生成的原始建议转换为结构化的HTML格式
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: "<div style='font-family: Arial, sans-serif; max-width: 800px; margin:\
+          \ 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;\
+          \ background-color: #f9f9f9;'>\n    <h2 style='color: #2c3e50; border-bottom:\
+          \ 2px solid #3498db; padding-bottom: 10px;'>投资建议报告</h2>\n    <div style='margin-top:\
+          \ 20px;'>\n        <h3 style='color: #2980b9;'>用户需求背景</h3>\n        <p style='color:\
+          \ #34495e;'>{{ user_input }}</p>\n    </div>\n    <div style='margin-top:\
+          \ 20px;'>\n        <h3 style='color: #2980b9;'>专业投资建议</h3>\n        <div\
+          \ style='background-color: white; padding: 15px; border-radius: 5px; box-shadow:\
+          \ 0 2px 4px rgba(0,0,0,0.1);'>\n            {{ investment_advice }}\n  \
+          \      </div>\n    </div>\n    <div style='margin-top: 20px; font-size:\
+          \ 0.9em; color: #7f8c8d; text-align: right;'>\n        生成时间: {{ now.strftime('%Y-%m-%d\
+          \ %H:%M') }}\n    </div>\n</div>"
+        title: 投资建议格式化
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1'
+          - user_input
+          variable: user_input
+        - value_selector:
+          - '7'
+          - text
+          variable: investment_advice
+        version: '1'
+      height: 144
+      id: '10'
+      parentId: null
+      position:
+        x: 1290.7061196120555
+        y: 282
+      positionAbsolute:
+        x: 1290.7061196120555
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 输出最终格式化后的投资建议
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10'
+          - output
+          variable: investment_advice
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 投资建议输出
+        type: end
+        version: '1'
+      height: 101
+      id: '13'
+      parentId: null
+      position:
+        x: 1593.3828995150693
+        y: 282
+      positionAbsolute:
+        x: 1593.3828995150693
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 完成投资咨询流程
+        output_type: object
+        outputs:
+        - value_selector:
+          - '13'
+          - investment_advice
+          variable: investment_advice
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 投资咨询完成
+        type: end
+        version: '1'
+      height: 101
+      id: '16'
+      parentId: null
+      position:
+        x: 1896.0596794180835
+        y: 282
+      positionAbsolute:
+        x: 1896.0596794180835
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据保险知识库检索结果生成专业保险建议回复
+        model:
+          completion_params:
+            max_tokens: 1024
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的保险顾问，擅长提供各类保险建议。请根据提供的保险知识库信息，为用户生成专业、清晰且实用的保险建议。建议应包含具体保险方案、风险评估和保障范围分析。
+        - role: user
+          text: '根据以下保险知识库检索结果，为用户生成保险建议：
+
+
+            {{#5.result#}}
+
+
+            用户需求背景：
+
+
+            {{#1.user_input#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 保险建议生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 144
+      id: '8'
+      parentId: null
+      position:
+        x: 988.0303397090418
+        y: 282
+      positionAbsolute:
+        x: 988.0303397090418
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 格式化保险建议，将LLM生成的原始建议转换为结构化的HTML格式
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: "<div style='font-family: Arial, sans-serif; max-width: 800px; margin:\
+          \ 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;\
+          \ background-color: #f9f9f9;'>\n    <h2 style='color: #2c3e50; border-bottom:\
+          \ 2px solid #3498db; padding-bottom: 10px;'>保险建议报告</h2>\n    <div style='margin-top:\
+          \ 20px;'>\n        <h3 style='color: #2980b9;'>用户需求背景</h3>\n        <p style='color:\
+          \ #34495e;'>{{ user_input }}</p>\n    </div>\n    <div style='margin-top:\
+          \ 20px;'>\n        <h3 style='color: #2980b9;'>专业保险建议</h3>\n        <div\
+          \ style='background-color: white; padding: 15px; border-radius: 5px; box-shadow:\
+          \ 0 2px 4px rgba(0,0,0,0.1);'>\n            {{ insurance_advice }}\n   \
+          \     </div>\n    </div>\n    <div style='margin-top: 20px; font-size: 0.9em;\
+          \ color: #7f8c8d; text-align: right;'>\n        生成时间: {{ now.strftime('%Y-%m-%d\
+          \ %H:%M') }}\n    </div>\n</div>"
+        title: 保险建议格式化
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1'
+          - user_input
+          variable: user_input
+        - value_selector:
+          - '8'
+          - text
+          variable: insurance_advice
+        version: '1'
+      height: 144
+      id: '11'
+      parentId: null
+      position:
+        x: 1290.7061196120555
+        y: 282
+      positionAbsolute:
+        x: 1290.7061196120555
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 输出最终格式化后的保险建议
+        output_type: object
+        outputs:
+        - value_selector:
+          - '11'
+          - output
+          variable: insurance_advice
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 保险建议输出
+        type: end
+        version: '1'
+      height: 101
+      id: '14'
+      parentId: null
+      position:
+        x: 1593.3828995150693
+        y: 282
+      positionAbsolute:
+        x: 1593.3828995150693
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 完成保险咨询流程
+        output_type: object
+        outputs:
+        - value_selector:
+          - '14'
+          - insurance_advice
+          variable: insurance_advice
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 保险咨询完成
+        type: end
+        version: '1'
+      height: 101
+      id: '17'
+      parentId: null
+      position:
+        x: 1896.0596794180835
+        y: 282
+      positionAbsolute:
+        x: 1896.0596794180835
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 格式化储蓄建议，将LLM生成的原始建议转换为结构化的HTML格式
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: "<div style='font-family: Arial, sans-serif; max-width: 800px; margin:\
+          \ 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;\
+          \ background-color: #f9f9f9;'>\n    <h2 style='color: #2c3e50; border-bottom:\
+          \ 2px solid #3498db; padding-bottom: 10px;'>储蓄建议报告</h2>\n    <div style='margin-top:\
+          \ 20px;'>\n        <h3 style='color: #2980b9;'>用户需求背景</h3>\n        <p style='color:\
+          \ #34495e;'>{{ user_input }}</p>\n    </div>\n    <div style='margin-top:\
+          \ 20px;'>\n        <h3 style='color: #2980b9;'>专业储蓄建议</h3>\n        <div\
+          \ style='background-color: white; padding: 15px; border-radius: 5px; box-shadow:\
+          \ 0 2px 4px rgba(0,0,0,0.1);'>\n            {{ saving_advice }}\n      \
+          \  </div>\n    </div>\n    <div style='margin-top: 20px; font-size: 0.9em;\
+          \ color: #7f8c8d; text-align: right;'>\n        生成时间: {{ now.strftime('%Y-%m-%d\
+          \ %H:%M') }}\n    </div>\n</div>"
+        title: 储蓄建议格式化
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1'
+          - user_input
+          variable: user_input
+        - value_selector:
+          - '6'
+          - text
+          variable: saving_advice
+        version: '1'
+      height: 144
+      id: '9'
+      parentId: null
+      position:
+        x: 1290.7061196120555
+        y: 282
+      positionAbsolute:
+        x: 1290.7061196120555
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 输出最终格式化后的储蓄建议
+        output_type: object
+        outputs:
+        - value_selector:
+          - '9'
+          - output
+          variable: saving_advice
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 储蓄建议输出
+        type: end
+        version: '1'
+      height: 101
+      id: '12'
+      parentId: null
+      position:
+        x: 1593.3828995150693
+        y: 282
+      positionAbsolute:
+        x: 1593.3828995150693
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 完成储蓄咨询流程
+        output_type: object
+        outputs:
+        - value_selector:
+          - '12'
+          - saving_advice
+          variable: saving_advice
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 储蓄咨询完成
+        type: end
+        version: '1'
+      height: 101
+      id: '15'
+      parentId: null
+      position:
+        x: 1896.0596794180835
+        y: 282
+      positionAbsolute:
+        x: 1896.0596794180835
+        y: 282
+      type: custom
+      width: 243
+      zIndex: 0
+    type: custom

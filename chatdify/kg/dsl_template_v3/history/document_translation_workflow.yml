@@ -1,0 +1,401 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: translator
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: junjiem/mcp_sse:0.1.0@5a75f28f62f193346cd692bcb4621b4029fd05f9c33848c46b73199aaac5c17a
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: code
+      id: 1744966979351-source-1745195931468-target
+      selected: false
+      source: '1744966979351'
+      sourceHandle: source
+      target: '1745195931468'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: http-request
+      id: 1745195931468-source-1745196170859-target
+      selected: false
+      source: '1745195931468'
+      sourceHandle: source
+      target: '1745196170859'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: code
+      id: 1745196170859-source-1745196454575-target
+      selected: false
+      source: '1745196170859'
+      sourceHandle: source
+      target: '1745196454575'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: tool
+      id: 1745196454575-source-1745833171246-target
+      selected: false
+      source: '1745196454575'
+      sourceHandle: source
+      target: '1745833171246'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: end
+      id: 1745833171246-source-1745196968185-target
+      selected: false
+      source: '1745833171246'
+      sourceHandle: source
+      target: '1745196968185'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 源语言
+          max_length: 48
+          options:
+          - 中文
+          - 英文
+          required: true
+          type: select
+          variable: src_lang
+        - label: 目标语言
+          max_length: 48
+          options:
+          - 英文
+          - 中文
+          required: true
+          type: select
+          variable: dst_lang
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          label: 待翻译文档
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: to_translate_doc
+      height: 142
+      id: '1744966979351'
+      position:
+        x: 79
+        y: 282
+      positionAbsolute:
+        x: 79
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "def main() -> dict:\n    base_url = \"https://api.example.com\"\n \
+          \   return dict(\n        upload_url=f\"{base_url}/translator/upload\",\n\
+          \        base_url=base_url\n    )"
+        code_language: python3
+        desc: ''
+        outputs:
+          base_url:
+            children: null
+            type: string
+          upload_url:
+            children: null
+            type: string
+        selected: false
+        title: 代码执行
+        type: code
+        variables: []
+      height: 54
+      id: '1745195931468'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - file:
+            - '1744966979351'
+            - to_translate_doc
+            id: key-value-127
+            key: file
+            type: file
+            value: ''
+          - id: key-value-128
+            key: ''
+            type: text
+            value: ''
+          type: form-data
+        desc: ''
+        headers: ''
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: HTTP 请求
+        type: http-request
+        url: '{{#1745195931468.upload_url#}}'
+        variables: []
+      height: 122
+      id: '1745196170859'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "def main(status_code: int, body: dict) -> dict:\n    if status_code\
+          \ != 200:\n        raise Exception(f\"查询任务状态失败：{body}\")\n\n    import json\n\
+          \    body = json.loads(body)\n\n    return dict(file_handler_id=body['file_handler_id'])"
+        code_language: python3
+        desc: ''
+        outputs:
+          file_handler_id:
+            children: null
+            type: string
+        selected: false
+        title: 代码执行 2
+        type: code
+        variables:
+        - value_selector:
+          - '1745196170859'
+          - status_code
+          variable: status_code
+        - value_selector:
+          - '1745196170859'
+          - body
+          variable: body
+      height: 54
+      id: '1745196454575'
+      position:
+        x: 991
+        y: 282
+      positionAbsolute:
+        x: 991
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1745833171246'
+          - text
+          variable: status_result
+        selected: true
+        title: 结束
+        type: end
+      height: 90
+      id: '1745196968185'
+      position:
+        x: 1673
+        y: 282
+      positionAbsolute:
+        x: 1673
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        is_team_authorization: true
+        output_schema: null
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Name of the tool to execute.
+            ja_JP: Name of the tool to execute.
+            pt_BR: Name of the tool to execute.
+            zh_Hans: 要执行的工具的名称。
+          label:
+            en_US: Tool Name
+            ja_JP: Tool Name
+            pt_BR: Tool Name
+            zh_Hans: 工具名称
+          llm_description: Name of the tool to execute.
+          max: null
+          min: null
+          name: tool_name
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Tool arguments (JSON string in the python dict[str, Any] format).
+            ja_JP: Tool arguments (JSON string in the python dict[str, Any] format).
+            pt_BR: Tool arguments (JSON string in the python dict[str, Any] format).
+            zh_Hans: 工具的参数。
+          label:
+            en_US: Arguments
+            ja_JP: Arguments
+            pt_BR: Arguments
+            zh_Hans: 参数
+          llm_description: Tool arguments (JSON string in the python dict[str, Any]
+            format).
+          max: null
+          min: null
+          name: arguments
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        params:
+          arguments: ''
+          tool_name: ''
+        provider_id: junjiem/mcp_sse/mcp_sse
+        provider_name: junjiem/mcp_sse/mcp_sse
+        provider_type: builtin
+        selected: false
+        title: Translator数字员工
+        tool_configurations: {}
+        tool_label: 调用 MCP 工具
+        tool_name: mcp_sse_call_tool
+        tool_parameters:
+          arguments:
+            type: mixed
+            value: "{\n    \"src_lang\": \"{{#1744966979351.src_lang#}}\",\n    \"\
+              dst_lang\": \"{{#1744966979351.dst_lang#}}\",\n    \"file_handler_id\"\
+              : \"{{#1745196454575.file_handler_id#}}\"\n}"
+          tool_name:
+            type: mixed
+            value: mcp_translate
+        type: tool
+      height: 54
+      id: '1745833171246'
+      position:
+        x: 1295
+        y: 282
+      positionAbsolute:
+        x: 1295
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -1127
+      y: 108.5
+      zoom: 1

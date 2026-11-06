@@ -1,0 +1,175 @@
+app:
+  mode: workflow
+  name: english_text_summarization
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: code
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的英文文本
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - label: 英文文本
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: english_text
+        version: '1'
+      height: 90
+      id: '1'
+      parentId: null
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import nltk\nfrom nltk.tokenize import sent_tokenize\nfrom nltk.corpus\
+          \ import stopwords\nfrom sklearn.feature_extraction.text import TfidfVectorizer\n\
+          import json\n\ndef extract_json_from_markdown(markdown_text: str) -> str:\n\
+          \    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(english_text: str)\
+          \ -> dict:\n    try:\n        # 预处理输入\n        text = extract_json_from_markdown(english_text)\n\
+          \        \n        # 下载必要的NLTK数据\n        nltk.download('punkt', quiet=True)\n\
+          \        nltk.download('stopwords', quiet=True)\n        \n        # 分句\n\
+          \        sentences = sent_tokenize(text)\n        \n        # 计算TF-IDF\n\
+          \        stop_words = set(stopwords.words('english'))\n        vectorizer\
+          \ = TfidfVectorizer(stop_words=stop_words)\n        tfidf_matrix = vectorizer.fit_transform(sentences)\n\
+          \        \n        # 获取特征词\n        feature_names = vectorizer.get_feature_names_out()\n\
+          \        \n        # 计算句子重要性得分\n        sentence_scores = {}\n        for\
+          \ i, sentence in enumerate(sentences):\n            score = 0\n        \
+          \    for word in sentence.split():\n                word = word.lower()\n\
+          \                if word in feature_names:\n                    idx = list(feature_names).index(word)\n\
+          \                    score += tfidf_matrix[i, idx]\n            sentence_scores[i]\
+          \ = score\n        \n        # 选择得分最高的3个句子作为摘要\n        top_sentences =\
+          \ sorted(sentence_scores.items(), key=lambda x: x[1], reverse=True)[:3]\n\
+          \        summary = ' '.join([sentences[i] for i, _ in top_sentences])\n\
+          \        \n        return {\n            \"summary\": summary,\n       \
+          \     \"sentences\": sentences,\n            \"feature_words\": feature_names.tolist(),\n\
+          \            \"sentence_scores\": sentence_scores,\n            \"error\"\
+          : \"\"\n        }\n        \n    except Exception as e:\n        return\
+          \ {\n            \"summary\": \"\",\n            \"sentences\": [],\n  \
+          \          \"feature_words\": [],\n            \"sentence_scores\": {},\n\
+          \            \"error\": str(e)\n        }"
+        code_language: python3
+        desc: 使用NLTK进行TF-IDF摘要处理
+        outputs:
+          error:
+            children: null
+            type: string
+          feature_words:
+            children: null
+            type: array[string]
+          sentence_scores:
+            children: null
+            type: object
+          sentences:
+            children: null
+            type: array[string]
+          summary:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: TF-IDF摘要处理
+        type: code
+        variables:
+        - value_selector:
+          - '1'
+          - english_text
+          variable: english_text
+        version: '1'
+      height: 54
+      id: '2'
+      parentId: null
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 结束节点返回标准化的文本摘要结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '2'
+          - summary
+          variable: summary
+        - value_selector:
+          - '2'
+          - sentences
+          variable: sentences
+        - value_selector:
+          - '2'
+          - feature_words
+          variable: feature_words
+        - value_selector:
+          - '2'
+          - sentence_scores
+          variable: sentence_scores
+        - value_selector:
+          - '2'
+          - error
+          variable: error
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 摘要结果
+        type: end
+        version: '1'
+      height: 90
+      id: '3'
+      parentId: null
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

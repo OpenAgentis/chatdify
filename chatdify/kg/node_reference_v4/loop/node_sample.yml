@@ -1,0 +1,47 @@
+nodes:
+- data:
+    break_conditions:
+    - comparison_operator: ≠
+      id: c90022f1915d49c389dd9fe0ddcee921
+      value: '20'
+      varType: number
+      variable_selector:
+      - '1744689117088'
+      - score
+    desc: ''
+    error_handle_mode: terminated
+    height: 319
+    logical_operator: and
+    loop_count: 10
+    loop_variables:
+    - id: 20ed7db9-e06a-4ef4-9f50-c9c71a018dcd
+      label: score
+      value: '0'
+      value_type: constant
+      var_type: number
+    - id: 2b8a4579-efeb-4d69-a4ad-db210a7274cd
+      label: result
+      value: '""'
+      value_type: constant
+      var_type: string
+    - id: 0db037bd-55cd-4384-b6b9-6c218d222b6f
+      label: reason
+      value: '""'
+      value_type: constant
+      var_type: string
+    - id: 0db037bd-55cd-4384-b6b9-6c218d222b6g
+      label: original_text
+      value:
+      - '10000001'
+      - original_text
+      value_type: variable
+      var_type: string
+    selected: false
+    start_node_id: 1744689095698start
+    title: 循环
+    type: loop
+    width: 1600
+  id: '1744689095698'
+  selected: false
+  type: custom
+  zIndex: 1

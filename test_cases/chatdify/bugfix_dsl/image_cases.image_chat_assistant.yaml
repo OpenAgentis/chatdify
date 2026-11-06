@@ -1,0 +1,174 @@
+app:
+  mode: workflow
+  name: image_chat_assistant
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1749036701892-source-llm-target
+      source: '1749036701892'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: llm-source-answer-target
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的图片文件(JPG/JPEG/PNG/GIF/WEBP/SVG格式)作为输入
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - jpg
+          - jpeg
+          - png
+          - gif
+          - webp
+          - svg
+          allowed_file_types:
+          - image
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 图片文件
+          max_length: 48
+          required: true
+          type: file
+          variable: image
+        version: '1'
+      height: 90
+      id: '1749036701892'
+      parentId: null
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: Qwen/Qwen2.5-VL-32B-Instruct
+          provider: langgenius/siliconflow/siliconflow
+        prompt_template:
+        - id: deb2ce6c-667b-4614-a16d-80361bcf3963
+          role: system
+          text: '## 角色
+
+
+            你是一个图片智能问答客服。你需要解答用户的问题并给出相关的建议。
+
+
+            ## 输入：
+
+
+            输入包含两种类型的内容:
+
+
+            1. 图片
+
+
+            2. 用户实时的提问
+
+
+            ## 流程
+
+
+            1. 根据用户输入的图片，理解图片的内容
+
+
+            2. 用户会在输入的图片基础上进行问询，结合用户的提问以及图片
+
+
+            3. 如果用户的提问不清晰或者有歧义，请输出"您的提问不清晰或存在歧义"，并输出你理解的几种可能。
+
+
+            4. 如果用户的提问清晰准确，则回答用户的内容'
+        - id: e69d2c38-a79f-4aa0-9b41-6f671162f607
+          role: user
+          text: '用户输入的图片：{{#1749036701892.image#}}
+
+
+            用户的提问：{{#sys.query#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: LLM
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1749036701892'
+            - image
+          enabled: true
+      height: 90
+      id: llm
+      parentId: null
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: ''
+        output_type: object
+        outputs:
+        - value_selector:
+          - llm
+          - text
+          variable: text
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 回答
+        type: end
+        version: '1'
+      height: 105
+      id: answer
+      parentId: null
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

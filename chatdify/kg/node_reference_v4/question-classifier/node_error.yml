@@ -1,0 +1,5 @@
+node_error:
+- 'got invalid json object. error: Expecting '','' delimiter: line 2 column 22 (char
+  23)'
+- 'got invalid json object. error: Expecting property name enclosed in double quotes:
+  line 2 column 3 (char 4)'

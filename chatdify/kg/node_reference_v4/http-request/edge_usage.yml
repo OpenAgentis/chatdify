@@ -1,0 +1,19 @@
+edge_usage:
+  节点类型: http-request
+  使用规范:
+      - HTTP请求节点允许通过HTTP协议发送服务器请求，适用于获取外部数据、webhook、下载文件等情景
+      - 支持GET、POST、HEAD、PATCH、PUT、DELETE等常见HTTP请求方法
+      - 支持在URL、请求头、查询参数、请求体等部分动态插入变量
+      - 支持文件上传（PUT请求的binary body）和文件下载（自动保存响应中的文件）
+      - 返回值包括响应体、状态码、响应头和文件
+      - 支持错误重试（最大10次，最大间隔5000ms）和异常处理
+  应用场景:
+    适用场景:
+      - 常见使用场景包括：
+        - 获取第三方API数据。
+        - 发送webhook通知。
+        - 文件上传下载。
+        - 第三方服务集成和API调用。
+      - 支持多种请求体格式：binary、json、raw-text、x-www-form-urlencoded、form-data。
+      - 支持各种认证方式配置。
+  常见使用错误: ""

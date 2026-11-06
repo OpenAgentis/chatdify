@@ -1,0 +1,427 @@
+app:
+  mode: workflow
+  name: meeting_minutes_process
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 2-source-4-target
+      source: '2'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 2-source-5-target
+      source: '2'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 3-source-6-target
+      source: '3'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 4-source-7-target
+      source: '4'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 5-source-8-target
+      source: '5'
+      sourceHandle: source
+      target: '8'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的会议文档或音频文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 会议文本文件
+          max_length: 48
+          required: true
+          type: file
+          variable: meeting_note_file
+        - allowed_file_types:
+          - audio
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 会议音频文件
+          max_length: 48
+          required: false
+          type: file
+          variable: meeting_audio
+        - label: 上下文关键词
+          max_length: 256
+          required: false
+          type: text-input
+          variable: context_words
+        - label: 发言人数量
+          max_length: 48
+          required: false
+          type: number
+          variable: num_speakers
+        version: '1'
+      height: 168
+      id: '1'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 提取会议文本文件内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1'
+        - meeting_note_file
+        version: '1'
+      height: 92
+      id: '2'
+      parentId: null
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点分析会议文本，生成章节总结
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 22de0333-b5ed-414b-ac59-ec6d7cbf5772
+          role: system
+          text: '你是一个专业的会议分析助手，负责从会议文本中提取关键章节并生成结构化的章节总结。请仔细阅读会议内容，识别并总结每个章节的核心内容。输出格式应清晰、简洁，包含以下部分：
+
+
+            1. 章节一标题：章节内容摘要
+
+
+            2. 章节二标题：章节内容摘要
+
+
+            3. 章节三标题：章节内容摘要
+
+
+            请确保总结准确全面，不遗漏重要内容，也不添加无关信息。'
+        - id: 8d634975-4cc7-46bf-a352-da11c3949acc
+          role: user
+          text: '会议内容：
+
+
+            {{#2.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 生成章节总结
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '3'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点生成发言人观点和贡献总结
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 22de0333-b5ed-414b-ac59-ec6d7cbf5772
+          role: system
+          text: "你是一个专业的会议分析助手，负责从会议文本中分析每位发言人的观点和贡献。请仔细阅读会议内容，识别并总结每位发言人的核心观点和具体贡献。输出格式应清晰、简洁，包含以下部分：\n\
+            \n1. 发言人1：\n   - 观点：...\n   - 贡献：...\n\n2. 发言人2：\n   - 观点：...\n   - 贡献：...\n\
+            \n...\n\n请确保总结准确全面，不遗漏重要内容，也不添加无关信息。"
+        - id: 8d634975-4cc7-46bf-a352-da11c3949acc
+          role: user
+          text: '会议内容：
+
+
+            {{#2.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 生成发言人观点和贡献总结
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '4'
+      parentId: null
+      position:
+        x: 700
+        y: 400
+      positionAbsolute:
+        x: 700
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点分析会议文本，生成具体的行动项和待办事项
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 22de0333-b5ed-414b-ac59-ec6d7cbf5772
+          role: system
+          text: '你是一个专业的会议行动项生成助手，负责从会议文本中提取具体的行动项和待办事项。请仔细阅读会议内容，识别并列出会议中讨论的所有行动项，每个行动项应包含以下要素：
+
+
+            1. 行动描述（清晰具体的任务）
+
+            2. 负责人（如能确定）
+
+            3. 截止时间（如有明确时间要求）
+
+            4. 优先级（高/中/低）
+
+
+            同时，请列出需要跟踪的待办事项，包括：
+
+            1. 待办事项描述
+
+            2. 相关责任人
+
+            3. 预计完成时间
+
+            4. 状态（未开始/进行中/已完成）
+
+
+            输出格式为：
+
+
+            ### 行动项
+
+            1. [行动描述] | 负责人: [姓名] | 截止时间: [日期] | 优先级: [高/中/低]
+
+            2. [行动描述] | 负责人: [姓名] | 截止时间: [日期] | 优先级: [高/中/低]
+
+            ...
+
+
+            ### 待办事项
+
+            1. [待办事项描述] | 责任人: [姓名] | 预计完成时间: [日期] | 状态: [未开始/进行中/已完成]
+
+            2. [待办事项描述] | 责任人: [姓名] | 预计完成时间: [日期] | 状态: [未开始/进行中/已完成]
+
+            ...
+
+
+            请确保行动项和待办事项提取准确完整，不遗漏重要任务，也不添加无关信息。'
+        - id: 8d634975-4cc7-46bf-a352-da11c3949acc
+          role: user
+          text: '会议内容：
+
+
+            {{#2.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 生成会议行动项和待办事项
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '5'
+      parentId: null
+      position:
+        x: 700
+        y: 400
+      positionAbsolute:
+        x: 700
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终的章节总结结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '3'
+          - text
+          variable: chapter_summary
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 章节总结输出
+        type: end
+        version: '1'
+      height: 90
+      id: '6'
+      parentId: null
+      position:
+        x: 1300
+        y: 100
+      positionAbsolute:
+        x: 1300
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终的发言人总结结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '4'
+          - text
+          variable: speaker_summary
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 发言人总结输出
+        type: end
+        version: '1'
+      height: 90
+      id: '7'
+      parentId: null
+      position:
+        x: 1300
+        y: 400
+      positionAbsolute:
+        x: 1300
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终的会议行动项结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '5'
+          - text
+          variable: action_items
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 会议行动项输出
+        type: end
+        version: '1'
+      height: 90
+      id: '8'
+      parentId: null
+      position:
+        x: 1300
+        y: 400
+      positionAbsolute:
+        x: 1300
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

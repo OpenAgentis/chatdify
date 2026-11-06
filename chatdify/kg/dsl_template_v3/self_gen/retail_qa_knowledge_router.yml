@@ -1,0 +1,764 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: retail_qa_knowledge_router
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/siliconflow:0.0.8@217f973bd7ced1b099c2f0c669f1356bdf4cc38b8372fd58d7874f9940b95de3
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.6@dd589dc093c8084925858034ab5ec1fdf0d33819f43226c2f8c4a749a9acbbb2
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 10000002-1-10000003-target
+      source: '10000002'
+      sourceHandle: '1'
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 10000002-2-10000004-target
+      source: '10000002'
+      sourceHandle: '2'
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 10000003-source-10000005-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 10000004-source-10000006-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000005-source-10000007-target
+      source: '10000005'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000006-source-10000008-target
+      source: '10000006'
+      sourceHandle: source
+      target: '10000008'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 10000002-3-1753673345131-target
+      source: '10000002'
+      sourceHandle: '3'
+      target: '1753673345131'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 10000002-4-1753673354300-target
+      source: '10000002'
+      sourceHandle: '4'
+      target: '1753673354300'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1753673345131-source-1753673361554-target
+      source: '1753673345131'
+      sourceHandle: source
+      target: '1753673361554'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1753673354300-source-1753673364761-target
+      source: '1753673354300'
+      sourceHandle: source
+      target: '1753673364761'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1753673361554-source-1753673370084-target
+      source: '1753673361554'
+      sourceHandle: source
+      target: '1753673370084'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1753673364761-source-1753673375758-target
+      source: '1753673364761'
+      sourceHandle: source
+      target: '1753673375758'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的零售相关问题
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: 问题输入
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: question
+        version: '1'
+      height: 118
+      id: '10000001'
+      parentId: null
+      position:
+        x: 30
+        y: 263
+      positionAbsolute:
+        x: 30
+        y: 263
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        classes:
+        - id: '1'
+          name: 产品咨询
+        - id: '2'
+          name: 价格查询
+        - id: '3'
+          name: 库存查询
+        - id: '4'
+          name: 售后服务
+        desc: 对零售相关问题进行分类，输出分类ID和名称
+        instruction: '请根据用户问题内容判断其属于以下哪种类别：
+
+          1. 产品咨询：询问产品功能、规格、使用方法等
+
+          2. 价格查询：询问产品价格、折扣、促销信息等
+
+          3. 库存查询：询问产品库存、到货时间、门店库存等
+
+          4. 售后服务：询问退换货、维修、投诉处理等'
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '10000001'
+        - question
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 零售问题分类器
+        type: question-classifier
+        version: '1'
+      height: 292
+      id: '10000002'
+      parentId: null
+      position:
+        x: 334
+        y: 400
+      positionAbsolute:
+        x: 334
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 8c4620fa-15d7-464f-9cb9-561f1a59eb3f
+        desc: 根据问题分类结果查询相关知识库
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: BAAI/bge-reranker-v2-m3
+            provider: langgenius/siliconflow/siliconflow
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: BAAI/bge-m3
+              embedding_provider_name: langgenius/siliconflow/siliconflow
+              vector_weight: 0.7
+        query_variable_selector:
+        - '10000001'
+        - question
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 零售知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 82
+      id: '10000003'
+      parentId: null
+      position:
+        x: 650
+        y: 400
+      positionAbsolute:
+        x: 650
+        y: 400
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 8c4620fa-15d7-464f-9cb9-561f1a59eb3f
+        desc: 根据问题分类结果查询相关知识库
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: BAAI/bge-reranker-v2-m3
+            provider: langgenius/siliconflow/siliconflow
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: BAAI/bge-m3
+              embedding_provider_name: langgenius/siliconflow/siliconflow
+              vector_weight: 0.7
+        query_variable_selector:
+        - '10000001'
+        - question
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 零售知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 82
+      id: '10000004'
+      parentId: null
+      position:
+        x: 650
+        y: 500
+      positionAbsolute:
+        x: 650
+        y: 500
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '10000003'
+          - result
+        desc: 基于检索结果生成专业回答
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 19207999-f840-4672-9db4-2afd0d0a3a48
+          role: system
+          text: '你是一位零售领域的专业顾问，将根据提供的知识库内容回答用户问题。回答必须准确、专业且符合零售行业规范。
+
+
+            请遵循以下规则：
+
+            1. 仅基于提供的上下文回答问题
+
+            2. 如果不知道答案，请明确说明
+
+            3. 避免提及你从上下文中获取信息
+
+            4. 回答要简洁专业，符合零售行业标准
+
+            5. 根据用户问题的语言使用相同语言回答'
+        - id: c83389f1-03f5-4b33-a3bc-52a4dcd1f0c1
+          role: user
+          text: '用户问题：{{#10000001.question#}}
+
+
+            相关上下文：
+
+            {{#context#}}
+
+
+            请基于以上信息提供专业回答。'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 零售知识问答
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '10000005'
+      parentId: null
+      position:
+        x: 950
+        y: 318.44241679521053
+      positionAbsolute:
+        x: 950
+        y: 318.44241679521053
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '10000004'
+          - result
+        desc: 基于检索结果生成专业回答
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 90c4a641-b674-400d-81e9-b7c3f3df1900
+          role: system
+          text: '你是一位零售领域的专业顾问，将根据提供的知识库内容回答用户问题。回答必须准确、专业且符合零售行业规范。
+
+
+            请遵循以下规则：
+
+            1. 仅基于提供的上下文回答问题
+
+            2. 如果不知道答案，请明确说明
+
+            3. 避免提及你从上下文中获取信息
+
+            4. 回答要简洁专业，符合零售行业标准
+
+            5. 根据用户问题的语言使用相同语言回答'
+        - id: 8a475432-e457-4b2f-b106-07d619019ed6
+          role: user
+          text: '用户问题：{{#10000001.question#}}
+
+
+            相关上下文：
+
+            {{#context#}}
+
+
+            请基于以上信息提供专业回答。'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 零售知识问答
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '10000006'
+      parentId: null
+      position:
+        x: 959.7020155073037
+        y: 500
+      positionAbsolute:
+        x: 959.7020155073037
+        y: 500
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 向用户展示最终回答结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000005'
+          - text
+          variable: answer
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 零售问答结果
+        type: end
+        version: '1'
+      height: 118
+      id: '10000007'
+      parentId: null
+      position:
+        x: 1283.3122522949138
+        y: 304.6580365352461
+      positionAbsolute:
+        x: 1283.3122522949138
+        y: 304.6580365352461
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 向用户展示最终回答结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000006'
+          - text
+          variable: answer
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 零售问答结果
+        type: end
+        version: '1'
+      height: 118
+      id: '10000008'
+      parentId: null
+      position:
+        x: 1283.3122522949138
+        y: 483.32469665535996
+      positionAbsolute:
+        x: 1283.3122522949138
+        y: 483.32469665535996
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids: []
+        desc: ''
+        multiple_retrieval_config:
+          reranking_enable: false
+          top_k: 4
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: BAAI/bge-m3
+              embedding_provider_name: langgenius/siliconflow/siliconflow
+              vector_weight: 0.7
+        query_variable_selector: []
+        retrieval_mode: multiple
+        selected: false
+        title: 知识检索 5
+        type: knowledge-retrieval
+      height: 54
+      id: '1753673345131'
+      parentId: null
+      position:
+        x: 618.3318101414504
+        y: 679.0583480740074
+      positionAbsolute:
+        x: 618.3318101414504
+        y: 679.0583480740074
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids: []
+        desc: ''
+        multiple_retrieval_config:
+          reranking_enable: false
+          top_k: 4
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: BAAI/bge-m3
+              embedding_provider_name: langgenius/siliconflow/siliconflow
+              vector_weight: 0.7
+        query_variable_selector: []
+        retrieval_mode: multiple
+        selected: false
+        title: 知识检索 4
+        type: knowledge-retrieval
+      height: 54
+      id: '1753673354300'
+      parentId: null
+      position:
+        x: 618.3318101414504
+        y: 802.407030021784
+      positionAbsolute:
+        x: 618.3318101414504
+        y: 802.407030021784
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 4c0e42c8-dcc3-4877-8fbe-8c9911515ce3
+          role: system
+          text: '你是一位零售领域的专业顾问，将根据提供的知识库内容回答用户问题。回答必须准确、专业且符合零售行业规范。
+
+
+            请遵循以下规则：
+
+            1. 仅基于提供的上下文回答问题
+
+            2. 如果不知道答案，请明确说明
+
+            3. 避免提及你从上下文中获取信息
+
+            4. 回答要简洁专业，符合零售行业标准
+
+            5. 根据用户问题的语言使用相同语言回答'
+        selected: true
+        title: LLM 3
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1753673361554'
+      parentId: null
+      position:
+        x: 922.3318101414504
+        y: 679.0583480740074
+      positionAbsolute:
+        x: 922.3318101414504
+        y: 679.0583480740074
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - role: system
+          text: ''
+        selected: false
+        title: LLM 4
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1753673364761'
+      parentId: null
+      position:
+        x: 922.3318101414504
+        y: 802.407030021784
+      positionAbsolute:
+        x: 922.3318101414504
+        y: 802.407030021784
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs: []
+        selected: false
+        title: 结束 3
+        type: end
+      height: 54
+      id: '1753673370084'
+      parentId: null
+      position:
+        x: 1226.3318101414504
+        y: 679.0583480740074
+      positionAbsolute:
+        x: 1226.3318101414504
+        y: 679.0583480740074
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs: []
+        selected: false
+        title: 结束 4
+        type: end
+      height: 54
+      id: '1753673375758'
+      parentId: null
+      position:
+        x: 1226.3318101414504
+        y: 802.407030021784
+      positionAbsolute:
+        x: 1226.3318101414504
+        y: 802.407030021784
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -318.36996693148444
+      y: -5.289220824076438
+      zoom: 0.757858283255199

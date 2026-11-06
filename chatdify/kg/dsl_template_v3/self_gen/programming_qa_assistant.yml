@@ -1,0 +1,397 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: programming_qa_assistant
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/siliconflow:0.0.8@217f973bd7ced1b099c2f0c669f1356bdf4cc38b8372fd58d7874f9940b95de3
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.6@dd589dc093c8084925858034ab5ec1fdf0d33819f43226c2f8c4a749a9acbbb2
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 2-1-3-target
+      source: '2'
+      sourceHandle: '1'
+      target: '3'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: end
+      id: 2-3-5-target
+      selected: false
+      source: '2'
+      sourceHandle: '3'
+      target: '5'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 2-2-1753672619594-target
+      source: '2'
+      sourceHandle: '2'
+      target: '1753672619594'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1753672619594-source-5-target
+      source: '1753672619594'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的编程问题
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: 编程问题
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: problem
+        version: '1'
+      height: 118
+      id: '1'
+      parentId: null
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        classes:
+        - description: Java相关编程问题
+          id: '1'
+          name: java
+        - description: Python相关编程问题
+          id: '2'
+          name: python
+        - description: 其他编程语言问题
+          id: '3'
+          name: other
+        desc: 对用户问题进行语言分类，判断是Java、Python还是其他语言
+        instruction: 请分析用户提出的编程问题，判断其所属的编程语言类型。如果是关于Java的问题，返回'java'；如果是关于Python的问题，返回'python'；其他情况返回'other'。重点关注问题中提到的语言特性、框架名称、语法特征等关键词。
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '1'
+        - problem
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 编程语言分类器
+        type: question-classifier
+        variables: []
+        version: '1'
+      height: 254
+      id: '2'
+      parentId: null
+      position:
+        x: 360
+        y: 282
+      positionAbsolute:
+        x: 360
+        y: 282
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - your_java_knowledge_base_id
+        desc: 从知识库中检索与Java问题相关的解决方案
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: BAAI/bge-reranker-v2-m3
+            provider: langgenius/siliconflow/siliconflow
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: BAAI/bge-m3
+              embedding_provider_name: langgenius/siliconflow/siliconflow
+              vector_weight: 0.7
+        query_variable_selector:
+        - '2'
+        - class_name
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Java知识检索
+        type: knowledge-retrieval
+        variables: []
+        version: '1'
+      height: 98
+      id: '3'
+      parentId: null
+      position:
+        x: 615.5357154335104
+        y: 99.35696155547146
+      positionAbsolute:
+        x: 615.5357154335104
+        y: 99.35696155547146
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 基于检索到的Java知识生成专业解答
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: system-prompt
+          role: system
+          text: 你是一位专业的Java开发专家，擅长根据提供的知识库内容生成准确、专业的解答。请仔细分析用户提出的Java问题和相关知识库内容，生成结构清晰、准确可靠的解答。解答应包含必要的代码示例、解释说明和最佳实践建议。确保所有技术细节准确无误，并优先使用知识库中提供的信息作为解答依据。
+        - id: user-prompt
+          role: user
+          text: '用户问题：{{#1.problem#}}
+
+
+            相关知识库内容：/result
+
+
+            请基于以上信息生成专业的Java问题解答。'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Java问题解答生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '4'
+      parentId: null
+      position:
+        x: 1437.4186191718945
+        y: 111.25297326350233
+      positionAbsolute:
+        x: 1437.4186191718945
+        y: 111.25297326350233
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 返回不支持该编程语言的固定提示信息
+        output_type: object
+        outputs:
+        - value_selector:
+          - '2'
+          - class_name
+          variable: unsupported_message
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: 不支持该编程语言的问题
+        title: 不支持的语言提示
+        type: end
+        variables: []
+        version: '1'
+      height: 118
+      id: '5'
+      parentId: null
+      position:
+        x: 1286.1523766247776
+        y: 345.1784095248369
+      positionAbsolute:
+        x: 1286.1523766247776
+        y: 345.1784095248369
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: e6431f48-5d36-4a4d-84c8-55520fcd41d3
+          role: system
+          text: 你是一位专业的python开发专家，擅长根据提供的知识库内容生成准确、专业的解答。请仔细分析用户提出的问题和相关知识库内容，生成结构清晰、准确可靠的解答。解答应包含必要的代码示例、解释说明和最佳实践建议。确保所有技术细节准确无误，并优先使用知识库中提供的信息作为解答依据。
+        - id: cc01e8b7-81b5-4991-b041-7a3e66ff9582
+          role: user
+          text: '用户问题：{{#1.problem#}}
+
+
+            相关知识库内容：/result
+
+
+            请基于以上信息生成专业的Java问题解答。'
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1753672619594'
+      parentId: null
+      position:
+        x: 817.7959575730645
+        y: 258.1480423166629
+      positionAbsolute:
+        x: 817.7959575730645
+        y: 258.1480423166629
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -93.0341002650232
+      y: 185.34169563418556
+      zoom: 0.6597539553864472

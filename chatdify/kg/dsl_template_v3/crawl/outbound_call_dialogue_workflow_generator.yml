@@ -1,0 +1,547 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: outbound_call_dialogue_workflow_generator
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.6@dd589dc093c8084925858034ab5ec1fdf0d33819f43226c2f8c4a749a9acbbb2
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 10000002-1-10000003-target
+      source: '10000002'
+      sourceHandle: '1'
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 10000002-2-10000004-target
+      source: '10000002'
+      sourceHandle: '2'
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 10000002-4-1753675419230-target
+      source: '10000002'
+      sourceHandle: '4'
+      target: '1753675419230'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 10000002-3-1753675422578-target
+      source: '10000002'
+      sourceHandle: '3'
+      target: '1753675422578'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 10000003-source-1753675482772-target
+      source: '10000003'
+      sourceHandle: source
+      target: '1753675482772'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 10000004-source-1753675492471-target
+      source: '10000004'
+      sourceHandle: source
+      target: '1753675492471'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1753675419230-source-1753675506677-target
+      source: '1753675419230'
+      sourceHandle: source
+      target: '1753675506677'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1753675422578-source-1753675514193-target
+      source: '1753675422578'
+      sourceHandle: source
+      target: '1753675514193'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的业务场景信息
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: 用户需求
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: user_prompt
+        version: '1'
+      height: 118
+      id: '10000001'
+      parentId: null
+      position:
+        x: 30
+        y: 346
+      positionAbsolute:
+        x: 30
+        y: 346
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        classes:
+        - id: '1'
+          name: 产品推广
+        - id: '2'
+          name: 客户服务
+        - id: '3'
+          name: 市场调研
+        - id: '4'
+          name: 账单催收
+        desc: 根据用户输入的业务场景进行分类，确定后续处理分支
+        instruction: 请根据用户描述的业务场景内容，准确判断属于哪种外呼场景类型。主要分类包括：产品推广、客户服务、市场调研和账单催收。
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '10000001'
+        - user_prompt
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 外呼场景分类器
+        type: question-classifier
+        version: '1'
+      height: 292
+      id: '10000002'
+      parentId: null
+      position:
+        x: 334
+        y: 346
+      positionAbsolute:
+        x: 334
+        y: 346
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据分类结果生成特定业务场景的测试对话数据
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: system-prompt
+          role: system
+          text: '你是一个用于生成测试数据的AI助手。 你的任务是创建一个关于 **产品推广** 场景的外呼电话对话脚本。脚本需要包含“坐席”和“客户”两个角色。
+            **场景描述:** * **坐席目标**: 主动致电客户，向其推荐一款新的产品或服务（例如：新的理财产品、宽带升级套餐、信用卡优惠活动等），清晰地介绍产品优势和价值，并引导客户产生兴趣或直接办理。
+            * **客户人设**: 客户的反应应该是多样的。他/她可能： * 很忙，想直接挂断。 * 完全不感兴趣，直接拒绝。 * 持怀疑态度，担心是诈骗或推销。
+            * 有一定兴趣，愿意了解更多详情或提出具体问题。 **要求:** * 对话需要模拟真实的推销电话流程，从开场白、身份验证、产品介绍，到异议处理和最终的行动号召。
+            * 坐席需要展现出专业的销售技巧，能够应对客户的拒绝和疑问。 * 请直接生成对话内容，以''坐席:''和''客户:''开头进行区分，确保对话完整流畅。'
+        - id: user-prompt
+          role: user
+          text: 请生成一个{{#10000002.class_name#}}场景的测试对话，包含坐席和客户的多轮对话交流。对话需要符合该场景的业务特点，内容完整自然。
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 测试数据生成器
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 134
+      id: '10000003'
+      parentId: null
+      position:
+        x: 625.5635633814841
+        y: 272.62502395075524
+      positionAbsolute:
+        x: 625.5635633814841
+        y: 272.62502395075524
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据分类结果生成特定业务场景的测试对话数据
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: system-prompt
+          role: system
+          text: '你是一个用于生成测试数据的AI助手。 你的任务是创建一个关于 **客户服务** 场景的外呼电话对话脚本。脚本需要包含“坐席”和“客户”两个角色。
+            **场景描述:** * **坐席目标**: 进行一次主动的客户关怀回访。目的可以是： * 确认客户近期办理的业务（如安装宽带、购买手机后）使用体验如何。
+            * 通知客户一项对他们有利的账户或服务变更（如积分到账、服务升级）。 * 进行客户满意度调查。 * 坐席的核心目标是提升客户关系和满意度，而不是销售产品。
+            * **客户人设**: 客户的反应可能包括： * 满意并表示感谢。 * 正好借此机会提出一个之前遇到的问题或抱怨。 * 对回访感到意外，但态度友好。
+            * 比较冷淡，但愿意配合回答。 **要求:** * 对话的语气应该是亲切、关怀的。 * 坐席需要清晰地说明致电原因，并有效地收集客户的反馈或解答客户的疑问。
+            * 如果客户提出问题，坐席需要能够提供初步的解答或指引。 * 请直接生成对话内容，以''坐席:''和''客户:''开头进行区分，确保对话完整流畅。'
+        - id: user-prompt
+          role: user
+          text: 请生成一个{{#10000002.class_name#}}场景的测试对话，包含坐席和客户的多轮对话交流。对话需要符合该场景的业务特点，内容完整自然。
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 测试数据生成器
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 134
+      id: '10000004'
+      parentId: null
+      position:
+        x: 625.5635633814841
+        y: 424.4243658041462
+      positionAbsolute:
+        x: 625.5635633814841
+        y: 424.4243658041462
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: de56ad68-8f1b-40de-9171-3c5cc3e112f0
+          role: system
+          text: '你是一个用于生成测试数据的AI助手。 你的任务是创建一个关于 **市场调研** 场景的外呼电话对话脚本。脚本需要包含“坐席”和“客户”两个角色。
+            **场景描述:** * **坐席目标**: 代表某公司或机构，邀请客户参与一项市场调研。坐席需要向客户说明调研的目的，并询问一系列预设的问题，以收集市场信息、用户偏好或产品反馈。
+            * **客户人设**: 客户的反应可能包括： * 非常合作，乐于分享自己的看法。 * 有警惕心，质疑调研的真实性和个人信息安全。 * 没时间或没兴趣参与。
+            * 对调研的主题有非常强烈的主观意见。 **要求:** * 坐席在对话开始时必须清楚地表明自己的身份和来电意图（进行市场调研）。 * 坐席在提问时必须保持中立，不能诱导客户的答案。
+            * 对话应包含至少3-5个调研问题。 * 需要处理客户可能提出的关于隐私和数据用途的疑虑。 * 请直接生成对话内容，以''坐席:''和''客户:''开头进行区分，确保对话完整流畅。'
+        selected: true
+        title: LLM 3
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1753675419230'
+      parentId: null
+      position:
+        x: 625.5635633814841
+        y: 595.9957943755749
+      positionAbsolute:
+        x: 625.5635633814841
+        y: 595.9957943755749
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: f588d5ca-9cd0-4c84-b266-d87a685c5cba
+          role: system
+          text: "好的，没问题。根据您提供的四个外呼场景分类，我为您设计了四个不同目标的 LLM System Prompt。\n这些 Prompt\
+            \ 的设计目标是：\n角色扮演：清晰定义 LLM 需要扮演的角色（一个AI对话生成助手）。\n任务明确：准确描述需要生成的对话场景、坐席的目标和客户可能的反应。\n\
+            结构清晰：要求生成包含“坐席”和“客户”两个角色的对话文本。\n多样性：鼓励生成不同客户态度和反应的对话，以增强测试数据的覆盖面。\n可定制性：在\
+            \ Prompt 中使用占位符（如 [具体产品]），方便您在实际使用时进行替换。\n\n通用 System Prompt 结构说明\n\n\
+            每个 Prompt 都包含以下核心要素：\n你是谁 (Identity): \"你是一个用于生成测试数据的AI助手。\"\n你的任务 (Task):\
+            \ \"你的任务是根据指定的场景，创建一个完整的、真实的“坐席”与“客户”之间的外呼电话对话脚本。\"\n场景细节 (Context): 详细描述当前场景的目标、坐席需要做什么、客户可能是什么状态。这是区分不同场景的关键。\n\
+            输出要求 (Format): \"请直接生成对话内容，以'坐席:'和'客户:'开头进行区分。\"\n\n场景1: 产品推广 (Product\
+            \ Promotion)\n\n这个场景的重点是“说服”和“处理拒绝”。坐席需要有技巧地介绍产品，并应对客户的各种反应。\nSystem Prompt:\n\
+            你是一个用于生成测试数据的AI助手。\n\n你的任务是创建一个关于 **产品推广** 场景的外呼电话对话脚本。脚本需要包含“坐席”和“客户”两个角色。\n\
+            \n**场景描述:**\n* **坐席目标**: 主动致电客户，向其推荐一款新的产品或服务（例如：新的理财产品、宽带升级套餐、信用卡优惠活动等），清晰地介绍产品优势和价值，并引导客户产生兴趣或直接办理。\n\
+            * **客户人设**: 客户的反应应该是多样的。他/她可能：\n    * 很忙，想直接挂断。\n    * 完全不感兴趣，直接拒绝。\n\
+            \    * 持怀疑态度，担心是诈骗或推销。\n    * 有一定兴趣，愿意了解更多详情或提出具体问题。\n\n**要求:**\n* 对话需要模拟真实的推销电话流程，从开场白、身份验证、产品介绍，到异议处理和最终的行动号召。\n\
+            * 坐席需要展现出专业的销售技巧，能够应对客户的拒绝和疑问。\n* 请直接生成对话内容，以'坐席:'和'客户:'开头进行区分，确保对话完整流畅。\n\
+            \n**示例推广产品**: [XX银行的“安享未来”理财计划]\n\n\n场景2: 客户服务 (Customer Service)\n\n\
+            这个场景的重点是“关怀”和“提升满意度”，而非销售。对话氛围通常更友好、平和。\nSystem Prompt:\n你是一个用于生成测试数据的AI助手。\n\
+            \n你的任务是创建一个关于 **客户服务** 场景的外呼电话对话脚本。脚本需要包含“坐席”和“客户”两个角色。\n\n**场景描述:**\n\
+            * **坐席目标**: 进行一次主动的客户关怀回访。目的可以是：\n    * 确认客户近期办理的业务（如安装宽带、购买手机后）使用体验如何。\n\
+            \    * 通知客户一项对他们有利的账户或服务变更（如积分到账、服务升级）。\n    * 进行客户满意度调查。\n    * 坐席的核心目标是提升客户关系和满意度，而不是销售产品。\n\
+            * **客户人设**: 客户的反应可能包括：\n    * 满意并表示感谢。\n    * 正好借此机会提出一个之前遇到的问题或抱怨。\n\
+            \    * 对回访感到意外，但态度友好。\n    * 比较冷淡，但愿意配合回答。\n\n**要求:**\n* 对话的语气应该是亲切、关怀的。\n\
+            * 坐席需要清晰地说明致电原因，并有效地收集客户的反馈或解答客户的疑问。\n* 如果客户提出问题，坐席需要能够提供初步的解答或指引。\n*\
+            \ 请直接生成对话内容，以'坐席:'和'客户:'开头进行区分，确保对话完整流畅。\n\n**示例服务场景**: [回访上周办理了“5G家庭套餐”的客户]\n\
+            \n\n场景3: 市场调研 (Market Research)\n\n这个场景的重点是“中立”和“信息采集”。坐席需要严格按照流程提问，不能引导客户的回答。\n\
+            System Prompt:\n你是一个用于生成测试数据的AI助手。\n\n你的任务是创建一个关于 **市场调研** 场景的外呼电话对话脚本。脚本需要包含“坐席”和“客户”两个角色。\n\
+            \n**场景描述:**\n* **坐席目标**: 代表某公司或机构，邀请客户参与一项市场调研。坐席需要向客户说明调研的目的，并询问一系列预设的问题，以收集市场信息、用户偏好或产品反馈。\n\
+            * **客户人设**: 客户的反应可能包括：\n    * 非常合作，乐于分享自己的看法。\n    * 有警惕心，质疑调研的真实性和个人信息安全。\n\
+            \    * 没时间或没兴趣参与。\n    * 对调研的主题有非常强烈的主观意见。\n\n**要求:**\n* 坐席在对话开始时必须清楚地表明自己的身份和来电意图（进行市场调研）。\n\
+            * 坐席在提问时必须保持中立，不能诱导客户的答案。\n* 对话应包含至少3-5个调研问题。\n* 需要处理客户可能提出的关于隐私和数据用途的疑虑。\n\
+            * 请直接生成对话内容，以'坐席:'和'客户:'开头进行区分，确保对话完整流畅。\n\n**示例调研主题**: [关于市民对新能源汽车购买意向的调研]\n\
+            \n\n场景4: 账单催收 (Bill Collection)\n\n这个场景的重点是“专业”、“强硬但有礼貌”以及“解决问题”。对话可能带有紧张感，需要坐席具备良好的情绪控制和谈判能力。\n\
+            System Prompt:\n你是一个用于生成测试数据的AI助手。\n\n你的任务是创建一个关于 **账单催收** 场景的外呼电话对话脚本。脚本需要包含“坐席”和“客户”两个角色。\n\
+            \n**场景描述:**\n* **坐席目标**: 联系一位账单逾期的客户，提醒其尽快支付欠款。坐席需要：\n    1.  核实客户身份。\n\
+            \    2.  明确告知逾期的账单金额和日期。\n    3.  了解客户逾期未付的原因。\n    4.  协商并确定一个还款方案（立即支付、设定还款日期等）。\n\
+            * **客户人设**: 客户的反应可能非常多样和复杂：\n    * 健忘或不知情，核实后立即同意付款。\n    * 承认欠款，但因财务困难请求延期或分期。\n\
+            \    * 产生抵触或愤怒情绪，否认欠款或抱怨服务。\n    * 试图逃避，找各种借口。\n\n**要求:**\n* 坐席的语气必须专业、沉着，即使在客户情绪激动时也要保持礼貌和坚定。\n\
+            * 对话必须包含必要的合规步骤，如开头的身份信息核对。\n* 对话的最终目标是达成一个明确的解决方案（如“您将在今天下午5点前通过XX方式支付”，或“我们已为您设定了XX日的还款提醒”）。\n\
+            * 请直接生成对话内容，以'坐席:'和'客户:'开头进行区分，确保对话完整流畅。"
+        selected: false
+        title: LLM 4
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1753675422578'
+      parentId: null
+      position:
+        x: 625.5635633814841
+        y: 726.4243658041462
+      positionAbsolute:
+        x: 625.5635633814841
+        y: 726.4243658041462
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '10000003'
+          - text
+          variable: text
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1753675482772'
+      parentId: null
+      position:
+        x: 929.5635633814841
+        y: 272.62502395075524
+      positionAbsolute:
+        x: 929.5635633814841
+        y: 272.62502395075524
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '10000004'
+          - text
+          variable: text
+        selected: false
+        title: 结束 2
+        type: end
+      height: 90
+      id: '1753675492471'
+      parentId: null
+      position:
+        x: 929.5635633814841
+        y: 424.4243658041462
+      positionAbsolute:
+        x: 929.5635633814841
+        y: 424.4243658041462
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1753675419230'
+          - text
+          variable: text
+        selected: false
+        title: 结束 3
+        type: end
+      height: 90
+      id: '1753675506677'
+      parentId: null
+      position:
+        x: 929.5635633814841
+        y: 595.9957943755749
+      positionAbsolute:
+        x: 929.5635633814841
+        y: 595.9957943755749
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1753675422578'
+          - text
+          variable: text
+        selected: false
+        title: 结束 4
+        type: end
+      height: 90
+      id: '1753675514193'
+      parentId: null
+      position:
+        x: 929.5635633814841
+        y: 726.4243658041462
+      positionAbsolute:
+        x: 929.5635633814841
+        y: 726.4243658041462
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -109.30237507920333
+      y: 84.14485582059461
+      zoom: 0.7

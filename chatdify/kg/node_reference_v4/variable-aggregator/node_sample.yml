@@ -1,0 +1,62 @@
+nodes:
+- data:
+    desc: ''
+    output_type: string
+    selected: false
+    title: 变量聚合器
+    type: variable-aggregator
+    variables:
+    - - '1730191979948'
+      - text
+    - - '17301921619230'
+      - text
+    - - '17301923168610'
+      - text
+    - - '17301924021390'
+      - text
+    - - '17301924991430'
+      - text
+    - - '17301925812850'
+      - text
+    - - '17306982748800'
+      - text
+  id: '1730214844929'
+  selected: false
+  type: custom
+- data:
+    advanced_settings:
+      group_enabled: false
+      groups:
+      - groupId: 5558f841-272f-4848-8e4c-dd1b90994a2e
+        group_name: Group1
+        output_type: string
+        variables:
+        - - '1740960303022'
+          - text
+        - - '1740959162304'
+          - text
+    desc: ''
+    output_type: string
+    selected: false
+    title: 变量聚合器
+    type: variable-aggregator
+    variables:
+    - - '1740959162304'
+      - text
+    - - '1741521838680'
+      - text
+  id: '1740960349832'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    output_type: string
+    selected: false
+    title: 当前论文
+    type: variable-aggregator
+    variables:
+    - - '1729476799012'
+      - text
+  id: '1729476853830'
+  selected: false
+  type: custom

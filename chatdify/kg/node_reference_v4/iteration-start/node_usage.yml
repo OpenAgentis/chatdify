@@ -1,0 +1,27 @@
+node_usage:
+  节点类型: iteration-start
+  输入规范:
+      - 节点接受以下参数：
+          - 该节点继承自 BaseNodeData，不包含额外的配置参数。
+          - 节点的 iteration_id 必须与所属的 Iteration 节点 ID 保持一致。
+          - 节点必须正确配置 parentId，指向其所属的 Iteration 节点。
+          - 节点类型固定为 "iteration-start"，不可更改。
+          - 节点的 isInIteration 属性必须设置为 true。
+  常见使用错误:
+      - 配置错误：
+          - 节点未正确放置在 Iteration 节点内部：确保 parentId 指向正确的 Iteration 节点。
+          - iteration_id 配置错误：确保与所属 Iteration 节点的 ID 一致。
+          - 节点类型配置错误：确保 type 字段设置为 "iteration-start"。
+          - isInIteration 属性未设置：确保该属性设置为 true。
+      - 变量引用错误：
+          - 错误引用 iteration-start 节点的变量：iteration-start 节点本身不产生可引用的变量。
+          - 使用错误的变量选择器格式：如 "10000009start.item"，应该引用父级 Iteration 节点的变量，如 "10000009.item"。
+          - 尝试引用不存在的变量：如 ".desc"、".step"、".chapter" 等，这些变量由 Iteration 节点提供。
+      - 流程结构错误：
+          - 缺少后续处理节点：iteration-start 节点后必须连接具体的处理节点。
+          - 边连接配置错误：确保 sourceType 和 targetType 正确配置。
+          - 多个 iteration-start 节点冲突：一个 Iteration 节点内只能有一个 iteration-start 节点。
+      - 运行时错误：
+          - 迭代数据为空或格式错误：确保上游提供的数组数据格式正确。
+          - 节点执行状态异常：虽然 iteration-start 节点总是返回成功状态，但需要确保整个迭代流程正常。
+          - 并行模式下的资源竞争：在并行迭代模式下可能出现资源访问冲突。

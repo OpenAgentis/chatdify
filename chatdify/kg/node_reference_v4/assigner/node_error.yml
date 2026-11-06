@@ -1,0 +1,6 @@
+node_error:
+- '创建节点失败, 节点ID 10000004: 处理节点配置失败: 1 validation error for VariableAssignerNodeData
+  items.0.input_type Input should be ''variable'' or ''constant'' [type=enum, input_value=''value'',
+  input_type=str] For further information visit https://errors.pydantic.dev/2.10/v/enum'
+- Variable ['conversation', 'subtaskRet'] not found
+- Variable ['conversation', 'draw_chart'] not found

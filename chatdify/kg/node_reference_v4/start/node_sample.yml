@@ -1,0 +1,1782 @@
+nodes:
+- data:
+    desc: 接收用户上传的API文档文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    title: API文档上传
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .pdf
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: API文档文件
+      max_length: 48
+      required: true
+      type: file
+      variable: api_document
+    - label: 目标编程语言
+      max_length: 48
+      options:
+      - curl
+      - python
+      - java
+      - golang
+      - nodejs
+      required: true
+      type: select
+      variable: language
+    - label: 额外需求说明
+      max_length: 32768
+      required: false
+      type: paragraph
+      variable: additional_requirements
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的Swagger/OpenAPI规范文档
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 上传Swagger文件
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .json
+      - .yaml
+      - .yml
+      allowed_file_types:
+      - custom
+      allowed_file_upload_methods:
+      - local_file
+      label: Swagger文件
+      max_length: 48
+      required: true
+      type: file
+      variable: swagger_file
+    version: '1'
+  id: '10000001'
+  parentId: null
+  selected: false
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的产品文档文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .pdf
+      - .docx
+      - .txt
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 产品文档
+      max_length: 48
+      required: true
+      type: file
+      variable: file
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的PPT文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: PPT上传
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .ppt
+      - .pptx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: PPT文件
+      max_length: 48
+      required: true
+      type: file
+      variable: ppt_file
+    - label: 试题规则
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: rule
+    version: '1'
+  id: '1'
+  parentId: null
+  selected: false
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的Word格式合同文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .doc
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 合同文件
+      max_length: 48
+      required: true
+      type: file
+      variable: file
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: '👨‍💼作者：北平牧哥
+
+      💚微信：mugeleey
+
+      🗨微信公众号：pekingmuge
+
+      🌍Twitter: https://x.com/pekingmuge'
+    selected: true
+    title: 开始
+    type: start
+    variables:
+    - label: 教程名称
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: course_name
+  id: '1728198077941'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1739339708213'
+  selected: false
+  type: custom
+- data:
+    desc: 欢迎使用周辉制作的绘画机器人+多模态识别+语音播报
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1711528914102'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: Upload a paper
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: paper1
+  id: '1729476461944'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables: []
+  id: '1729841263487'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: text
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: text
+  id: '1738911112498'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: pic
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: pic
+  id: '1731154408275'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 源语言
+      max_length: 48
+      options:
+      - 中文
+      - 英文
+      required: true
+      type: select
+      variable: src_lang
+    - label: 目标语言
+      max_length: 48
+      options:
+      - 英文
+      - 中文
+      required: true
+      type: select
+      variable: dst_lang
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      label: 待翻译文档
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: to_translate_doc
+  id: '1744966979351'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      label: image
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: image
+  id: '1749037130780'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      label: API本地文档（二选一）
+      max_length: 48
+      options: []
+      required: false
+      type: file
+      variable: file
+    - label: API文档Url（二选一）
+      max_length: 256
+      options: []
+      required: false
+      type: text-input
+      variable: api_url
+    - label: 额外说明
+      max_length: 32768
+      options: []
+      required: false
+      type: paragraph
+      variable: other
+    - label: 编程语言
+      max_length: 48
+      options:
+      - curl
+      - python
+      - java
+      - golang
+      - nodejs
+      required: true
+      type: select
+      variable: language
+  id: '1740959153996'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: Title
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: article_title
+    - label: Outline
+      max_length: 33024
+      options: []
+      required: true
+      type: paragraph
+      variable: article_outline
+  id: '1716783101349'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 输入图片
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: image
+  id: '1748934356377'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1732361572986'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: llm_string
+      max_length: 10000
+      options: []
+      required: true
+      type: paragraph
+      variable: llm_string
+  id: '1732007415808'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables: []
+  id: '1724816625228'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 目标文章链接
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: url
+    - label: 是否去除图片
+      max_length: 48
+      options: []
+      required: true
+      type: number
+      variable: clean_img
+    - label: 单图仿写
+      max_length: 48
+      options: []
+      required: true
+      type: number
+      variable: single_img
+  id: '1718957126125'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1736693758435'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: URL后缀
+      max_length: 90
+      options: []
+      required: true
+      type: text-input
+      variable: url
+    - label: 基准语言
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: lang
+  id: '1731078730206'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: input
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: input
+  id: '1732605362358'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: file
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: file
+  id: '1729851066338'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: file
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: file
+    - label: tone
+      max_length: 48
+      options:
+      - 'CASUAL = "TONE: The tone of the podcast should be casual and conversational"'
+      - 'FORMAL = "TONE: The tone of the podcast should be formal and professional"'
+      - '    HUMOROUS = "TONE: The tone of the podcast should be humorous and light-hearted"    HUMOROUS
+        = "TONE: The tone of the podcast should be humorous and light-hearted"'
+      - 'SERIOUS = "TONE: The tone of the podcast should be serious and informative"'
+      - 'EDUCATIONAL = "TONE: The tone of the podcast should be educational and instructive"'
+      - 'INSPIRATIONAL = "TONE: The tone of the podcast should be inspirational and
+        motivational"'
+      - 'CONTROVERSIAL = "TONE: The tone of the podcast should be controversial and
+        thought-provoking"'
+      - 'STORYTELLING = "TONE: The tone of the podcast should be narrative and storytelling"'
+      - ' INVESTIGATIVE = "TONE: The tone of the podcast should be investigative and
+        analytical"'
+      - ' DEBATE = "TONE: The tone of the podcast should be debate-style and argumentative"'
+      required: true
+      type: select
+      variable: tone
+    - label: host_name
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: host_name
+    - label: guest_name
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: guest_name
+    - label: language
+      max_length: 48
+      options:
+      - 中文
+      - English
+      - 日本語
+      required: true
+      type: select
+      variable: language
+  id: '1727578865729'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 提示词
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: prompt
+  id: '1738651659789'
+  selected: false
+  type: custom
+- data:
+    desc: 接收用户输入的医疗相关图片
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: input_image
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: input_image
+    version: '1'
+  id: '1748500452448'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: ''
+    selected: true
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: meeting_note_file
+      max_length: 48
+      options: []
+      required: false
+      type: file
+      variable: meeting_note_file
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - audio
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: meeting_audio
+      max_length: 48
+      options: []
+      required: false
+      type: file
+      variable: meeting_audio
+    - label: context_words
+      max_length: 256
+      options: []
+      required: false
+      type: text-input
+      variable: context_words
+    - label: num_speakers
+      max_length: 48
+      options: []
+      required: false
+      type: number
+      variable: num_speakers
+  id: '1744102481785'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1721123006687'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: pic
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: pic
+  id: '1731154408275'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: input
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: input
+  id: '1720794829558'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: ☝️ 简单说说基本要求
+      max_length: 33024
+      options: []
+      required: true
+      type: paragraph
+      variable: basic_instruction
+    - label: ✨ 可以在这里强调额外的专用术语
+      max_length: 33024
+      options: []
+      required: false
+      type: paragraph
+      variable: nouns
+    - label: 📝 请补充必要的背景信息，帮助 AI 推理
+      max_length: 33024
+      options: []
+      required: false
+      type: paragraph
+      variable: background_detail
+    - label: 🎨 正文风格强调
+      max_length: 33024
+      options: []
+      required: false
+      type: paragraph
+      variable: style
+  id: '1721651035904'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: file
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: file
+  id: '1731206171408'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: depth
+      max_length: 48
+      options: []
+      required: false
+      type: number
+      variable: depth
+  id: '1739229221219'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: 需要翻译的代码文件内容
+      max_length: 33024
+      options: []
+      required: true
+      type: paragraph
+      variable: code_to_translate
+    - label: 相关依赖库的代码内容
+      max_length: 33024
+      options: []
+      required: false
+      type: paragraph
+      variable: related_files_content
+    - label: 待翻译文件的文件名
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: code_file_name
+    - label: 源代码语言(例如Python)
+      max_length: 48
+      options:
+      - python
+      - java
+      required: true
+      type: select
+      variable: src_lang
+    - label: 目标编程语言（例如Java）
+      max_length: 48
+      options:
+      - java
+      - python
+      required: true
+      type: select
+      variable: dest_lang
+  id: '1720505581749'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: 質問
+      max_length: 148
+      options: []
+      required: true
+      type: text-input
+      variable: Question
+  id: '1713261835258'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      label: input_file
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: input_file
+  id: '1742437758207'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: 作者名字
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: author
+    - label: 文本内容
+      max_length: null
+      options: []
+      required: true
+      type: paragraph
+      variable: body_text
+  id: '1721710272051'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 主题
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: theme
+    - label: 上下联字数
+      max_length: 48
+      options:
+      - 五言
+      - 七言
+      - 九言
+      - 十一言
+      required: true
+      type: select
+      variable: count
+    - label: 一字总结
+      max_length: 48
+      options:
+      - 开启
+      - 不开启
+      required: false
+      type: select
+      variable: enabled_summary
+  id: '1737014287710'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: input_file
+      max_length: 5
+      options: []
+      required: true
+      type: file
+      variable: input_file
+  id: '1743992797516'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      label: image
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: image
+  id: '1749036701892'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 提示词
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: prompt
+  id: '1738645729564'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: query
+      max_length: 60000
+      options: []
+      required: true
+      type: paragraph
+      variable: query
+  id: '1714456604511'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1728709838888'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 主题
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: subject
+    - label: 其他描述
+      max_length: 1000
+      options: []
+      required: false
+      type: paragraph
+      variable: description
+  id: '1719024828554'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 请上传TXT文件格式视频字幕文件
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: srtfile
+  id: '1737731709313'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 文件名
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: file
+  id: '1740472103530'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1732240791951'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1744689075400'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1740638793787'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: true
+    title: 开始
+    type: start
+    variables:
+    - label: file_ids
+      max_length: 48
+      options: []
+      required: true
+      type: text-input
+      variable: file_ids
+    - label: sub_appid
+      max_length: 48
+      options: []
+      required: true
+      type: number
+      variable: sub_appid
+  id: '1731555779402'
+  selected: true
+  type: custom
+- data:
+    desc: 接收用户输入的编程问题
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: 编程问题
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: problem
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的Python代码
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: Python代码输入
+    type: start
+    variables:
+    - label: Python代码
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: python_code
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的文稿内容
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 文稿内容
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: content
+    - label: 目标受众
+      options:
+      - 普通读者
+      - 专业人士
+      - 学生
+      - 企业用户
+      required: false
+      type: select
+      variable: target_audience
+    - label: 写作风格
+      options:
+      - 正式
+      - 轻松
+      - 技术性
+      - 新闻体
+      - 创意写作
+      required: false
+      type: select
+      variable: writing_style
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的题目和大纲信息
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    title: 开始
+    type: start
+    variables:
+    - label: 文章标题
+      max_length: 256
+      required: true
+      type: text-input
+      variable: article_title
+    - label: 文章大纲
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: article_outline
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的零售相关问题
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: 问题输入
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: question
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的代码片段和目标语言
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    title: Start
+    type: start
+    variables:
+    - label: 需要翻译的代码片段
+      max_length: 33024
+      required: true
+      type: paragraph
+      variable: code_to_translate
+    - label: 目标编程语言
+      options:
+      - Python
+      - Java
+      - JavaScript
+      - Go
+      - C++
+      - C#
+      - Ruby
+      - PHP
+      - Swift
+      - Kotlin
+      required: true
+      type: select
+      variable: target_language
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的问题
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    title: Start
+    type: start
+    variables:
+    - label: 用户问题
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: input
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的会议文档文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .txt
+      - .pdf
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 会议文档
+      max_length: 48
+      required: true
+      type: file
+      variable: meeting_document
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的文档文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      label: 上传文档
+      max_length: 48
+      required: true
+      type: file
+      variable: input_file
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的客服问题
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    title: Start
+    type: start
+    variables:
+    - label: 用户问题
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: question
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户反馈输入
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 用户反馈
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: feedback
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的接口查询问题和相关参数
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    title: Start
+    type: start
+    variables:
+    - label: 接口查询问题
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: query
+    - label: 其他相关参数
+      max_length: 256
+      required: false
+      type: text-input
+      variable: params
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的专利或创新文档
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .txt
+      - .pdf
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 上传文档
+      max_length: 48
+      required: true
+      type: file
+      variable: document
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的年报文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .pdf
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 年报文件
+      max_length: 48
+      required: true
+      type: file
+      variable: annual_report
+    - label: style
+      max_length: 48
+      options:
+      - 学院
+      - 金融
+      - 社交
+      required: true
+      type: select
+      variable: style
+    version: '1'
+  id: '10000001'
+  parentId: null
+  selected: false
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的初始问题，作为整个工作流的起点
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    title: Start
+    type: start
+    variables:
+    - label: 用户问题
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: input
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的考试范围文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .pdf
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      label: 考试范围文件
+      max_length: 48
+      required: true
+      type: file
+      variable: exam_scope_file
+    version: '1'
+  id: '10000001'
+  parentId: null
+  selected: false
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的待翻译文本和语言选择
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - label: 待翻译文本
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: text
+    - label: 目标语言
+      options:
+      - 中文
+      - 英文
+      required: true
+      type: select
+      variable: lang
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的英文论文文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .pdf
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 上传英文论文
+      max_length: 48
+      required: true
+      type: file
+      variable: paper_file
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: ''
+    selected: false
+    title: 开始
+    type: start
+    variables: []
+  id: '1733313536005'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: 文章
+      max_length: 10000
+      options: []
+      required: true
+      type: paragraph
+      variable: article
+  id: '1726366928368'
+  selected: false
+  type: custom
+- data:
+    desc: 接收用户输入的问题
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: 用户问题
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: user_input
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的话术文件
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 话术文件
+      max_length: 48
+      options: []
+      required: true
+      type: file
+      variable: file
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户上传的需求文档
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 开始
+    type: start
+    variables:
+    - allowed_file_extensions:
+      - .pdf
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 需求文档
+      max_length: 48
+      required: true
+      type: file
+      variable: file
+    version: '1'
+  id: '1'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的邮件内容和请求类型
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 邮件助手输入
+    type: start
+    variables:
+    - label: 邮件内容
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: content
+    - label: 请求类型
+      options:
+      - 扩写
+      - 缩写
+      - 风格优化
+      - 写邮件
+      required: true
+      type: select
+      variable: request_type
+    version: '1'
+  id: '10000001'
+  parentId: null
+  selected: false
+  type: custom
+  zIndex: 1
+- data:
+    desc: 接收用户上传的文件作为工作流输入
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - allowed_file_extensions: []
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      label: 上传文件
+      max_length: 48
+      required: true
+      type: file
+      variable: file
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的业务场景信息
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: Start
+    type: start
+    variables:
+    - label: 用户需求
+      max_length: 256
+      options: []
+      required: true
+      type: text-input
+      variable: user_prompt
+    version: '1'
+  id: '10000001'
+  parentId: null
+  selected: false
+  type: custom
+  zIndex: 0
+- data:
+    desc: 接收用户输入的外呼业务场景描述
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 业务场景输入
+    type: start
+    variables:
+    - label: 业务场景描述
+      max_length: 99999
+      required: true
+      type: paragraph
+      variable: business_scenario
+    version: '1'
+  id: '10000001'
+  parentId: null
+  type: custom
+  zIndex: 0

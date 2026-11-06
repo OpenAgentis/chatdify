@@ -1,0 +1,355 @@
+app:
+  mode: workflow
+  name: audio_script
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: tool
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: end
+      id: 10000004-source-10000005-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的播客主题信息和音频格式偏好
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - label: 播客主题
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: topic
+        - label: 音频格式偏好
+          options:
+          - MP3
+          - WAV
+          - AAC
+          - OGG
+          required: true
+          type: select
+          variable: audio_format
+        - label: 播客语气
+          options:
+          - 轻松随意
+          - 正式专业
+          - 幽默风趣
+          - 严肃认真
+          - 教育指导
+          - 激励人心
+          - 争议讨论
+          - 故事叙述
+          required: true
+          type: select
+          variable: tone
+        - label: 主持人姓名
+          max_length: 48
+          required: true
+          type: text-input
+          variable: host_name
+        - label: 嘉宾姓名
+          max_length: 48
+          required: true
+          type: text-input
+          variable: guest_name
+        - label: 播客语言
+          options:
+          - 中文
+          - English
+          - 日本語
+          required: true
+          type: select
+          variable: language
+        version: '1'
+      height: 194
+      id: '10000001'
+      parentId: null
+      position:
+        x: 363.142957965791
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 363.142957965791
+        y: 274.87198362549776
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '10000001'
+          - topic
+        desc: 根据用户提供的播客主题生成详细的音频大纲
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - role: system
+          text: '你是一位专业的播客制作人，擅长将主题转化为结构化的音频大纲。请根据用户提供的播客主题、语气、主持人信息和语言偏好，生成一个详细的音频大纲。大纲应包括：
+
+
+            1. 开场介绍
+
+            2. 主要讨论点（3-5个）
+
+            3. 每个讨论点的关键内容
+
+            4. 过渡语句
+
+            5. 结尾总结
+
+
+            请使用Markdown格式输出，确保结构清晰。'
+        - role: user
+          text: '请根据以下信息生成音频大纲：
+
+
+            - 主题：{{#10000001.topic#}}
+
+            - 语气：{{#10000001.tone#}}
+
+            - 主持人：{{#10000001.host_name#}}
+
+            - 嘉宾：{{#10000001.guest_name#}}
+
+            - 语言：{{#10000001.language#}}
+
+            - 音频格式：{{#10000001.audio_format#}}'
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 5
+        title: 生成音频大纲
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 98
+      id: '10000002'
+      parentId: null
+      position:
+        x: 661.7296503826896
+        y: 415.73439185131787
+      positionAbsolute:
+        x: 661.7296503826896
+        y: 415.73439185131787
+      type: custom
+      width: 244
+      zIndex: 2
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '10000002'
+          - text
+        desc: 根据音频大纲生成详细的播客脚本
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - role: system
+          text: '你是一位专业的播客脚本撰写专家，擅长将结构化的大纲转化为自然流畅的对话脚本。请根据提供的大纲内容，生成一个完整的播客脚本，包含以下要素：
+
+
+            1. 主持人开场介绍
+
+            2. 嘉宾介绍
+
+            3. 各讨论点的详细对话内容
+
+            4. 自然的过渡语句
+
+            5. 符合指定语气的表达方式
+
+            6. 结尾总结
+
+
+            脚本格式要求：
+
+            - 使用Markdown格式
+
+            - 每行对话前不加说话者姓名
+
+            - 保持自然口语化表达
+
+            - 包含适当的填充词和停顿
+
+            - 确保对话流畅且有逻辑性'
+        - role: user
+          text: '请根据以下信息生成详细的播客脚本：
+
+
+            - 音频大纲：{{#10000002.text#}}
+
+            - 主持人：{{#10000001.host_name#}}
+
+            - 嘉宾：{{#10000001.guest_name#}}
+
+            - 语气：{{#10000001.tone#}}
+
+            - 语言：{{#10000001.language#}}
+
+
+            请确保脚本符合以下要求：
+
+            1. 对话自然流畅，符合口语表达习惯
+
+            2. 包含适当的填充词和停顿
+
+            3. 保持指定的语气风格
+
+            4. 每行对话前不加说话者姓名
+
+            5. 使用Markdown格式输出'
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 5
+        title: 生成音频脚本
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 98
+      id: '10000003'
+      parentId: null
+      position:
+        x: 961.5606056628817
+        y: 415.73439185131787
+      positionAbsolute:
+        x: 961.5606056628817
+        y: 415.73439185131787
+      type: custom
+      width: 244
+      zIndex: 3
+    - data:
+        desc: 将LLM生成的播客脚本转换为指定格式的音频文件
+        parameters: {}
+        provider_id: audio
+        provider_name: audio
+        provider_type: builtin
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 5
+        selected: false
+        timeout: 30
+        title: TTS音频转换
+        tool_configurations:
+          audio_format: '{{#10000001.audio_format#}}'
+          language: '{{#10000001.language#}}'
+          model: openai_api_compatible#tts-1
+          tone: '{{#10000001.tone#}}'
+          voice#openai_api_compatible#tts-1: alloy
+        tool_label: Text To Speech
+        tool_name: tts
+        tool_parameters:
+          script:
+            type: mixed
+            value: '{{#10000003.text#}}'
+        type: tool
+        version: '1'
+      height: 116
+      id: '10000004'
+      parentId: null
+      position:
+        x: 1261.5606056628817
+        y: 415.73439185131787
+      positionAbsolute:
+        x: 1261.5606056628817
+        y: 415.73439185131787
+      type: custom
+      width: 244
+      zIndex: 4
+    - data:
+        desc: 结束节点输出最终的音频文件和大纲、脚本等完整结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000004'
+          - files
+          variable: audio_file
+        - value_selector:
+          - '10000002'
+          - text
+          variable: outline
+        - value_selector:
+          - '10000003'
+          - text
+          variable: script
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 结束
+        type: end
+        version: '1'
+      height: 116
+      id: '10000005'
+      parentId: null
+      position:
+        x: 1561.5606056628817
+        y: 415.73439185131787
+      positionAbsolute:
+        x: 1561.5606056628817
+        y: 415.73439185131787
+      type: custom
+      width: 244
+      zIndex: 5
+    type: custom

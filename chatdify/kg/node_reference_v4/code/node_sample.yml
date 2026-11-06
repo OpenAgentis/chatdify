@@ -1,0 +1,1701 @@
+nodes:
+- data:
+    code: |
+      def main(search_json: list) -> dict:
+          try:
+              if search_json is None:
+                  return {"url_list": [], "is_valid": False, "err_msg": "search_json 为空"}
+              batches = search_json if isinstance(search_json, list) else [search_json]
+              url_list = []
+              seen = set()
+              for batch in batches:
+                  if not isinstance(batch, dict):
+                      continue
+                  for item in batch.get("results") or []:
+                      if not isinstance(item, dict):
+                          continue
+                      url = (item.get("url") or "").strip()
+                      if not url or url in seen:
+                          continue
+                      seen.add(url)
+                      url_list.append(url)
+              if not url_list:
+                  return {"url_list": [], "is_valid": False, "err_msg": "未从 Tavily json 中解析到有效 URL"}
+              return {"url_list": url_list, "is_valid": True, "err_msg": ""}
+          except Exception as e:
+              return {"url_list": [], "is_valid": False, "err_msg": str(e)}
+    code_language: python3
+    desc: 解析 tool_tavily_search 的 json 输出，提取 URL 字符串列表
+    outputs:
+      err_msg:
+        children: null
+        type: string
+      is_valid:
+        children: null
+        type: boolean
+      url_list:
+        children: null
+        type: array[string]
+    selected: false
+    title: 解析Tavily搜索结果
+    type: code
+    variables:
+    - value_selector:
+      - '10000002'
+      - json
+      variable: search_json
+  id: '10000003_tavily'
+  selected: false
+  type: custom
+- data:
+    code: |
+      def main(page_text) -> dict:
+          try:
+              import json
+
+              text = str(page_text or "").strip()
+              if not text:
+                  return {"title": "", "description": "", "url": "", "content": "", "is_valid": False, "err_msg": "JinaReader text 为空"}
+              payload = json.loads(text)
+              if not isinstance(payload, dict):
+                  return {"title": "", "description": "", "url": "", "content": "", "is_valid": False, "err_msg": "JinaReader text 不是 JSON 对象"}
+              if payload.get("code") != 200 and payload.get("status") != 20000:
+                  return {"title": "", "description": "", "url": "", "content": "", "is_valid": False, "err_msg": "JinaReader 返回状态异常"}
+              data = payload.get("data") or {}
+              if not isinstance(data, dict):
+                  return {"title": "", "description": "", "url": "", "content": "", "is_valid": False, "err_msg": "JinaReader data 不是对象"}
+              content = str(data.get("content") or "").strip()
+              if not content:
+                  return {"title": "", "description": "", "url": "", "content": "", "is_valid": False, "err_msg": "JinaReader data.content 为空"}
+              return {
+                  "title": str(data.get("title") or ""),
+                  "description": str(data.get("description") or ""),
+                  "url": str(data.get("url") or ""),
+                  "content": content,
+                  "is_valid": True,
+                  "err_msg": "",
+              }
+          except Exception as e:
+              return {"title": "", "description": "", "url": "", "content": "", "is_valid": False, "err_msg": str(e)}
+    code_language: python3
+    desc: 解析 tool_jina_reader 的 text JSON 字符串，从 data 中提取标题和正文
+    outputs:
+      content:
+        children: null
+        type: string
+      description:
+        children: null
+        type: string
+      err_msg:
+        children: null
+        type: string
+      is_valid:
+        children: null
+        type: boolean
+      title:
+        children: null
+        type: string
+      url:
+        children: null
+        type: string
+    selected: false
+    title: 解析JinaReader正文
+    type: code
+    variables:
+    - value_selector:
+      - '10000005'
+      - text
+      variable: page_text
+  id: '10000003_jina_text'
+  selected: false
+  type: custom
+- data:
+    code: |
+      def main(doc_text) -> dict:
+          try:
+              import pytablereader as ptr
+              tables = list(ptr.MarkdownTableTextLoader(doc_text or "").load())
+              if not tables:
+                  return {"rows": [], "err_msg": "未解析到 Markdown 表格"}
+              df = tables[0].as_dataframe()
+              rows = df.fillna("").astype(str).to_dict(orient="records")
+              return {"rows": rows, "err_msg": ""}
+          except Exception as e:
+              return {"rows": [], "err_msg": str(e)}
+    code_language: python3
+    desc: 解析 document-extractor 的 Markdown 表格 text，禁止 csv.DictReader/read_csv
+    outputs:
+      err_msg:
+        children: null
+        type: string
+      rows:
+        children: null
+        type: array[object]
+    selected: false
+    title: 解析Markdown表格
+    type: code
+    variables:
+    - value_selector:
+      - '10000002'
+      - text
+      variable: doc_text
+  id: '10000003_md'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(step_obj: dict, subtaskRet: list, index: int) -> dict:\n   \
+      \ step = step_obj[\"step\"]\n    desc = step_obj[\"desc\"]\n    subtaskStr =\
+      \ json.dumps(subtaskRet)\n    return {\n        \"step\": step,\n        \"\
+      desc\": desc,\n        \"subtaskStr\": subtaskStr,\n        \"idx\": index+1\n\
+      \    }\n"
+    code_language: python3
+    desc: ''
+    isInIteration: true
+    iteration_id: '1728709933523'
+    outputs:
+      desc:
+        children: null
+        type: string
+      idx:
+        children: null
+        type: number
+      step:
+        children: null
+        type: string
+      subtaskStr:
+        children: null
+        type: string
+    selected: false
+    title: 解析对象
+    type: code
+    variables:
+    - value_selector:
+      - '1728709933523'
+      - item
+      variable: step_obj
+    - value_selector:
+      - conversation
+      - subtaskRet
+      variable: subtaskRet
+    - value_selector:
+      - '1728709933523'
+      - index
+      variable: index
+  id: '1728730342984'
+  parentId: '1728709933523'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    code: "\ndef main(cn: str, en: str, jp: str, lang: str) -> dict:\n    language_map\
+      \ = {\n        \"zh-Hans\": cn,\n        \"en-US\": en,\n        \"ja-JP\":\
+      \ jp\n    }\n    return {\n        \"result\": language_map.get(lang, \"\")\n\
+      \    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 基准语言设置
+    type: code
+    variables:
+    - value_selector:
+      - '1732377867403'
+      - result
+      variable: cn
+    - value_selector:
+      - '1732378541085'
+      - result
+      variable: en
+    - value_selector:
+      - '1732378574421'
+      - result
+      variable: jp
+    - value_selector:
+      - '1731078730206'
+      - lang
+      variable: lang
+  id: '1732346962510'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(step: str, desc: str, ret: str) -> dict:\n    return {\n   \
+      \     \"result\": {\n            'step': step,\n            'desc': desc,\n\
+      \            'ret': ret\n        }\n    }\n"
+    code_language: python3
+    desc: ''
+    isInIteration: true
+    iteration_id: '1728709933523'
+    outputs:
+      result:
+        children: null
+        type: object
+    selected: false
+    title: 聚合结果
+    type: code
+    variables:
+    - value_selector:
+      - '1728730342984'
+      - step
+      variable: step
+    - value_selector:
+      - '1728730342984'
+      - desc
+      variable: desc
+    - value_selector:
+      - '1728730552797'
+      - text
+      variable: ret
+  id: '1728905920547'
+  parentId: '1728709933523'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    code: "\ndef main(resp:dict, sig_impl: list[str], dest_lang:str) -> dict:\n  \
+      \  sig_impl_idx = 0\n    for item in resp[dest_lang]:\n        _type = item['type']\n\
+      \        if _type in ['function', 'class']:\n            item['codes'] = sig_impl[sig_impl_idx]\n\
+      \            sig_impl_idx += 1\n\n    final_code = '\\n'.join([item['codes']\
+      \ for item in resp[dest_lang]])\n\n    return {\n        \"final_code\": final_code,\n\
+      \        \"resp\": resp,\n    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      final_code:
+        children: null
+        type: string
+      resp:
+        children: null
+        type: object
+    selected: false
+    title: Code - 合并翻译结果
+    type: code
+    variables:
+    - value_selector:
+      - '1720580108806'
+      - output
+      variable: sig_impl
+    - value_selector:
+      - '1720508367130'
+      - resp
+      variable: resp
+    - value_selector:
+      - '1720505581749'
+      - dest_lang
+      variable: dest_lang
+  id: '1720580885073'
+  selected: false
+  type: custom
+- data:
+    code: "import json\n\ndef main(text: str, enabled_summary: str) -> dict:\n   \
+      \ json_obj = extract_json_response(text)\n    summary = '福'\n    if enabled_summary\
+      \ == '开启':\n        summary = json_obj['summary']\n    return {\n        \"\
+      banner\": json_obj['banner'],\n        \"reversed_banner\": json_obj['banner'][::-1],\n\
+      \        \"top\": json_obj['top'],\n        \"bottom\": json_obj['bottom'],\n\
+      \        \"summary\": summary,\n    }\n\ndef extract_json_response(text: str)\
+      \ -> dict:\n\n    def extract_json(text):\n        stack = []\n        for i,\
+      \ c in enumerate(text):\n            if c == \"{\":\n                stack.append(c)\n\
+      \            elif c == \"}\":\n                if not stack:\n             \
+      \       return text[:i]\n                if c == \"}\" and stack[-1] == \"{\"\
+      :\n                    stack.pop()\n                    if not stack:\n    \
+      \                    return text[: i + 1]\n                else:\n         \
+      \           return text[:i]\n        return None\n\n    for idx in range(len(text)):\n\
+      \        if text[idx] == \"{\":\n            json_str = extract_json(text[idx:])\n\
+      \            if json_str:\n                return json.loads(json_str)\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      banner:
+        children: null
+        type: string
+      bottom:
+        children: null
+        type: string
+      reversed_banner:
+        children: null
+        type: string
+      summary:
+        children: null
+        type: string
+      top:
+        children: null
+        type: string
+    selected: false
+    title: 代码执行
+    type: code
+    variables:
+    - value_selector:
+      - '1737014291474'
+      - text
+      variable: text
+    - value_selector:
+      - '1737014287710'
+      - enabled_summary
+      variable: enabled_summary
+  id: '1737014565681'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(course: str, info: str) -> dict:\n    return {\n        \"result\"\
+      : {\n            \"info\": info,\n            \"course\": course,\n        },\n\
+      \    }\n"
+    code_language: python3
+    desc: ''
+    isInIteration: true
+    iteration_id: '1728217105363'
+    outputs:
+      result:
+        children: null
+        type: object
+    selected: false
+    title: 整合
+    type: code
+    variables:
+    - value_selector:
+      - '1728218323079'
+      - text
+      variable: course
+    - value_selector:
+      - '1728217105363'
+      - item
+      variable: info
+  id: '1728463823248'
+  parentId: '1728217105363'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    code: "def main(item: object) -> dict:\n    return item\n"
+    code_language: python3
+    desc: ''
+    isInIteration: true
+    iteration_id: '1728217105363'
+    outputs:
+      chapter:
+        children: null
+        type: string
+      subtitle:
+        children: null
+        type: string
+      title:
+        children: null
+        type: string
+    selected: false
+    title: 转object
+    type: code
+    variables:
+    - value_selector:
+      - '1728217105363'
+      - item
+      variable: item
+  id: '1728218846720'
+  parentId: '1728217105363'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    code: "\ndef main(item: dict) -> dict:\n    return {\n        \"keywords\": item[\"\
+      keywords\"],\n        \"section\":  item[\"section\"]\n    }\n"
+    code_language: python3
+    desc: ''
+    isInIteration: true
+    isIterationStart: true
+    iteration_id: '1719046938333'
+    outputs:
+      keywords:
+        children: null
+        type: string
+      section:
+        children: null
+        type: string
+    selected: false
+    title: 字段拆分
+    type: code
+    variables:
+    - value_selector:
+      - '1719046938333'
+      - item
+      variable: item
+  extent: parent
+  id: '1719051705186'
+  parentId: '1719046938333'
+  selected: false
+  type: custom
+  zIndex: 1001
+- data:
+    code: "import json\n\ndef extract_fn_cls(text: str, dest_lang:str) -> dict:\n\
+      \    resp = json.loads(text)['json']\n    out_file_name = resp['out_file_name']\n\
+      \    signatures = [\n        item['signature'] for item in resp[dest_lang] if\
+      \ item['type'] in ['function', 'class']\n    ]\n    return {\n        # \"out_file_name\"\
+      : out_file_name,\n        \"resp\": resp,\n        \"signatures\": signatures,\n\
+      \    }\n\ndef main(text:str, dest_lang:str):\n    return extract_fn_cls(text,\
+      \ dest_lang)"
+    code_language: python3
+    desc: ''
+    outputs:
+      resp:
+        children: null
+        type: object
+      signatures:
+        children: null
+        type: array[string]
+    selected: false
+    title: Code - 抽取类/函数签名
+    type: code
+    variables:
+    - value_selector:
+      - '1723619551968'
+      - text
+      variable: text
+    - value_selector:
+      - '1720505581749'
+      - dest_lang
+      variable: dest_lang
+  id: '1720508367130'
+  selected: false
+  type: custom
+- data:
+    code: "import json\nimport time\nimport hmac\nimport hashlib\nimport requests\n\
+      import io\nfrom datetime import datetime\n\n# 腾讯云配置信息\nSECRET_ID = \"\"\nSECRET_KEY\
+      \ = \"\"\nSERVICE = \"vod\"\nHOST = \"vod.tencentcloudapi.com\"\nALGORITHM =\
+      \ \"TC3-HMAC-SHA256\"\nVERSION = \"2018-07-17\"\n\ndef _sign_string(key, msg):\n\
+      \    return hmac.new(key, msg.encode('utf-8'), hashlib.sha256).digest()\n\n\
+      def generate_signature(canonical_request, timestamp, date):\n    credential_scope\
+      \ = f\"{date}/{SERVICE}/tc3_request\"\n    hashed_canonical_request = hashlib.sha256(canonical_request.encode('utf-8')).hexdigest()\n\
+      \    str_to_sign = f\"{ALGORITHM}\\n{timestamp}\\n{credential_scope}\\n{hashed_canonical_request}\"\
+      \n    \n    secret_date = _sign_string((\"TC3\" + SECRET_KEY).encode('utf-8'),\
+      \ date)\n    secret_service = _sign_string(secret_date, SERVICE)\n    secret_signing\
+      \ = _sign_string(secret_service, \"tc3_request\")\n    signature = hmac.new(secret_signing,\
+      \ str_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()\n    \n    return\
+      \ f\"{ALGORITHM} Credential={SECRET_ID}/{credential_scope}, SignedHeaders=content-type;host,\
+      \ Signature={signature}\"\n\ndef get_vtt_content(url: str) -> str:\n    try:\n\
+      \        response = requests.get(url)\n        response.raise_for_status()\n\
+      \        content = io.StringIO(response.text)\n        return str(content.getvalue())\n\
+      \    except Exception as err:\n        print(f'获取内容失败: {err}, URL: {url}')\n\
+      \        return \"\"\n\ndef main(file_ids: str = '', sub_appid: int = 0):\n\
+      \    try:\n        timestamp = str(int(time.time()))\n        date = datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%d')\n\
+      \n        payload = {\n            \"FileIds\": [file_ids],\n            \"\
+      SubAppId\": sub_appid\n        }\n        payload_str = json.dumps(payload)\n\
+      \n        headers = {\n            'Content-Type': 'application/json',\n   \
+      \         'Host': HOST,\n            'X-TC-Action': 'DescribeMediaInfos',\n\
+      \            'X-TC-Version': VERSION,\n            'X-TC-Timestamp': timestamp,\n\
+      \        }\n\n        canonical_headers = f\"content-type:{headers['Content-Type']}\\\
+      nhost:{HOST}\\n\"\n        hashed_request_payload = hashlib.sha256(payload_str.encode('utf-8')).hexdigest()\n\
+      \        canonical_request = f\"POST\\n/\\n\\n{canonical_headers}\\ncontent-type;host\\\
+      n{hashed_request_payload}\"\n\n        headers['Authorization'] = generate_signature(canonical_request,\
+      \ timestamp, date)\n\n        response = requests.post(f\"https://{HOST}\",\
+      \ data=payload_str, headers=headers)\n        result = response.json()\n   \
+      \     \n        if 'Error' in result.get('Response', {}):\n            error_info\
+      \ = result['Response']['Error']\n            print(f\"API错误: {error_info.get('Code')}\
+      \ - {error_info.get('Message')}\")\n            return {\"status\":0,\"content\"\
+      :\"\"}\n        \n        media_info = result['Response']['MediaInfoSet'][0]\n\
+      \        if 'SubtitleInfo' in media_info and 'SubtitleSet' in media_info['SubtitleInfo']:\n\
+      \            subtitle_sets = media_info['SubtitleInfo']['SubtitleSet']\n   \
+      \         print(f\"\\n找到 {len(subtitle_sets)} 个:\")\n            for subtitle\
+      \ in subtitle_sets:\n                print(f\"\\nID: {subtitle['Id']}\")\n \
+      \               print(f\"URL: {subtitle['Url']}\")\n                print(\"\
+      内容:\")\n                content = get_vtt_content(subtitle['Url'])\n       \
+      \         print(content)\n            return {\"status\":1,\"content\":content}\n\
+      \        else:\n            print(\"未找到信息\")\n            return {\"status\"\
+      :0,\"content\":\"\"}\n\n    except Exception as err:\n        print(f\"获取信息失败:\
+      \ {err}\")\n        return {\"status\":0,\"content\":\"\"}"
+    code_language: python3
+    desc: ''
+    outputs:
+      content:
+        children: null
+        type: string
+      status:
+        children: null
+        type: number
+    selected: false
+    title: 代码执行
+    type: code
+    variables:
+    - value_selector:
+      - '1731555779402'
+      - file_ids
+      variable: file_ids
+    - value_selector:
+      - '1731555779402'
+      - sub_appid
+      variable: sub_appid
+  id: '1731555795064'
+  selected: false
+  type: custom
+- data:
+    code: "import requests\nimport json\n\n\ndef main(prompt: str, apikey: str) ->\
+      \ dict:\n    # 设置请求的URL和Headers\n    url = \"https://api.siliconflow.cn/v1/image/generations\"\
+      \n    headers = {\n        \"accept\": \"application/json\",\n        \"authorization\"\
+      : f\"Bearer {apikey}\",\n        \"content-type\": \"application/json\"\n  \
+      \  }\n\n    # 定义请求的payload数据\n    data = {\n        \"model\": \"black-forest-labs/FLUX.1-schnell\"\
+      ,\n        \"prompt\": prompt,\n        \"image_size\": \"1920x1080\"\n    }\n\
+      \n    # 发送POST请求\n    response = requests.post(url, headers=headers, data=json.dumps(data))\n\
+      \n    # 提取结果并返回\n    if response.status_code == 200:\n        result = response.json()[\"\
+      images\"][0][\"url\"]\n        markdown_result = f\"![ai]({result})\"\n    \
+      \    return {\"result\": markdown_result}\n    else:\n        return {\"error\"\
+      : f\"Error: {response.status_code}, {response.text}\"}\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: FLUX1绘画
+    type: code
+    variables:
+    - value_selector:
+      - '1711528917469'
+      - text
+      variable: prompt
+    - value_selector:
+      - env
+      - apikey
+      variable: apikey
+  id: '1727158200027'
+  selected: false
+  type: custom
+- data:
+    code: "import requests\nimport json\n\ndef main(imagerurl: str, apikey: str) ->\
+      \ dict:\n    # 设置请求的URL和Headers\n    url = \"https://api.siliconflow.cn/v1/chat/completions\"\
+      \n    headers = {\n        \"authorization\": f\"Bearer {apikey}\",\n      \
+      \  \"content-type\": \"application/json\"\n    }\n\n    # 添加中文提示词\n    prompt_text\
+      \ = \"请提取图片信息里面的内容，并使用中文回答。\"\n\n    payload = {\n        \"model\": \"Pro/OpenGVLab/InternVL2-8B\"\
+      ,\n        \"messages\": [\n            {\n                \"role\": \"user\"\
+      ,\n                \"content\": [\n                    {\n                 \
+      \       \"type\": \"image_url\",\n                        \"text\": prompt_text,\n\
+      \                        \"image_url\": {\n                            \"url\"\
+      : imagerurl.split('(', 1)[1].split(')', 1)[0],\n                           \
+      \ \"detail\": \"auto\"\n                        }\n                    }\n \
+      \               ]\n            }\n        ],\n        \"stream\": False,\n \
+      \       \"max_tokens\": 1024,\n        \"temperature\": 0.3,\n        \"top_p\"\
+      : 0.7,\n        \"top_k\": 50,\n        \"frequency_penalty\": 0.5,\n      \
+      \  \"n\": 1,\n        \"response_format\": {\"type\": \"text\"}\n    }\n\n \
+      \   # 发送POST请求\n    response = requests.post(url, headers=headers, json=payload)\n\
+      \n    # 提取结果并返回\n    if response.status_code == 200:\n        result = response.json()\n\
+      \        # 检查result中是否有choices字段\n        if \"choices\" in result:\n      \
+      \      # 获取第一个choice的内容\n            content = result[\"choices\"][0][\"message\"\
+      ][\"content\"]\n            return {\"result\": content}\n        else:\n  \
+      \          return \"Error: No choices found in the response.\"\n    else:\n\
+      \        return f\"Error: {response.status_code}, {response.text}\""
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 多模态模型
+    type: code
+    variables:
+    - value_selector:
+      - '1727158200027'
+      - result
+      variable: imagerurl
+    - value_selector:
+      - env
+      - apikey
+      variable: apikey
+  id: '1736590963976'
+  selected: false
+  type: custom
+- data:
+    code: "def main(status_code: int, body: dict) -> dict:\n    if status_code !=\
+      \ 200:\n        raise Exception(f\"查询任务状态失败：{body}\")\n\n    import json\n \
+      \   body = json.loads(body)\n\n    return dict(file_handler_id=body['file_handler_id'])"
+    code_language: python3
+    desc: ''
+    outputs:
+      file_handler_id:
+        children: null
+        type: string
+    selected: false
+    title: 代码执行 2
+    type: code
+    variables:
+    - value_selector:
+      - '1745196170859'
+      - status_code
+      variable: status_code
+    - value_selector:
+      - '1745196170859'
+      - body
+      variable: body
+  id: '1745196454575'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(mem,datetime_now):\n    return {\n        \"result\": {f\"{datetime_now}\"\
+      :mem},\n    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: object
+    selected: false
+    title: 组织记忆和时间
+    type: code
+    variables:
+    - value_selector:
+      - '1726648763086'
+      - text
+      variable: mem
+    - value_selector:
+      - '1726715181866'
+      - text
+      variable: datetime_now
+  id: '1726715205152'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(direct_text: str, asr_text: str) -> dict:\n    if direct_text\
+      \ is not None:\n        return {\n            \"result\": direct_text\n    \
+      \    }\n    else:\n        import json\n        data = json.loads(asr_text)\n\
+      \        return {'result': data.get('result')}\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 提取文本
+    type: code
+    variables:
+    - value_selector:
+      - '1744103267507'
+      - text
+      variable: direct_text
+    - value_selector:
+      - '1744103588410'
+      - body
+      variable: asr_text
+  id: '1744103634801'
+  selected: false
+  type: custom
+- data:
+    code: "def main(json_str: str, draw_chart: int) -> dict:\n    import json\n  \
+      \  data = json.loads(json_str)\n    if draw_chart == 0:\n        return {'result':\
+      \ str(data['result'])}\n    else:\n\n        echart_config = \"```echarts\\\
+      n\" + json_str + \"\\n```\"\n        return  {'result': echart_config}\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: parse_json
+    type: code
+    variables:
+    - value_selector:
+      - '17440176430110'
+      - body
+      variable: json_str
+    - value_selector:
+      - conversation
+      - draw_chart
+      variable: draw_chart
+  id: '1744018336773'
+  selected: false
+  type: custom
+- data:
+    code: "def main(arg1: str,arg2: str) -> dict:\n    import json\n\n    # 解析输入的\
+      \ JSON 数据\n    try:\n        data = json.loads(arg1)\n    except json.JSONDecodeError:\n\
+      \        return {\"result\": \"输入的字符串不是有效的 JSON 格式，请检查输入数据。\"}\n\n    # 确保解析后的数据包含\
+      \ 'data' 键\n    if not isinstance(data, dict) or 'data' not in data:\n     \
+      \   return {\"result\": \"输入的数据格式不正确，请确保输入是一个包含 'data' 键的 JSON 对象。\"}\n\n  \
+      \  # 获取 'data' 键对应的数组数据\n    image_data = data.get('data', [])\n\n    # 确保 'data'\
+      \ 键的值是一个列表\n    if not isinstance(image_data, list):\n        return {\"result\"\
+      : \"输入的数据中 'data' 键的值不是一个数组，请确保其值是一个 JSON 数组对象。\"}\n\n    # 初始化结果字符串\n    strn\
+      \ = \"\"\n\n    # 遍历每条图片数据\n    for index, item in enumerate(image_data, start=1):\n\
+      \        # 检查每条数据是否是字典，并且包含 'url' 字段\n        if not isinstance(item, dict)\
+      \ or 'url' not in item:\n            strn += f\"图片第{index}条内容：无法提取 URL（缺少 'url'\
+      \ 字段）\\n\"\n            continue\n\n        # 提取 URL 并生成 Markdown 格式的图片链接\n\
+      \        url = item['url']\n        strn += url + \"\\n\"\n\n    # 将输入字符串转换为表格格式\n\
+      \    str2 = strn\n    table = [[arg2, str2, \"\", \"\", \"\"]]\n\n    # 将表格转换为字符串形式的嵌套列表，并添加转义字符\n\
+      \    result_str = str(table).replace(\"'\", '\"')  # 将单引号替换为双引号\n\n    # 返回结果\n\
+      \    return {\n        \"result\": result_str,\n    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 处理即梦AI图片
+    type: code
+    variables:
+    - value_selector:
+      - '1738645745761'
+      - body
+      variable: arg1
+    - value_selector:
+      - '1738645729564'
+      - prompt
+      variable: arg2
+  id: '1739418278701'
+  selected: false
+  type: custom
+- data:
+    code: "def main(score_text: str) -> dict:\n    import re\n    pattern = r\"(\\\
+      d+).*(准确性|流畅度|完整性|风格与用词).*?(\\d)\\s*分\"\n    scores = re.findall(pattern, score_text)\n\
+      \    if len(scores) == 8:\n        scores = scores[:4]\n    elif len(scores)\
+      \ != 4:\n        raise ValueError(scores, score_text)\n\n    scores = {\n  \
+      \          \"Accuracy\": int(scores[0][2]),\n            \"Fluency\": int(scores[1][2]),\n\
+      \            \"Completeness\": int(scores[2][2]),\n            \"Style & Word\
+      \ Choice\": int(scores[3][2]),\n    }\n    return dict(score=sum(s for _, s\
+      \ in scores.items()))"
+    code_language: python3
+    desc: ''
+    isInIteration: false
+    isInLoop: true
+    loop_id: '1744689095698'
+    outputs:
+      score:
+        children: null
+        type: number
+    selected: false
+    title: 代码执行
+    type: code
+    variables:
+    - value_selector:
+      - '1744689106273'
+      - text
+      variable: score_text
+  id: '1744689117088'
+  parentId: '1744689095698'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    code: "import json,requests\n\ndef main(input_string):\n    try:\n        data\
+      \ = json.loads(input_string)\n        username = data['username']\n        password\
+      \ = data['password']\n        #这里可以验证是否登录成功，返回user_token和status，假设username=svcvit为登录成功\n\
+      \        #response_data = requests.post(\"\")\n        if username == \"svcvit\"\
+      :\n            return {\"is_login\":1,\"user_token\":\"user_token_test\"}\n\
+      \        else:\n            return {\"is_login\":0,\"user_token\":\"\"}\n  \
+      \  except:\n        return {\"is_login\":0,\"user_token\":\"\"}\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      is_login:
+        children: null
+        type: number
+      user_token:
+        children: null
+        type: string
+    selected: false
+    title: 登录
+    type: code
+    variables:
+    - value_selector:
+      - sys
+      - query
+      variable: input_string
+  id: '1731378644337'
+  selected: false
+  type: custom
+- data:
+    code: "def main(arg1: str) -> dict:\n    import json\n    data = json.loads(arg1)\n\
+      \    \n    # Create an array of objects\n    result = [{'section': item[\"section\"\
+      ], 'bullets': item[\"bullets\"]} for item in data]\n    \n    return {\n   \
+      \     'result': result\n    }"
+    code_language: python3
+    desc: 'Extract section titles. '
+    outputs:
+      result:
+        children: null
+        type: array[object]
+    selected: false
+    title: Extract Subtitles and Outlines
+    type: code
+    variables:
+    - value_selector:
+      - '1716783205923'
+      - text
+      variable: arg1
+  id: '1716783405935'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(articleSections: list):\n    data = articleSections\n    return\
+      \ {\n        \"result\": \"\\n\".join(data)\n    }\n"
+    code_language: python3
+    desc: 'Transform Array from Iteration to String. '
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: Code
+    type: code
+    variables:
+    - value_selector:
+      - '1716786291494'
+      - output
+      variable: articleSections
+  id: '1716786321875'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main():\n    return {\n        \"p_info\": '''{\n  \"基本信息\": {\n\
+      \    \"姓名\": \"张三\",\n    \"性别\": \"男\",\n    \"年龄\": 45,\n    \"身高\": 175,\n\
+      \    \"体重\": 75,\n    \"手机号\": \"13800138000\"\n  },\n  \"疾病信息\": {\n    \"\
+      现病史\": \"高血压\",\n    “确诊时间”: \"2021 年确诊高血压\",\n    \"疾病指标\":\"高压 180、低压 90\"\
+      ,\n    \"既往史\": [\"糖尿病\", \"慢性支气管炎\"],\n    \"家族史\": [\"心脏病\", \"中风\"],\n  \
+      \  \"过敏史\": [\"青霉素\"],\n    \"近期不舒服\": [\"头痛\", \"胸闷\", \"视力模糊\"]\n  },\n  \"\
+      生活习惯\": {\n    \"运动\": \"每周 3 次跑步，每次 30 分钟\",\n    \"饮食\": \"低盐低脂饮食\",\n   \
+      \ \"睡眠\": \"每晚 7 小时\",\n    \"吸烟\": \"不吸烟\",\n    \"饮酒\": \"偶尔饮酒，每周 1-2 次\"\n\
+      \  },\n  \"用药信息\": {\n    \"用药种类\": [\"洛伐他汀\", \"阿司匹林\"],\n    \"用药时长\": [\"\
+      洛伐他汀服用半年多\", \"阿司匹林半个月\"],\n    \"服药状态\": [\"洛伐他汀服用中\", \"阿司匹林服用中\"],\n    \"\
+      服用保健品\"：[\"脑白金\",\"阿胶\",\"枸杞\"]\n  },\n  \"注意事项\": [\n    \"2024-1-28 反应最近有感冒，注意通风\"\
+      ,\n    \"2024-1-28 参加答题比赛\"\n  ]\n}''', \"task\": \"周一：提醒用药；周二：健康关爱；周五：实时热点\"\
+      , \"topic\": '''台风席卷上海''', \"mem\": \"无\"\n    }\n"
+    code_language: python3
+    desc: 获取用户相关的信息
+    outputs:
+      mem:
+        children: null
+        type: string
+      p_info:
+        children: null
+        type: string
+      task:
+        children: null
+        type: string
+      topic:
+        children: null
+        type: string
+    selected: false
+    title: 获取用户信息
+    type: code
+    variables: []
+  id: '1726644698291'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(arg1):\n    return {\n        \"result\": \"1\",\n    }\n"
+    code_language: python3
+    desc: 判定时机是否合适
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 该不该发
+    type: code
+    variables:
+    - value_selector:
+      - conversation
+      - mem
+      variable: arg1
+  id: '1726714060257'
+  selected: false
+  type: custom
+- data:
+    code: "def main(json_data: str) -> str:\n    import json\n    data = json.loads(json_data)\n\
+      \    \n    # 从data数组中获取第一个图片信息\n    if data.get(\"success\") and data.get(\"\
+      data\"):\n        image_info = data[\"data\"][0]\n        if image_info[\"type\"\
+      ] == \"image\":\n            filename = image_info[\"filename\"]\n         \
+      \   url = image_info[\"url\"]\n            markdown_result = f\"![{filename}]({url})\"\
+      \n            return {\"result\": markdown_result,\"picture_url\":url}\n   \
+      \ \n    return {\"result\": \"No valid image found\"}"
+    code_language: python3
+    desc: ''
+    outputs:
+      picture_url:
+        children: null
+        type: string
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 文生图代码提取图片URL
+    type: code
+    variables:
+    - value_selector:
+      - '1742449038487'
+      - text
+      variable: json_data
+  id: '1742451731296'
+  selected: false
+  type: custom
+- data:
+    code: "def main(json_data: str) -> str:\n    import json\n    data = json.loads(json_data)\n\
+      \    \n    # 从data数组中获取第一个图片信息\n    if data.get(\"success\") and data.get(\"\
+      data\"):\n        image_info = data[\"data\"][0]\n        if image_info[\"type\"\
+      ] == \"image\":\n            filename = image_info[\"filename\"]\n         \
+      \   url = image_info[\"url\"]\n            markdown_result = f\"![{filename}]({url})\"\
+      \n            return {\"result\": markdown_result,\"picture_url\":url}\n   \
+      \ \n    return {\"result\": \"No valid image found\"}"
+    code_language: python3
+    desc: ''
+    outputs:
+      picture_url:
+        children: null
+        type: string
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 图生图代码提取图片URL
+    type: code
+    variables:
+    - value_selector:
+      - '1742452745576'
+      - text
+      variable: json_data
+  id: '1742452830955'
+  selected: false
+  type: custom
+- data:
+    code: "def main(arg1: str) -> dict:\n    # 将输入字符串转换为表格格式\n    str2 = arg1\n  \
+      \  table = [[str2, \"\", \"\", \"\", \"\"]]\n    \n    # 将表格转换为字符串形式的嵌套列表，并添加转义字符\n\
+      \    result_str = str(table).replace(\"'\", '\"')  # 将单引号替换为双引号\n    \n    #\
+      \ 返回结果\n    return {\n        \"result\": result_str,\n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: llm大语言模型转换飞书输入
+    type: code
+    variables:
+    - value_selector:
+      - '1739339721220'
+      - text
+      variable: arg1
+  id: '1739342547948'
+  selected: false
+  type: custom
+- data:
+    code: "def main(arg1: str) -> str:\n    # 首先解析外层的 JSON 字符串\n    data = json.loads(arg1)\n\
+      \    filename=data['filename']\n    url=data['etag']\n    markdown_result =\
+      \ f\"<audio controls><source src='{url}' type='audio/mpeg'>{filename}</audio>\"\
+      \n    return {\"result\": markdown_result} "
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: '代码执行 '
+    type: code
+    variables:
+    - value_selector:
+      - '1736600024973'
+      - text
+      variable: arg1
+  id: '1736601162372'
+  selected: false
+  type: custom
+- data:
+    code: "import json\n\ndef main(arg1: str) -> dict:\n    try:\n        json_object\
+      \ = json.loads(arg1)\n        return {\n            \"result\": json_object\n\
+      \        }\n    except json.JSONDecodeError as e:\n        return {\n      \
+      \      \"result\": None,\n            \"error\": f\"Invalid JSON: {str(e)}\"\
+      \n        }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: array[object]
+    selected: false
+    title: 转成 Array[object]
+    type: code
+    variables:
+    - value_selector:
+      - '1731575963411'
+      - text
+      variable: arg1
+  id: '1731576019023'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(text: str) -> dict:\n    import re, json\n\n    pattern = r\"\
+      ^```json\\n([\\s\\S]*)\\n```\"\n    matched = re.match(pattern, text, re.MULTILINE)\n\
+      \    if not matched:\n        return {\"result\": \"None\"}\n    jsonstr = matched.group(1)\n\
+      \    obj = json.loads(jsonstr)\n    contents = []\n    for chapter in obj:\n\
+      \        for subtitle in chapter['contents']:\n            contents += [\n \
+      \               {\n                    \"chapter\": chapter[\"chapter\"],\n\
+      \                    \"title\": chapter[\"title\"],\n                    \"\
+      subtitle\": subtitle,\n                }\n            ]\n    return {\n    \
+      \    \"result\": contents,\n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: array[object]
+    selected: false
+    title: 转换成JSON
+    type: code
+    variables:
+    - value_selector:
+      - '1728198088794'
+      - text
+      variable: text
+  id: '1728203511475'
+  selected: false
+  type: custom
+- data:
+    code: "import re\n\ndef split_to_tspan(text):\n    # 按标点符号分割句子\n    sentences\
+      \ = re.split(r'(，|。|！|？|；|：)', text)\n    # 去掉空字符串和重组句子\n    lines = [''.join(sentences[i:i+2]).strip()\
+      \ for i in range(0, len(sentences), 2) if sentences[i].strip()]\n    \n    #\
+      \ 构造 <tspan> 标签\n    tspan_lines = []\n    for i, line in enumerate(lines):\n\
+      \        if i == 0:\n            tspan_lines.append(f'<tspan x=\"50%\" dy=\"\
+      0\">{line}</tspan>')\n        else:\n            tspan_lines.append(f'<tspan\
+      \ x=\"50%\" dy=\"1.2em\">{line}</tspan>')\n    return '\\n  '.join(tspan_lines)\n\
+      \ndef main(text: str) -> dict:\n    return {\n        \"result\": split_to_tspan(text),\n\
+      \    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 分段填写
+    type: code
+    variables:
+    - value_selector:
+      - llm
+      - text
+      variable: text
+  id: '1732361957157'
+  selected: true
+  type: custom
+- data:
+    code: "import base64\n\ndef main(svg_string: str) -> dict:\n    # 将SVG编码为Base64格式\n\
+      \    encoded_svg = base64.b64encode(svg_string.encode('utf-8')).decode('utf-8')\n\
+      \n    # 构建data URI\n    data_uri = f\"data:image/svg+xml;base64,{encoded_svg}\"\
+      \n    return {\n        \"result\": data_uri,\n    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: SVG转换为Base64编码图片
+    type: code
+    variables:
+    - value_selector:
+      - '1732362131496'
+      - output
+      variable: svg_string
+  id: '1732362013203'
+  selected: false
+  type: custom
+- data:
+    code: "import json_repair\nimport json\n\ndef main(llm_string):\n    new_string\
+      \ = json_repair.repair_json(llm_string, ensure_ascii=False)\n    return {\n\
+      \        \"result\": new_string\n    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: true
+    title: 代码执行
+    type: code
+    variables:
+    - value_selector:
+      - '1732007415808'
+      - llm_string
+      variable: llm_string
+  id: '1732007419308'
+  selected: true
+  type: custom
+- data:
+    code: "\ndef main(count):\n    if count%3==0:\n        return {\n            \"\
+      result\": 1,\n        }\n    else:\n        return {\n            \"result\"\
+      : 0,\n        }\n\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: number
+    selected: false
+    title: 是否需要更新记忆
+    type: code
+    variables:
+    - value_selector:
+      - sys
+      - dialogue_count
+      variable: count
+  id: '1726649035816'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(text: str) -> dict:\n    import json\n    data = json.loads(text)\n\
+      \    if len(data.get(\"content\", \"\")) <5:\n        return {\"crawl_empty\"\
+      : 1}\n    return {\"crawl_empty\": 0}\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      crawl_empty:
+        children: null
+        type: number
+    selected: false
+    title: 爬虫结果
+    type: code
+    variables:
+    - value_selector:
+      - '1718967141318'
+      - text
+      variable: text
+  id: '1719061181576'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(content: str) -> dict:\n    if len(content) <= 400:\n      \
+      \  return {\"single_section\": \"是\"}\n    return {\"single_section\": \"否\"\
+      }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      single_section:
+        children: null
+        type: string
+    selected: false
+    title: 是否单段落
+    type: code
+    variables:
+    - value_selector:
+      - '17190400701430'
+      - content
+      variable: content
+  id: '1719062922068'
+  selected: false
+  type: custom
+- data:
+    code: "import json  \n  \ndef main(req: str) -> dict:  \n    # 解析JSON字符串（该字符串已经是请求体内容）\
+      \  \n    data = json.loads(req)  \n      \n    # 从解析后的数据中提取url  \n    url =\
+      \ data['data']['url']  \n      \n    # 创建并返回结果字典  \n    return {  \n       \
+      \ \"result\": url  # 封面图片的URL  \n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 获取封面图URl
+    type: code
+    variables:
+    - value_selector:
+      - '1736693844224'
+      - body
+      variable: req
+  id: '1736694050685'
+  selected: false
+  type: custom
+- data:
+    code: "def main(arg1: str) -> str:\n    # 首先解析外层的 JSON 字符串\n    data = json.loads(arg1)\n\
+      \    filename=data['filename']\n    url=data['etag']\n    markdown_result =\
+      \ f\"<audio controls><source src='{url}' type='audio/mpeg'>{filename}</audio>\"\
+      \n    return {\"result\": markdown_result} "
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 文字转音频文件处理
+    type: code
+    variables:
+    - value_selector:
+      - '1736694608554'
+      - text
+      variable: arg1
+  id: '1736694775201'
+  selected: false
+  type: custom
+- data:
+    code: "def main(arg1: str) -> str:\n    import json\n    data = json.loads(arg1)\n\
+      \    filename=data['filename']\n    url=data['etag']\n    markdown_result =url\n\
+      \    return {\"result\": markdown_result}"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 处理生成图片URL
+    type: code
+    variables:
+    - value_selector:
+      - '1736695769672'
+      - text
+      variable: arg1
+  id: '1736695833109'
+  selected: false
+  type: custom
+- data:
+    code: "def main(text: str) -> dict:\n    import json\n    try:\n        # 解析JSON字符串\n\
+      \        parsed_data = json.loads(text)\n        # 从data字段中提取content\n     \
+      \   content = parsed_data.get(\"data\", {}).get(\"content\", \"\")\n       \
+      \ return {\n            \"result\": content\n        }\n    except json.JSONDecodeError:\n\
+      \        return {\n            \"result\": \"\"\n        }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 处理中文
+    type: code
+    variables:
+    - value_selector:
+      - '1732344950523'
+      - text
+      variable: text
+  id: '1732377867403'
+  selected: false
+  type: custom
+- data:
+    code: "def main(text: str) -> dict:\n    import json\n    try:\n        # 解析JSON字符串\n\
+      \        parsed_data = json.loads(text)\n        # 从data字段中提取content\n     \
+      \   content = parsed_data.get(\"data\", {}).get(\"content\", \"\")\n       \
+      \ return {\n            \"result\": content\n        }\n    except json.JSONDecodeError:\n\
+      \        return {\n            \"result\": \"\"\n        }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 处理英文
+    type: code
+    variables:
+    - value_selector:
+      - '17310793844280'
+      - text
+      variable: text
+  id: '1732378541085'
+  selected: false
+  type: custom
+- data:
+    code: "def main(text: str) -> dict:\n    import json\n    try:\n        # 解析JSON字符串\n\
+      \        parsed_data = json.loads(text)\n        # 从data字段中提取content\n     \
+      \   content = parsed_data.get(\"data\", {}).get(\"content\", \"\")\n       \
+      \ return {\n            \"result\": content\n        }\n    except json.JSONDecodeError:\n\
+      \        return {\n            \"result\": \"\"\n        }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 处理日文
+    type: code
+    variables:
+    - value_selector:
+      - '17310794023810'
+      - text
+      variable: text
+  id: '1732378574421'
+  selected: false
+  type: custom
+- data:
+    code: "def main(arg1: str) -> str:\n    import json\n\n    # 解析输入的 JSON 数据\n \
+      \   try:\n        data = json.loads(arg1)\n    except json.JSONDecodeError:\n\
+      \        return \"输入的字符串不是有效的 JSON 格式，请检查输入数据。\"\n\n    # 确保解析后的数据包含 'data'\
+      \ 键\n    if not isinstance(data, dict) or 'data' not in data:\n        return\
+      \ \"输入的数据格式不正确，请确保输入是一个包含 'data' 键的 JSON 对象。\"\n\n    # 获取 'data' 键对应的数组数据\n\
+      \    image_data = data.get('data', [])\n\n    # 确保 'data' 键的值是一个列表\n    if not\
+      \ isinstance(image_data, list):\n        return \"输入的数据中 'data' 键的值不是一个数组，请确保其值是一个\
+      \ JSON 数组对象。\"\n\n    # 初始化结果字符串\n    markdown_result = \"\"\n\n    # 遍历每条图片数据\n\
+      \    for index, item in enumerate(image_data, start=1):\n        # 检查每条数据是否是字典，并且包含\
+      \ 'url' 字段\n        if not isinstance(item, dict) or 'url' not in item:\n  \
+      \          markdown_result += f\"图片第{index}条内容：无法提取 URL（缺少 'url' 字段）\\n\"\n\
+      \            continue\n\n        # 提取 URL 并生成 Markdown 格式的图片链接\n        url\
+      \ = item['url']\n        markdown_result += f\"![图片{index}]({url})\\n\"\n\n\
+      \    # 返回最终的 Markdown 字符串\n    return {\"result\": markdown_result}"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 代码执行
+    type: code
+    variables:
+    - value_selector:
+      - '1738651665284'
+      - body
+      variable: arg1
+  id: '1738651805602'
+  selected: false
+  type: custom
+- data:
+    code: "import json\n\ndef main(arg1: str) -> dict:\n    # Parse the JSON string\
+      \ (which is already the body content)\n    data = json.loads(arg1)\n    \n \
+      \   # Extract url from the parsed data\n    url = data['data']['url']\n    \n\
+      \    # Create and return the result dictionary\n    return {\n        \"image_1_url\"\
+      : url\n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      image_1_url:
+        children: null
+        type: string
+    selected: false
+    title: 基础渲染 url 提取 - 小红书
+    type: code
+    variables:
+    - value_selector:
+      - '1721651094996'
+      - body
+      variable: arg1
+  id: '1721662209718'
+  selected: false
+  type: custom
+- data:
+    code: "import json\n\ndef main(arg1: str) -> dict:\n    # Parse the JSON string\
+      \ (which is already the body content)\n    data = json.loads(arg1)\n    \n \
+      \   # Extract url from the parsed data\n    url = data['data']['url']\n    \n\
+      \    # Create and return the result dictionary\n    return {\n        \"image_2_url\"\
+      : url\n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      image_2_url:
+        children: null
+        type: string
+    selected: false
+    title: 渐变渲染 url 提取
+    type: code
+    variables:
+    - value_selector:
+      - '1721662929596'
+      - body
+      variable: arg1
+  id: '1721663585779'
+  selected: false
+  type: custom
+- data:
+    code: "import json\n\ndef main(arg1: str) -> dict:\n    # Parse the JSON string\
+      \ (which is already the body content)\n    data = json.loads(arg1)\n    \n \
+      \   # Extract url from the parsed data\n    url = data['data']['url']\n    \n\
+      \    # Create and return the result dictionary\n    return {\n        \"image_3_url\"\
+      : url\n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      image_3_url:
+        children: null
+        type: string
+    selected: false
+    title: 基础渲染 url 提取 - Youtube
+    type: code
+    variables:
+    - value_selector:
+      - '1721726214091'
+      - body
+      variable: arg1
+  id: '1721726279422'
+  selected: false
+  type: custom
+- data:
+    code: "import json\n\ndef main(arg1: str) -> dict:\n    # Parse the JSON string\
+      \ (which is already the body content)\n    data = json.loads(arg1)\n    \n \
+      \   # Extract url from the parsed data\n    url = data['data']['url']\n    \n\
+      \    # Create and return the result dictionary\n    return {\n        \"image_4_url\"\
+      : url\n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      image_4_url:
+        children: null
+        type: string
+    selected: false
+    title: 渐变渲染 url 提取
+    type: code
+    variables:
+    - value_selector:
+      - '1721726752002'
+      - body
+      variable: arg1
+  id: '1721726788584'
+  selected: true
+  type: custom
+- data:
+    code: "import re\nimport time\ndef main(arg1) -> dict:\n    time.sleep(13)\n \
+      \   urls = re.findall(r'http[s]?://[^\\s)]+', arg1)\n    return {\n        \"\
+      result\": urls,\n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: array[string]
+    selected: false
+    title: Code
+    type: code
+    variables:
+    - value_selector:
+      - '1713262010863'
+      - text
+      variable: arg1
+  id: '1713262060182'
+  selected: false
+  type: custom
+- data:
+    code: "import time\ndef main(arg1) -> dict:\n    time.sleep(13)\n    result =\
+      \ []\n    for item in arg1:\n        url, text = item.split('\\\\SP')\n    \
+      \    text = text.replace('\\n', ' ')\n        result.append({'url':url, 'text':text})\n\
+      \    return {\n        \"result\": result,\n    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: array[object]
+    selected: false
+    title: Split URL and Text Summary
+    type: code
+    variables:
+    - value_selector:
+      - '1716911333343'
+      - output
+      variable: arg1
+  id: '1720759755103'
+  selected: false
+  type: custom
+- data:
+    code: "def main(arg1: str) -> str:\n    import json\n\n    # 解析输入的 JSON 数据\n \
+      \   try:\n        data = json.loads(arg1)\n    except json.JSONDecodeError:\n\
+      \        return \"输入的字符串不是有效的 JSON 格式，请检查输入数据。\"\n\n    # 确保解析后的数据包含 'data'\
+      \ 键\n    if not isinstance(data, dict) or 'data' not in data:\n        return\
+      \ \"输入的数据格式不正确，请确保输入是一个包含 'data' 键的 JSON 对象。\"\n\n    # 获取 'data' 键对应的数组数据\n\
+      \    image_data = data.get('data', [])\n\n    # 确保 'data' 键的值是一个列表\n    if not\
+      \ isinstance(image_data, list):\n        return \"输入的数据中 'data' 键的值不是一个数组，请确保其值是一个\
+      \ JSON 数组对象。\"\n\n    # 初始化结果字符串\n    markdown_result = \"\"\n\n    # 遍历每条图片数据\n\
+      \    for index, item in enumerate(image_data, start=1):\n        # 检查每条数据是否是字典，并且包含\
+      \ 'url' 字段\n        if not isinstance(item, dict) or 'url' not in item:\n  \
+      \          markdown_result += f\"图片第{index}条内容：无法提取 URL（缺少 'url' 字段）\\n\"\n\
+      \            continue\n\n        # 提取 URL 并生成 Markdown 格式的图片链接\n        url\
+      \ = item['url']\n        markdown_result += f\"![图片{index}]({url})\\n\"\n\n\
+      \    # 返回最终的 Markdown 字符串\n    return {\"result\": markdown_result}"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 代码执行
+    type: code
+    variables:
+    - value_selector:
+      - '1738645745761'
+      - body
+      variable: arg1
+  id: '1738646610237'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(subtaskRet: list) -> dict:\n    ret = json.dumps(subtaskRet,\
+      \ ensure_ascii=False)\n    result = \"\"\n    idx = 1\n    for item in subtaskRet:\n\
+      \        result += \"步骤\" + str(idx) + \":\" + item['desc'] + \"\\n结果\" + str(idx)\
+      \ + \":\" + item['ret'] + \"\\n\\n\"\n        idx += 1\n    return {\n     \
+      \   \"result\": result,\n    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 分析结果
+    type: code
+    variables:
+    - value_selector:
+      - conversation
+      - subtaskRet
+      variable: subtaskRet
+  id: '1728906342693'
+  selected: false
+  type: custom
+- data:
+    code: "\ndef main(titles: str) -> dict:\n    title_list = titles.replace(\"\\\\\
+      n\", \"\\n\").split(\"\\n\")\n    return {\n        \"result\": title_list,\n\
+      \    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: array[string]
+    selected: false
+    title: 代码执行
+    type: code
+    variables:
+    - value_selector:
+      - '1719024838077'
+      - text
+      variable: titles
+  id: '1719028193404'
+  selected: true
+  type: custom
+- data:
+    code: "import json\nimport os\nimport re\n\ndef main(json_str: str) -> dict:\n\
+      \    try:\n        # 预处理：清理非 JSON 部分\n        json_match = re.search(r'\\{.*\\\
+      }', json_str, re.DOTALL)\n        if not json_match:\n            return {\"\
+      result\": \"Error: Invalid JSON format\"}\n        \n        # 提取合法的 JSON 部分\n\
+      \        cleaned_json_str = json_match.group(0)\n        \n        # 解析JSON数据\n\
+      \        data = json.loads(cleaned_json_str)\n        filename = data.get(\"\
+      filename\", \"stock_chart.html\")\n        stock_data = data.get(\"上证指数日线行情\"\
+      , [])\n        \n        # 准备数据格式\n        dates = [item['date'].split(' ')[0]\
+      \ for item in stock_data]  # 提取日期部分（去掉时间）\n        open_prices = [item['open']\
+      \ for item in stock_data]\n        close_prices = [item['close'] for item in\
+      \ stock_data]\n        low_prices = [item['low'] for item in stock_data]\n \
+      \       high_prices = [item['high'] for item in stock_data]\n        volumes\
+      \ = [item['volume'] / 1e8 for item in stock_data]  # 转换为亿单位\n        \n    \
+      \    # 构建ECharts配置\n        echarts_config = {\n            \"title\": {\n \
+      \               \"text\": \"上证指数日线行情\"\n            },\n            \"legend\"\
+      : {\n                \"data\": [\"开盘价\", \"最高价\", \"最低价\", \"收盘价\", \"成交量\"\
+      ]\n            },\n            \"tooltip\": {},\n            \"dataset\": {\n\
+      \                \"source\": [\n                    [\"日期\", \"开盘价\", \"最高价\"\
+      , \"最低价\", \"收盘价\", \"成交量\"],\n                    *[[dates[i], open_prices[i],\
+      \ high_prices[i], low_prices[i], close_prices[i], volumes[i]] \n           \
+      \           for i in range(len(dates))]\n                ]\n            },\n\
+      \            \"xAxis\": [\n                {\"type\": \"category\", \"gridIndex\"\
+      : 0},\n                {\"type\": \"category\", \"gridIndex\": 1}\n        \
+      \    ],\n            \"yAxis\": [\n                {\n                    \"\
+      gridIndex\": 0,\n                    \"name\": \"价格趋势（单位：点）\"\n            \
+      \    },\n                {\n                    \"gridIndex\": 1,\n        \
+      \            \"name\": \"成交量（单位：亿）\"\n                }\n            ],\n  \
+      \          \"grid\": [\n                {\"bottom\": \"55%\"},\n           \
+      \     {\"top\": \"55%\"}\n            ],\n            \"series\": [\n      \
+      \          # 第一个网格中的折线图系列\n                {\"type\": \"line\", \"seriesLayoutBy\"\
+      : \"row\", \"name\": \"开盘价\"},\n                {\"type\": \"line\", \"seriesLayoutBy\"\
+      : \"row\", \"name\": \"最高价\"},\n                {\"type\": \"line\", \"seriesLayoutBy\"\
+      : \"row\", \"name\": \"最低价\"},\n                {\"type\": \"line\", \"seriesLayoutBy\"\
+      : \"row\", \"name\": \"收盘价\"},\n                # 第二个网格中的柱状图系列\n           \
+      \     {\"type\": \"bar\", \"xAxisIndex\": 1, \"yAxisIndex\": 1, \"name\": \"\
+      成交量\"}\n            ]\n        }\n        \n        # 生成输出文件\n        output\
+      \ = \"```echarts\\n\" + json.dumps(echarts_config, indent=2, ensure_ascii=False)\
+      \ + \"\\n```\"\n        \n        # 返回结果\n        return {\n            \"result\"\
+      : output\n        }\n    \n    except Exception as e:\n        return {\n  \
+      \          \"result\": f\"Error: {str(e)}\"\n        }"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: erchart代码转换生成
+    type: code
+    variables:
+    - value_selector:
+      - '1740473717276'
+      - text
+      variable: json_str
+  id: '1740476771273'
+  selected: false
+  type: custom
+- data:
+    code: "import jieba\nimport logging\njieba.setLogLevel(logging.INFO)\n\ndef main(input_content:\
+      \ str):\n    seg_list = jieba.cut(input_content,use_paddle=True) # 使用paddle模式\n\
+      \n    return {\n        \"output\": str(list(seg_list)),\n    }"
+    code_language: python3
+    desc: ''
+    outputs:
+      output:
+        children: null
+        type: string
+    selected: false
+    title: 代码执行
+    type: code
+    variables:
+    - value_selector:
+      - sys
+      - query
+      variable: input_content
+  id: '1732240797960'
+  selected: true
+  type: custom
+- data:
+    code: "def main() -> dict:\n    base_url = \"https://api.example.com\"\n    return\
+      \ dict(\n        upload_url=f\"{base_url}/translator/upload\",\n        base_url=base_url\n\
+      \    )"
+    code_language: python3
+    desc: ''
+    outputs:
+      base_url:
+        children: null
+        type: string
+      upload_url:
+        children: null
+        type: string
+    selected: false
+    title: 代码执行
+    type: code
+    variables: []
+  id: '1745195931468'
+  selected: false
+  type: custom
+- data:
+    code: "from pathlib import Path\nPath.home = lambda: Path(\"/dependencies/home\"\
+      )\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport io\nimport\
+      \ base64\n\ndef generate_base64_plot():\n    # 数据准备\n    x = np.linspace(0,\
+      \ 10, 100)\n    y = np.sin(x)\n    \n    # 创建图形\n    plt.figure(figsize=(8,\
+      \ 6))  # 设置画布大小为 800x600 像素\n    plt.plot(x, y, label='Sine Wave', color='blue',\
+      \ linewidth=2)\n    \n    # 添加标题和标签\n    plt.title('Sine Wave Example', fontsize=16)\n\
+      \    plt.xlabel('X-axis', fontsize=12)\n    plt.ylabel('Y-axis', fontsize=12)\n\
+      \    \n    # 添加网格和图例\n    plt.grid(True, linestyle='--', alpha=0.6)\n    plt.legend(fontsize=12)\n\
+      \    \n    # 使用内存缓冲区保存图片为Base64字符串\n    buffer = io.BytesIO()\n    plt.savefig(buffer,\
+      \ format='png', dpi=100)  # 使用 100 DPI 保存，确保像素为 800x600\n    buffer.seek(0)\
+      \  # 将缓冲区指针回到起点\n    base64_str = base64.b64encode(buffer.read()).decode('utf-8')\n\
+      \    buffer.close()\n    plt.close()  # 关闭绘图对象，释放资源\n    \n    return base64_str\n\
+      \n\ndef main():\n    base64_image = generate_base64_plot()\n    return {\"result\"\
+      : base64_image}\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: true
+    title: 代码执行
+    type: code
+    variables: []
+  id: '1732083953925'
+  selected: true
+  type: custom
+- data:
+    code: "\ndef main():\n    return {\n        \"result\": \"初始化完成\",\n    }\n"
+    code_language: python3
+    desc: ''
+    outputs:
+      result:
+        children: null
+        type: string
+    selected: false
+    title: 初始化完成
+    type: code
+    variables: []
+  id: '1726645701585'
+  selected: false
+  type: custom

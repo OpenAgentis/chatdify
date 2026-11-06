@@ -1,0 +1,37 @@
+node_error:
+- '创建节点失败, 节点ID 10000001: 处理节点配置失败: 1 validation error for StartNodeData variables
+  Input should be an instance of Sequence [type=is_instance_of, input_value={''type'':
+  ''paragraph'', ''va...ue, ''max_length'': 99999}, input_type=dict] For further information
+  visit https://errors.pydantic.dev/2.10/v/is_instance_of'
+- '创建节点失败, 节点ID 10000001: 处理节点配置失败: 4 validation errors for StartNodeData variables.1.options.0
+  Input should be a valid string [type=string_type, input_value={''value'': ''1'',
+  ''label'': ''是''}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/string_type
+  variables.1.options.1 Input should be a valid string [type=string_type, input_value={''value'':
+  ''0'', ''label'': ''否''}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/string_type
+  variables.2.options.0 Input should be a valid string [type=string_type, input_value={''value'':
+  ''1'', ''label'': ''单图模式''}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/string_type
+  variables.2.options.1 Input should be a valid string [type=string_type, input_value={''value'':
+  ''0'', ''label'': ''多图模式''}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/string_type'
+- '创建节点失败, 节点ID 10000001: 处理节点配置失败: 1 validation error for StartNodeData variables.1.type
+  Input should be ''text-input'', ''select'', ''paragraph'', ''number'', ''external_data_tool'',
+  ''file'' or ''file-list'' [type=enum, input_value=''date-range'', input_type=str]
+  For further information visit https://errors.pydantic.dev/2.10/v/enum'
+- '创建节点失败, 节点ID 10000001: 处理节点配置失败: 1 validation error for StartNodeData variables
+  Input should be an instance of Sequence [type=is_instance_of, input_value={''file'':
+  {''type'': ''file'',...rl''], ''max_length'': 48}}, input_type=dict] For further
+  information visit https://errors.pydantic.dev/2.10/v/is_instance_of'
+- '创建节点失败, 节点ID 10000001: 处理节点配置失败: 1 validation error for StartNodeData variables
+  Input should be an instance of Sequence [type=is_instance_of, input_value={''painting_description'':
+  ...e, ''max_length'': 99999}}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/is_instance_of'
+- '创建节点失败, 节点ID 10000001: 处理节点配置失败: 1 validation error for StartNodeData variables
+  Input should be an instance of Sequence [type=is_instance_of, input_value={''poet_name'':
+  {''type'': ''t...True, ''max_length'': 50}}, input_type=dict] For further information
+  visit https://errors.pydantic.dev/2.10/v/is_instance_of'
+- '创建节点失败, 节点ID 10000001: 处理节点配置失败: 1 validation error for StartNodeData variables
+  Input should be an instance of Sequence [type=is_instance_of, input_value={''type'':
+  ''paragraph'', ''va...rue, ''max_length'': 1024}, input_type=dict] For further information
+  visit https://errors.pydantic.dev/2.10/v/is_instance_of'
+- '创建节点失败, 节点ID 10000001: 处理节点配置失败: 1 validation error for StartNodeData variables
+  Input should be an instance of Sequence [type=is_instance_of, input_value={''topic'':
+  {''type'': ''parag...e, ''max_length'': 99999}}, input_type=dict] For further information
+  visit https://errors.pydantic.dev/2.10/v/is_instance_of'

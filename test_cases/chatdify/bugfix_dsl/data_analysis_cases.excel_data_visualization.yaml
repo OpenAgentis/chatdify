@@ -1,0 +1,403 @@
+app:
+  mode: workflow
+  name: excel_data_visualization
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: code
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 5-source-6-target
+      source: '5'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 6-source-7-target
+      source: '6'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的Excel文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .xlsx
+          - .xls
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: Excel文件
+          max_length: 48
+          required: true
+          type: file
+          variable: file
+        version: '1'
+      height: 88
+      id: '1'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: 从Excel文件中提取数据
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Excel数据提取
+        type: document-extractor
+        variable_selector:
+        - '1'
+        - file
+        version: '1'
+      height: 90
+      id: '2'
+      parentId: null
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: "import json\nimport pandas as pd\n\ndef main(text: str) -> dict:\n\
+          \    try:\n        # 确保pandas库已安装\n        try:\n            import pandas\
+          \ as pd\n        except ImportError:\n            return {\"error\": \"\
+          pandas库未安装，请先安装pandas库\", \"processed_data\": [], \"raw_data\": [], \"statistics\"\
+          : {}}\n            \n        # 从文档提取器获取原始数据\n        raw_data = json.loads(text)\n\
+          \        \n        # 数据预处理\n        df = pd.DataFrame(raw_data)\n      \
+          \  \n        # 计算基本统计量\n        stats = {\n            \"row_count\": len(df),\n\
+          \            \"columns\": list(df.columns),\n            \"numeric_columns\"\
+          : [col for col in df.columns if pd.api.types.is_numeric_dtype(df[col])],\n\
+          \            \"sample_data\": df.head().to_dict(orient='records')\n    \
+          \    }\n        \n        # 返回处理结果\n        return {\n            \"error\"\
+          : None,\n            \"processed_data\": df.to_dict(orient='records'),\n\
+          \            \"raw_data\": raw_data,\n            \"statistics\": stats\n\
+          \        }\n        \n    except Exception as e:\n        return {\n   \
+          \         \"error\": str(e),\n            \"processed_data\": [],\n    \
+          \        \"raw_data\": [],\n            \"statistics\": {}\n        }"
+        code_language: python3
+        desc: 对提取的Excel数据进行预处理和分析
+        outputs:
+          error:
+            children: null
+            type: string
+          processed_data:
+            children: null
+            type: array[object]
+          raw_data:
+            children: null
+            type: array[object]
+          statistics:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 数据预处理与分析
+        type: code
+        variables:
+        - value_selector:
+          - '2'
+          - text
+          variable: text
+        version: '1'
+      height: 52
+      id: '3'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析数据并生成数据摘要
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位数据分析专家，擅长从结构化数据中提取关键信息并生成简洁明了的数据摘要。请根据提供的数据分析结果，生成一份专业的数据摘要报告。
+
+
+            报告要求：
+
+            1. 包含数据的基本统计信息（行数、列数、数值列等）
+
+            2. 突出数据中的关键特征和趋势
+
+            3. 指出可能的异常值或值得注意的数据点
+
+            4. 使用清晰简洁的语言，避免技术术语
+
+            5. 输出格式为Markdown'
+        - role: user
+          text: '请根据以下数据分析结果生成数据摘要：
+
+
+            数据统计信息：
+
+            {{#3.statistics#}}
+
+
+            处理后的数据样本：
+
+            {{#3.processed_data#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 数据摘要生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 96
+      id: '4'
+      parentId: null
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: "import json\nimport matplotlib.pyplot as plt\nimport base64\nfrom io\
+          \ import BytesIO\n\ndef extract_json_from_markdown(markdown_text: str) ->\
+          \ str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(chart_config: str)\
+          \ -> dict:\n    try:\n        # 预处理输入\n        json_text = extract_json_from_markdown(chart_config)\n\
+          \        config = json.loads(json_text)\n        \n        # 生成柱状图\n   \
+          \     fig = plt.figure(figsize=(10, 6))\n        \n        # 确保配置中有series数据\n\
+          \        if 'series' not in config or not config['series']:\n          \
+          \  raise ValueError(\"缺少series数据配置\")\n            \n        # 绘制柱状图\n \
+          \       for series in config['series']:\n            plt.bar(range(len(series['data'])),\
+          \ series['data'], label=series.get('name', ''))\n        \n        # 设置图表属性\n\
+          \        if 'title' in config:\n            plt.title(config['title'])\n\
+          \        if 'xAxis' in config and 'name' in config['xAxis']:\n         \
+          \   plt.xlabel(config['xAxis']['name'])\n        if 'yAxis' in config and\
+          \ 'name' in config['yAxis']:\n            plt.ylabel(config['yAxis']['name'])\n\
+          \        if 'legend' in config and config['legend'].get('show', True):\n\
+          \            plt.legend()\n        \n        # 将图表转为base64编码\n        buf\
+          \ = BytesIO()\n        plt.savefig(buf, format='png')\n        plt.close()\n\
+          \        image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')\n\
+          \        \n        # 返回结果\n        return {\n            \"chart_image\"\
+          : image_base64,\n            \"chart_config\": config,\n            \"error\"\
+          : None\n        }\n        \n    except Exception as e:\n        return\
+          \ {\n            \"chart_image\": \"\",\n            \"chart_config\": {},\n\
+          \            \"error\": str(e)\n        }"
+        code_language: python3
+        desc: 根据输入的JSON配置生成柱状图可视化
+        outputs:
+          chart_config:
+            children: null
+            type: object
+          chart_image:
+            children: null
+            type: string
+          error:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 柱状图生成
+        type: code
+        variables:
+        - value_selector:
+          - '4'
+          - text
+          variable: chart_config
+        version: '1'
+      height: 52
+      id: '5'
+      parentId: null
+      position:
+        x: 1300
+        y: 100
+      positionAbsolute:
+        x: 1300
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成折线图和饼图可视化
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位数据可视化专家，擅长将数据分析结果转化为直观的图表。请根据提供的数据统计信息和样本数据，生成适合的折线图和饼图配置。
+
+
+            要求：
+
+            1. 折线图应展示数据随时间或其他连续变量的变化趋势
+
+            2. 饼图应展示各类别的占比关系
+
+            3. 图表配置需符合ECharts规范
+
+            4. 输出格式为JSON，包含完整的图表配置'
+        - role: user
+          text: '请根据以下数据分析结果生成折线图和饼图配置：
+
+
+            数据统计信息：
+
+            {{#3.statistics#}}
+
+
+            处理后的数据样本：
+
+            {{#3.processed_data#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 图表配置生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 96
+      id: '6'
+      parentId: null
+      position:
+        x: 1600
+        y: 100
+      positionAbsolute:
+        x: 1600
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: 输出最终的分析报告
+        output_type: object
+        outputs:
+        - value_selector:
+          - '6'
+          - text
+          variable: report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 分析报告输出
+        type: end
+        version: '1'
+      height: 52
+      id: '7'
+      parentId: null
+      position:
+        x: 1900
+        y: 100
+      positionAbsolute:
+        x: 1900
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    type: custom

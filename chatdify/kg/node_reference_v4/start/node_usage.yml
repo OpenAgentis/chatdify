@@ -1,0 +1,35 @@
+node_usage:
+  节点类型: start
+  输入规范:
+      - 输入字段配置：
+          - variables 必须是 Sequence 类型（数组格式），不能是字典格式
+          - 支持的变量类型：text-input（文本）、select（下拉选项）、paragraph（段落）、number（数字）、checkbox（复选框）、file（单文件）、file-list（文件列表）、external_data_tool（外部数据工具）
+          - 变量属性要求：
+              - variable：变量名称（必填）
+              - label：显示标签（必填）
+              - type：变量类型（必填，必须是支持的类型之一）
+              - required：是否必填（可选，布尔值）
+              - max_length：最大长度限制（可选，数字）
+              - options：下拉选项（select类型必填，必须是字符串数组）
+              - description：变量描述（可选）
+          - 注意：如果工作流模式为**advanced-chat**，不要配置query变量，因为用户提问的问题变量会引用sys.query变量。
+      - 下拉选项配置：
+          - options 必须是字符串数组格式
+          - 不能使用对象格式如 {"value":"1", "label":"是"}
+          - 正确格式：["选项1", "选项2", "选项3"]
+      - 文件上传配置：
+          - 支持 allowed_file_types、allowed_file_extensions、allowed_file_upload_methods 等属性
+          - 需要在应用编排页右上角的"功能"处开启文件上传功能
+  常见使用错误:
+      - Pydantic 验证错误：
+          - "Input should be an instance of Sequence"：variables 配置为字典格式而非数组格式
+          - "Input should be a valid string"：下拉选项使用对象格式而非字符串格式
+          - "Input should be 'text-input', 'select', 'paragraph', 'number', 'checkbox', 'external_data_tool', 'file' or 'file-list'"：使用了不支持的变量类型（如 date-range）
+      - 配置格式错误：
+          - 将 variables 配置为 {"变量名":{配置}} 格式，应该配置为 [{配置1}, {配置2}] 数组格式
+          - select 类型的 options 使用对象数组而非字符串数组
+          - 使用了系统不支持的变量类型
+      - 节点创建失败：
+          - 节点配置不符合 StartNodeData 的 Pydantic 模型验证要求
+          - 变量配置缺少必要字段或字段类型不正确
+          - 文件类型变量配置不完整或格式错误

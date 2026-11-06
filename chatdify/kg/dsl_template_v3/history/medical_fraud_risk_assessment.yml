@@ -1,0 +1,432 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: 未命名工作流
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.0.25@2b6f549753c8fe1b8d0bda620eb0611b549d6d809da691baf0692ee75f6c507f
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.16@5a2cb43f8d874c1cae8d0a975144b6bfed2d693e095340a49c4d7cb296ef157f
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1748500452448-source-1748502572868-target
+      source: '1748500452448'
+      sourceHandle: source
+      target: '1748502572868'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1748500452448-source-1748505347089-target
+      source: '1748500452448'
+      sourceHandle: source
+      target: '1748505347089'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1748500452448-source-1748506000000-target
+      source: '1748500452448'
+      sourceHandle: source
+      target: '1748506000000'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: 1748505347089-source-1749023469627-target
+      source: '1748505347089'
+      sourceHandle: source
+      target: '1749023469627'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: 1748502572868-source-1749023469627-target
+      source: '1748502572868'
+      sourceHandle: source
+      target: '1749023469627'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: 1748506000000-source-1749023469627-target
+      source: '1748506000000'
+      sourceHandle: source
+      target: '1749023469627'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1749023469627-source-1748505207042-target
+      source: '1749023469627'
+      sourceHandle: source
+      target: '1748505207042'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的医疗相关图片
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - image
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: input_image
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: input_image
+        version: '1'
+      height: 118
+      id: '1748500452448'
+      parentId: null
+      position:
+        x: -140
+        y: 282
+      positionAbsolute:
+        x: -140
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1748500452448'
+          - input_image
+        desc: 检测输入图片是否为医院场景
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: qwen2.5-vl-72b-instruct
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: efe73d57-e189-48a5-957b-537a24fdab1b
+          role: system
+          text: 你是一个专业的医疗场景检测系统。请仔细分析输入的图片，判断是否属于医院场景。医院场景通常包含以下特征：医疗设备、病床、医护人员、医院标识、医疗用品等。请给出明确的判断结果和简要理由。
+        - id: a997bd19-8039-43bc-a386-2b77814772cc
+          role: user
+          text: 请判断{{#1748500452448.input_image#}}是否出现在医院场景？
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 医院场景检测
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1748500452448'
+            - input_image
+          enabled: true
+      height: 118
+      id: '1748502572868'
+      parentId: null
+      position:
+        x: 243.71816772765953
+        y: 289.0511457527107
+      positionAbsolute:
+        x: 243.71816772765953
+        y: 289.0511457527107
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1748500452448'
+          - input_image
+        desc: 检测输入图片中是否包含中介相关信息
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: qwen2.5-vl-72b-instruct
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: 5877aaa5-68f9-49c0-85ae-dedc88efcb2c
+          role: system
+          text: 你是一个专业的图像分析系统。请仔细分析输入的图片，判断是否包含中介相关信息。中介通常具有以下特征：穿着职业装、手持房产资料、出现在房产中介门店或房屋现场等。请给出明确的判断结果和简要理由。
+        - id: 432ce850-885b-46dd-964c-d9bfa6ffc06f
+          role: user
+          text: 请根据{{#1748500452448.input_image#}}判断图片中的人是否中介
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 中介检测
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1748500452448'
+            - input_image
+          enabled: true
+      height: 118
+      id: '1748505347089'
+      parentId: null
+      position:
+        x: 253.32595848389985
+        y: 156.82387761358348
+      positionAbsolute:
+        x: 253.32595848389985
+        y: 156.82387761358348
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1748500452448'
+          - input_image
+        desc: 检测输入图片中是否包含重大疾病相关信息
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: qwen2.5-vl-72b-instruct
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: 5877aaa5-68f9-49c0-85ae-dedc88efcb2c
+          role: system
+          text: 你是一个专业的医疗图像分析系统。请仔细分析输入的医疗图片，判断是否包含重大疾病相关迹象。重大疾病通常包括但不限于：肿瘤、严重心血管疾病、神经系统疾病、严重器官衰竭等。请给出明确的判断结果和详细的医学依据。
+        - id: 432ce850-885b-46dd-964c-d9bfa6ffc06f
+          role: user
+          text: 请根据{{#1748500452448.input_image#}}判断图片中是否显示重大疾病迹象
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 重疾检测
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1748500452448'
+            - input_image
+          enabled: true
+      height: 134
+      id: '1748506000000'
+      parentId: null
+      position:
+        x: 253.32595848389985
+        y: 423.8238776135835
+      positionAbsolute:
+        x: 253.32595848389985
+        y: 423.8238776135835
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1748502572868'
+          - text
+        desc: 综合医院场景检测、中介检测和重疾检测结果进行欺诈风险评估
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: a7cede9b-d15f-47fb-873f-b179db77abe3
+          role: system
+          text: '你是一个专业的金融风控专家。请根据以下三个维度的检测结果进行综合欺诈风险评估：
+
+            1. 医院场景检测结果
+
+            2. 中介检测结果
+
+            3. 重疾检测结果
+
+
+            评估标准：
+
+            - 高风险特征：非医院场景+中介存在+无重疾证据
+
+            - 中风险特征：医院场景+中介存在+重疾证据不足
+
+            - 低风险特征：医院场景+无中介+明确重疾证据
+
+
+            请给出明确的评估结论和详细理由。'
+        - id: 4e4b20ad-d55a-47f2-b393-3cbf41b278ba
+          role: user
+          text: '医院场景检测结果：{{#1748502572868.text#}}
+
+            中介检测结果：{{#1748505347089.text#}}
+
+            重疾检测结果：{{#1748506000000.text#}}
+
+
+            请综合分析上述信息，判断是否应该发放贷款，并给出详细的风险评估报告。'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 欺诈风险判别器
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 134
+      id: '1749023469627'
+      parentId: null
+      position:
+        x: 691.9353936424806
+        y: 200.77965804238508
+      positionAbsolute:
+        x: 691.9353936424806
+        y: 200.77965804238508
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终的风险评估结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '1749023469627'
+          - text
+          variable: risk_assessment_result
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: true
+        title: 风险评估结果
+        type: end
+        version: '1'
+      height: 118
+      id: '1748505207042'
+      parentId: null
+      position:
+        x: 1057.428780621753
+        y: 225.26239043317378
+      positionAbsolute:
+        x: 1057.428780621753
+        y: 225.26239043317378
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: 0
+      y: 0
+      zoom: 1

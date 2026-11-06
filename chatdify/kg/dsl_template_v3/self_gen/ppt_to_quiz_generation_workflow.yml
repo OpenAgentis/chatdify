@@ -1,0 +1,340 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: ppt_to_quiz_generation_workflow
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的PPT文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: PPT上传
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .ppt
+          - .pptx
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: PPT文件
+          max_length: 48
+          required: true
+          type: file
+          variable: ppt_file
+        - label: 试题规则
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: rule
+        version: '1'
+      height: 144
+      id: '1'
+      parentId: null
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从PPT文件中提取全部文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: PPT文本提取
+        type: document-extractor
+        variable_selector:
+        - '1'
+        - ppt_file
+        version: '1'
+      height: 120
+      id: '2'
+      parentId: null
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '2'
+          - text
+        desc: 分析PPT文本内容并提取关键概念和主题
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 159f08cc-3522-4849-80d0-a3e880fd8ce4
+          role: system
+          text: '你是一个专业的文本分析专家。请仔细分析以下PPT文本内容，识别并提取其中的核心概念、关键主题和重要要点。输出格式必须为结构化JSON数据，包含以下字段：
+
+            1. key_concepts: 文本中最重要的概念列表
+
+            2. main_themes: 文本的主要主题
+
+            3. key_points: 文本中的关键要点
+
+
+            要求：
+
+            - 确保提取的信息准确反映文本的核心内容
+
+            - 对概念和主题进行简明扼要的描述
+
+            - 保持输出的结构化格式'
+        - id: 0a665329-56bf-4389-9a8d-995bc0f73e15
+          role: user
+          text: '请分析以下PPT文本内容：
+
+            {{#2.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: PPT内容分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '3'
+      parentId: null
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '3'
+          - text
+        desc: 根据关键内容生成三类试题
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 159f08cc-3522-4849-80d0-a3e880fd8ce4
+          role: system
+          text: '你是一位专业的试题生成专家。请根据提供的关键内容，生成三类高质量的试题：选择题、填空题和简答题。输出格式必须为结构化JSON数据，包含以下字段：
+
+
+            1. multiple_choice: 选择题列表，每道题包含question(问题)、options(选项)、answer(正确答案)
+
+            2. fill_in_blank: 填空题列表，每道题包含question(问题)、answer(正确答案)
+
+            3. short_answer: 简答题列表，每道题包含question(问题)、answer(参考答案)
+
+
+            要求：
+
+            - 试题必须覆盖所有关键内容
+
+            - 难度分布合理(简单30%、中等50%、困难20%)
+
+            - 选择题选项要有干扰项
+
+            - 简答题参考答案要简明扼要'
+        - id: 0a665329-56bf-4389-9a8d-995bc0f73e15
+          role: user
+          text: '请根据以下关键内容生成三类试题：
+
+
+            {{#3.text#}}
+
+
+            生成规则为：
+
+            {{#1.rule#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 试题生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '4'
+      parentId: null
+      position:
+        x: 992
+        y: 282
+      positionAbsolute:
+        x: 992
+        y: 282
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终试题集
+        output_type: object
+        outputs:
+        - value_selector:
+          - '4'
+          - text
+          variable: output
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 试题集输出
+        type: end
+        version: '1'
+      height: 118
+      id: '5'
+      parentId: null
+      position:
+        x: 1296
+        y: 282
+      positionAbsolute:
+        x: 1296
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -61.53098467947973
+      y: 216.2860022064587
+      zoom: 0.6597539553864471

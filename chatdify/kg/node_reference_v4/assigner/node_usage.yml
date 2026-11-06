@@ -1,0 +1,45 @@
+node_usage:
+  节点类型: assigner
+  使用规范: 
+      - 通过变量赋值节点，可以将工作流内的变量赋值到会话变量中用于临时存储，并可以在后续对话中持续引用。 
+      - 支持多种操作类型：覆写(over-write)、清空(clear)、追加(append)、扩展(extend)、设置(set)、加法(+=)、减法(-=)、乘法(*=)、除法(/=)。
+      - 支持两种输入类型：变量(variable)和常量(constant)。
+      - 可以处理多种数据类型：字符串、数字、对象、数组等。
+      - 节点没有输出，主要用于修改变量池中的变量值。
+  输入规范:
+      - 节点接受以下配置：
+          - items：变量操作项列表，每个项包含：
+              - variable_selector：变量选择器路径，指定要操作的变量。
+              - input_type：输入类型，必须是"variable"或"constant"。
+              - operation：操作类型，支持多种操作模式。
+              - value：操作值，根据input_type和operation的不同而变化。
+      - 变量选择器要求：
+          - 变量选择器路径不能为空。
+          - 引用的变量必须存在于变量池中。
+          - 变量必须是可写入的类型（如会话变量、循环变量）。
+      - 操作类型要求（不同 value_type 支持的 operation 不同，务必严格匹配）：
+          - 通用（所有类型）：over-write（覆写）、clear（清空）。
+          - number：在通用之外，额外支持 set、+=、-=、*=、/=（数学运算仅 number 可用）。
+          - string / boolean / object：在通用之外，仅额外支持 set；不支持 append/extend/数学运算。
+          - array[*]（array[string]/array[number]/array[boolean]/array[object]）：在通用之外，额外支持 append（追加单个元素）、extend（追加另一个数组）、remove-first、remove-last；不支持 set 和数学运算。
+          - 输入方式限制（按操作）：set、+=、-=、*=、/= 这些操作只能用常量(constant)输入，不接受变量(variable)输入。
+          - 输入方式限制（按目标类型，极易出错且 dify 运行期会直接报错）：**数组类型变量(array[*]) 的所有操作（append / extend / over-write / remove-first / remove-last）都必须用变量(variable)引用输入，绝不接受常量(constant)输入**；要写入数组，应引用一个持有该数组/元素的变量（如 code、llm、knowledge-retrieval 节点的输出）。常量(constant)输入只在 string / number / object / boolean 上可用（over-write、set；number 另含 +=/-=/*=//=）。违反时运行期报 "Input type constant is not supported for operation xxx"。
+          - 取值形状：append 的 value 必须是单个元素（不能是数组）；extend 的 value 必须是数组；+=/-=/*=//= 的 value 必须是数字，且 /= 不能为 0。
+      - 输入值要求：
+          - 当input_type为"variable"时，value应为变量选择器路径。
+          - 当input_type为"constant"时，value应为具体的常量值。
+          - 输入值类型必须与目标变量类型兼容。
+          - over-write/set 写入时，源值类型必须与目标会话变量声明的 value_type 一致：用 array[string]（如 conversation.history、knowledge-retrieval.result）覆盖写入的目标必须声明为数组；用 number 覆盖写入的目标必须声明为 number。把数组写入 string 类型变量会在运行期报 "Invalid input value"；若需存成字符串，应先用 code 把数组拼接成字符串再写入。
+      - 多轮对话（advanced-chat）轮次计数范式：
+          - 用一个 number 类型会话变量（如 conversation.current_round）做轮次计数，在每轮处理完成后用 operation 为 += 、value 为 1 的操作项自增。
+          - 禁止用 sys.dialogue_count 当轮次计数。
+          - 跨轮累积的对话历史使用 array[string] 会话变量并以 append 追加；append 的输入必须是变量(variable)引用（如引用 code/llm 节点输出的本轮文本），不能用常量(constant)字面量。若想存成单条 string，则改用 string 会话变量、在 code 里拼好"旧值+本轮"全量文本后 over-write。
+  常见使用错误:
+      - 创建节点失败：检查节点配置是否符合Pydantic模型要求，特别是input_type字段必须是"variable"或"constant"。
+      - 变量不存在：确保引用的变量存在于变量池中，检查变量选择器路径是否正确。
+      - 操作不支持：确保所选操作类型与目标变量类型兼容。
+      - 输入类型不支持：确保输入类型与操作类型的组合是有效的。常见为运行期报 "Input type constant is not supported for operation over-write/append/extend"——这是对数组类型变量用了常量(constant)输入，必须改成变量(variable)引用输入。
+      - 输入值无效：确保输入值的类型和格式符合要求。
+      - 会话ID未找到：在操作会话变量时，确保会话ID存在。
+      - JSON解析失败：当设置对象类型变量时，确保字符串值是有效的JSON格式。
+      - 变量类型不匹配：确保操作值的类型与目标变量类型兼容。

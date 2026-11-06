@@ -1,0 +1,38 @@
+node_usage:
+  节点类型: if-else
+  输入规范:
+      - 节点接受以下参数：
+          - cases：条件分支列表，每个分支包含：
+              - case_id：分支唯一标识符, 必须和边信息中对应的sourceHandle值保持一致
+              - logical_operator：逻辑运算符（"and" 或 "or"）
+              - conditions：条件列表，每个条件包含：
+                  - variable_selector：变量选择器，用于选择要比较的变量
+                  - comparison_operator：比较操作符
+                  - value：比较值，支持变量引用
+                  - varType：变量类型（string、number、boolean、file、object、array[string]、array[number]、array[object]、array[file]、array[boolean]）
+                  - numberVarType：【仅 varType 为 number 时必填】比较值的来源类型，取值 variable 或 constant
+                      - variable：value 是变量引用（形如 '{{#节点ID.字段#}}'），例如用某个会话变量/节点输出与之比较
+                      - constant：value 是字面量数字（形如 '3'）
+                      - 重要：numberVarType 必须与 value 实际形态一致。value 是 '{{#...#}}' 引用时务必用 variable，
+                        否则前端会把引用当成常量字符串，导致数值比较失效；value 是字面量数字时务必用 constant。
+                      - 其它 varType（string/boolean/file/array 等）不需要 numberVarType，因为它们的 value 可直接内联 '{{#...#}}'。
+      - 变量类型与支持的操作符映射：
+          - string 类型：支持 contains、not contains、start with、end with、is、is not、empty、not empty、in、not in
+          - number 类型：支持 =、≠、>、<、≥、≤、null、not null
+          - boolean 类型：is、is not、empty、not empty
+          - file 类型：支持 exists、not exists、all of
+  常见使用错误:
+      - cases不能为空：确保至少配置一个条件分支。
+      - conditions不能为空：确保每个分支至少包含一个条件。
+      - variable_selector不能为空：确保配置了变量选择器。
+      - value不能为空：确保配置了比较值。
+      - comparison_operator不能为空：确保配置了比较操作符。
+      - varType不能为空：确保配置了变量类型。
+      - varType的值错误：varType 必须是合法的变量类型（string/number/boolean/file/object/array[...] 等），不要写成 int、str 等 Python 类型名。
+      - numberVarType不能为空：varType 为 number 时必须设置 numberVarType（variable 或 constant）。
+      - numberVarType的值错误：value 是 '{{#...#}}' 变量引用时 numberVarType 必须为 variable；value 是字面量数字时必须为 constant，两者不能不一致。
+      - comparison_operator的值错误：确保操作符与变量类型匹配，例如 string 类型不支持 "=" 操作符。
+      - 变量引用错误：确保引用的变量是当前节点的前置节点输出的变量。
+      - 变量不存在：确保变量池中存在所选的变量。
+      - 子条件的key不能为空：确保子条件配置了key值。
+      - 子条件的comparison_operator不能为空：确保子条件配置了比较操作符。

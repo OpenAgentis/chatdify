@@ -1,0 +1,544 @@
+nodes:
+- data:
+    answer: '{{#1729477495470.text#}}'
+    desc: 输出 1
+    selected: false
+    title: 直接回复 精要概览
+    type: answer
+    variables: []
+  id: '1729477552297'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1729477594959.text#}}'
+    desc: 输出 2
+    selected: false
+    title: 直接回复 方法论
+    type: answer
+    variables: []
+  id: '1729477697238'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1729477395105.text#}}'
+    desc: Output 3
+    selected: false
+    title: 直接回复 总结
+    type: answer
+    variables: []
+  id: '1729477802113'
+  selected: false
+  type: custom
+- data:
+    answer: "{{#1711528917469.text#}}\n{{#1727158200027.result#}}\n  {{#1736599495897.text#}}\n\
+      {{#1736601162372.result#}}"
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: '1736601331523'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1729480319469.text#}}
+
+
+      ---
+
+
+      **以上是从文档提取器中快速总结的内容。**
+
+
+      如有任何问题，请随时按停止按钮。
+
+
+      AI正在阅读论文。
+
+
+      ---
+
+      '
+    desc: ''
+    selected: false
+    title: 直接回复 预览
+    type: answer
+    variables: []
+  id: '1729476930871'
+  selected: false
+  type: custom
+- data:
+    answer: '初次使用，请登录员工账号和密码哦。
+
+
+      {{#1730163641212.output#}}'
+    desc: ''
+    selected: false
+    title: 直接回复 2
+    type: answer
+    variables: []
+  id: '1731378296917'
+  selected: false
+  type: custom
+- data:
+    answer: 登录成功，我们聊点什么？
+    desc: ''
+    selected: false
+    title: 直接回复 3
+    type: answer
+    variables: []
+  id: '1731379313752'
+  selected: false
+  type: custom
+- data:
+    answer: '![描述文本](data:image/png;base64,{{#1732083953925.result#}})
+
+      '
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1738916723971.files#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: '1738915493027'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1716786321875.result#}}'
+    desc: ''
+    selected: false
+    title: Answer
+    type: answer
+    variables: []
+  id: '1716786344896'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#conversation.q4#}}'
+    desc: ''
+    selected: false
+    title: 问题4
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: '{{#conversation.q2#}}'
+    desc: ''
+    selected: false
+    title: 问题2
+    type: answer
+    variables: []
+  id: '1739087688715'
+  selected: false
+  type: custom
+- data:
+    answer: '为了更好的回答这个问题，我希望先了解一些内容：
+
+
+      {{#1739089738469.Question1#}}'
+    desc: ''
+    selected: false
+    title: 第一次回复&问题1
+    type: answer
+    variables: []
+  id: '1739089894656'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#conversation.q3#}}'
+    desc: ''
+    selected: false
+    title: 问题3
+    type: answer
+    variables: []
+  id: '1739090734936'
+  selected: false
+  type: custom
+- data:
+    answer: '|
+
+      报告已生成：
+
+
+      ---
+
+
+      {{#1739113756598.output#}}'
+    desc: ''
+    selected: false
+    title: 最终回复
+    type: answer
+    variables: []
+  id: '1739091083891'
+  selected: false
+  type: custom
+- data:
+    answer: '正在分析研究主题...
+
+      '
+    desc: ''
+    selected: false
+    title: 输出：正在生成最终回答
+    type: answer
+    variables: []
+  id: '1739111295209'
+  selected: false
+  type: custom
+- data:
+    answer: '|
+
+      研究主题已确定。
+
+      |
+
+      正在理解用户的回答...
+
+      '
+    desc: ''
+    selected: false
+    title: 输出：研究主题
+    type: answer
+    variables: []
+  id: '1739178863421'
+  selected: false
+  type: custom
+- data:
+    answer: '|
+
+      好的，依据用户给出的回答，我将构建多个研究角度。
+
+      '
+    desc: ''
+    selected: false
+    title: 输出：构建研究角度
+    type: answer
+    variables: []
+  id: '1739178941340'
+  selected: false
+  type: custom
+- data:
+    answer: '|
+
+      我将从以下4个角度进行分析：
+
+
+      **{{#1739112773493.subtitle1#}}**
+
+
+      **{{#1739112773493.subtitle2#}}**
+
+
+      **{{#1739112773493.subtitle3#}}**
+
+
+      **{{#1739112773493.subtitle4#}}**
+
+
+      正在生成研究报告...请稍候...
+
+      '
+    desc: ''
+    selected: false
+    title: 输出：研究角度
+    type: answer
+    variables: []
+  id: '1739179029377'
+  selected: false
+  type: custom
+- data:
+    answer: 报告生成发生错误，请重试
+    desc: ''
+    selected: false
+    title: 直接回复 10
+    type: answer
+    variables: []
+  id: '1739683505956'
+  selected: false
+  type: custom
+- data:
+    answer: '别着急，再等会，我正在努力瞎编中，你倒数 10 下就好了·····
+
+
+      ![{{#llm.text#}}]({{#1732362013203.result#}})
+
+
+      搞定了，要不考虑一下分享到朋友圈？👭
+
+
+      **小提示：点击图片后长按，即可下载或者分享哦。**'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1726647815982.text#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: '1726647831328'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1726649891248.output#}}'
+    desc: ''
+    selected: false
+    title: 直接回复 2
+    type: answer
+    variables: []
+  id: '1726647861883'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1726714238559.text#}}'
+    desc: ''
+    selected: false
+    title: 直接回复 3
+    type: answer
+    variables: []
+  id: '1726714257723'
+  selected: false
+  type: custom
+- data:
+    answer: '###STOP###'
+    desc: ''
+    selected: false
+    title: 直接回复 4
+    type: answer
+    variables: []
+  id: '1726714853670'
+  type: custom
+- data:
+    answer: '|gpt-4o|claude-3-5-sonnet|gpt-3.5-turbo|claude-3-haiku|
+
+      |---|---|---|---|
+
+      | {{#llm.text#}}  |  {{#17248166805710.text#}} | {{#17248166823210.text#}}  |{{#1724821559068.text#}}|'
+    desc: ''
+    selected: false
+    title: Answer
+    type: answer
+    variables: []
+  id: '1724821147504'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1736694293233.output#}}
+
+      {{#1736694775201.result#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1727675554894.text#}}'
+    desc: ''
+    selected: false
+    title: 对话
+    type: answer
+    variables: []
+  id: '1727591530544'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1727675911704.text#}}'
+    desc: ''
+    selected: false
+    title: 结论
+    type: answer
+    variables: []
+  id: '1727676032290'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1729056119524.files#}}'
+    desc: ''
+    selected: false
+    title: podcast
+    type: answer
+    variables: []
+  id: '1729056149073'
+  selected: false
+  type: custom
+- data:
+    answer: '-----------------------------------
+
+      播客正在生成，请耐心等待...'
+    desc: ''
+    selected: false
+    title: 等待
+    type: answer
+    variables: []
+  id: '1729097333550'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1731206310442.text#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: 未识别出正确的发票信息，请重新输入
+    desc: ''
+    selected: false
+    title: 直接回复 2
+    type: answer
+    variables: []
+  id: '1730192759530'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1730214844929.output#}}
+
+      {{#1729851066338.file#}}'
+    desc: ''
+    selected: false
+    title: 直接回复 2
+    type: answer
+    variables: []
+  id: '1730214939964'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1744018336773.result#}}'
+    desc: ''
+    selected: false
+    title: 最终回复
+    type: answer
+    variables: []
+  id: '1744018275180'
+  selected: false
+  type: custom
+- data:
+    answer: 请求与数据表格处理无关
+    desc: ''
+    selected: false
+    title: '直接回复 '
+    type: answer
+    variables: []
+  id: '17440808446200'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1738646610237.result#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: '------
+
+      ## 最终结论
+
+      {{#1728731078833.text#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1742446898705.text#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1742451731296.result#}}'
+    desc: ''
+    selected: false
+    title: 文生图直接回复
+    type: answer
+    variables: []
+  id: '1742448325619'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1742452830955.result#}}'
+    desc: ''
+    selected: false
+    title: 图生图直接回复
+    type: answer
+    variables: []
+  id: '1742452901225'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1740476771273.result#}}'
+    desc: ''
+    selected: true
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: true
+  type: custom
+- data:
+    answer: '{{#1732240797960.output#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom
+- data:
+    answer: '翻译结果是：{{#conversation.result#}}
+
+      得分是:{{#conversation.score#}}
+
+      得分理由是：{{#conversation.reason#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: '1744703790040'
+  selected: false
+  type: custom
+- data:
+    answer: '{{#1740645185279.text#}}'
+    desc: ''
+    selected: false
+    title: 直接回复
+    type: answer
+    variables: []
+  id: answer
+  selected: false
+  type: custom

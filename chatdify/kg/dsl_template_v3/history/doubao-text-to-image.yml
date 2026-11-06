@@ -1,0 +1,627 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: image-generation-文生图智能体
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: allenwriter/doubao_image:0.0.1@d9cb638d96848452b8fc2296c61ce93082a5ffa6968a114c15d008cbd4b3730b
+kind: app
+version: 0.3.0
+workflow:
+  conversation_variables: []
+  environment_variables:
+  - description: ''
+    id: e0b030e2-9602-4d38-9eef-de161f28bd88
+    name: apikey
+    selector:
+    - env
+    - apikey
+    value: YOUR_API_KEY
+    value_type: string
+  - description: ''
+    id: cd56bbbb-a03d-480f-9fa3-fb6c3e1d30c8
+    name: model
+    selector:
+    - env
+    - model
+    value: gemini-2.0-flash-exp-image-generation
+    value_type: string
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 1742446598245-source-1742446787311-target
+      source: '1742446598245'
+      sourceHandle: source
+      target: '1742446787311'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1742446787311-2-1742446898705-target
+      source: '1742446787311'
+      sourceHandle: '2'
+      target: '1742446898705'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1742446898705-source-answer-target
+      source: '1742446898705'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1742446787311-1-1742448203649-target
+      source: '1742446787311'
+      sourceHandle: '1'
+      target: '1742448203649'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: tool
+      id: 1742448203649-source-1756722259268-target
+      source: '1742448203649'
+      sourceHandle: source
+      target: '1756722259268'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: answer
+      id: 1756722259268-source-1742448325619-target
+      source: '1756722259268'
+      sourceHandle: source
+      target: '1742448325619'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 53
+      id: '1742446598245'
+      position:
+        x: -339.55283203125
+        y: 247
+      positionAbsolute:
+        x: -339.55283203125
+        y: 247
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1742446898705.text#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 104
+      id: answer
+      position:
+        x: 924.9999999999999
+        y: 400
+      positionAbsolute:
+        x: 924.9999999999999
+        y: 400
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        classes:
+        - id: '1'
+          name: AI绘画问题
+        - id: '2'
+          name: 其他类问题
+        desc: ''
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '1742446598245'
+        - sys.query
+        selected: false
+        title: 问题分类器
+        topics: []
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 171
+      id: '1742446787311'
+      position:
+        x: -39.35218646469758
+        y: 247
+      positionAbsolute:
+        x: -39.35218646469758
+        y: 247
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - edition_type: basic
+          id: b7aa8865-08bd-489b-a2f3-d347d2127674
+          role: system
+          text: '{{#sys.query#}}'
+        selected: false
+        title: 其他类LLM大语言模型
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1742446898705'
+      position:
+        x: 488.4909654531649
+        y: 468.6478135353025
+      positionAbsolute:
+        x: 488.4909654531649
+        y: 468.6478135353025
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - edition_type: basic
+          id: 2b7c5ff0-80a7-481a-b3c1-e2971f3aafef
+          role: system
+          text: '# Role: AI绘画和修改提示词专家
+
+
+            ## Profile
+
+            - 专长: 生成和修改AI绘画提示词
+
+            - 语言能力: 中英文双语流利
+
+            - 创造力: 高
+
+            - 安全意识: 强
+
+
+            ## Background
+
+            你是一位专业的AI绘画提示词专家,擅长将用户的简单描述转化为详细、富有创意的AI绘画提示词。你还能根据用户的反馈修改和优化提示词。
+
+
+            ## Goals
+
+            1. 将用户的简单描述转化为详细的AI绘画提示词
+
+            2. 根据用户的反馈修改和优化提示词
+
+            3. 确保生成的内容符合安全和道德标准
+
+
+            ## Skills
+
+            1. 理解用户意图并扩展描述
+
+            2. 将中文描述转换为英文AI绘画提示词
+
+            3. 根据用户反馈快速调整提示词
+
+            4. 应用安全过滤,确保内容适当
+
+
+            ## Rules
+
+            1. 始终以英语生成最终的AI绘画提示词
+
+            2. 提供详细、富有想象力的描述,包括场景、颜色、光线等元素
+
+            3. 严格遵守安全指南,不生成任何不适当或有害的内容
+
+            4. 在修改提示词时,保留原有的核心元素,同时融入用户的新要求
+
+
+            ## Workflow
+
+            1. 分析用户的初始描述
+
+            2. 扩展描述,添加细节和创意元素
+
+            3. 将扩展后的描述转换为英文AI绘画提示词
+
+            4. 如果用户要求修改,仔细分析新需求
+
+            5. 在原有提示词基础上进行调整,满足新要求
+
+            6. 确保修改后的提示词仍符合安全标准
+
+
+            ## Safety Guidelines
+
+            - 禁止生成色情内容
+
+            - 禁止仇恨言论和歧视内容
+
+            - 禁止骚扰和欺凌内容
+
+            - 禁止危险或有害内容
+
+            - 禁止粗俗或不尊重的语言
+
+            - 禁止暴力或血腥描述
+
+            - 禁止侮辱性语言
+
+            - 禁止亵渎或粗俗用语
+
+            - 禁止涉及非法活动
+
+            - 避免描述死亡、伤害或悲剧
+
+            - 不推广枪支或武器
+
+
+            ## Output Format
+
+            用户描述: [用户原始输入]
+
+            扩展描述: [中文扩展描述]
+
+            AI绘画提示词: [英文AI绘画提示词]
+
+
+            ## Examples
+
+            用户描述: 请帮我生成一个小男孩读书的画面,关键字是画。
+
+            扩展描述: 一幅温馨的画面,展示了一个可爱的小男孩专注地读着一本大书。他坐在一个舒适的扶手椅上,周围是温暖的黄色灯光。背景是一个充满书籍的书房,墙上挂着几幅艺术画作。男孩的表情充满好奇和喜悦,仿佛沉浸在书中的世界里。
+
+            AI绘画提示词: A heartwarming painting of a cute little boy reading a large
+            book. He is sitting in a comfortable armchair, surrounded by warm yellow
+            light. The background shows a study room filled with books and a few artistic
+            paintings on the walls. The boy''s expression is full of curiosity and
+            joy, as if he''s immersed in the world of the book. The scene has a soft,
+            painterly quality with visible brushstrokes.
+
+
+            用户反馈: 请帮我该写一下,增加一个背景颜色什么的
+
+            扩展描述: 在原有温馨画面的基础上,我们为背景添加了柔和的淡蓝色调。这种颜色能营造出宁静和专注的氛围,同时与温暖的黄色灯光形成和谐的对比。书房的墙壁现在呈现出淡蓝色,给人一种清新和宁静的感觉,更突出了小男孩读书时的专注状态。
+
+            AI绘画提示词: A heartwarming painting of a cute little boy reading a large
+            book. He is sitting in a comfortable armchair, surrounded by warm yellow
+            light. The background now features soft blue-toned walls in the study
+            room, creating a calm and focused atmosphere. This blue background contrasts
+            harmoniously with the warm yellow lighting. The room is filled with books
+            and a few artistic paintings on the blue walls. The boy''s expression
+            remains full of curiosity and joy, immersed in the world of the book.
+            The scene maintains a soft, painterly quality with visible brushstrokes,
+            now enhanced by the interplay of blue and yellow tones.'
+        - id: 55be3783-2f67-428c-95d6-122bfbea0d08
+          role: user
+          text: 请根据用户输入提示词:{{#sys.query#}}
+        selected: false
+        title: AI提示词转换
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1742448203649'
+      position:
+        x: 456.6116753479622
+        y: 130
+      positionAbsolute:
+        x: 456.6116753479622
+        y: 130
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1756722259268.files#}}'
+        desc: ''
+        selected: false
+        title: 文生图直接回复
+        type: answer
+        variables: []
+      height: 104
+      id: '1742448325619'
+      position:
+        x: 1202.632096554715
+        y: 130
+      positionAbsolute:
+        x: 1202.632096554715
+        y: 130
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        author: 周辉
+        desc: ''
+        height: 140
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"本工作流流主要是利用豆包文生图工具(text2image)实现文生图，并通过文字修改图片方式实现的多伦对话AI绘画工作流，其中遇到了工作流中
+          问题分类器、条件分支、自定义接口组件、变量赋值等功能。","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 594
+      height: 140
+      id: '1742458686929'
+      position:
+        x: -254.65288295843226
+        y: 438.7659249805399
+      positionAbsolute:
+        x: -254.65288295843226
+        y: 438.7659249805399
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 594
+    - data:
+        desc: ''
+        is_team_authorization: true
+        output_schema: null
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: The text prompt used to generate the image. Doubao will generate
+              an image based on this prompt.
+            ja_JP: The text prompt used to generate the image. Doubao will generate
+              an image based on this prompt.
+            pt_BR: The text prompt used to generate the image. Doubao will generate
+              an image based on this prompt.
+            zh_Hans: The text prompt used to generate the image. Doubao will generate
+              an image based on this prompt.
+          label:
+            en_US: Prompt
+            ja_JP: Prompt
+            pt_BR: Prompt
+            zh_Hans: Prompt
+          llm_description: This prompt text will be used to generate image.
+          max: null
+          min: null
+          name: prompt
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: 1024x1024
+          form: form
+          human_description:
+            en_US: The size of the generated image.
+            ja_JP: The size of the generated image.
+            pt_BR: The size of the generated image.
+            zh_Hans: The size of the generated image.
+          label:
+            en_US: Image Size
+            ja_JP: Image Size
+            pt_BR: Image Size
+            zh_Hans: Image Size
+          llm_description: ''
+          max: null
+          min: null
+          name: size
+          options:
+          - icon: ''
+            label:
+              en_US: 1024x1024 (Square)
+              ja_JP: 1024x1024 (Square)
+              pt_BR: 1024x1024 (Square)
+              zh_Hans: 1024x1024 (Square)
+            value: 1024x1024
+          - icon: ''
+            label:
+              en_US: 1024x1792 (Portrait)
+              ja_JP: 1024x1792 (Portrait)
+              pt_BR: 1024x1792 (Portrait)
+              zh_Hans: 1024x1792 (Portrait)
+            value: 1024x1792
+          - icon: ''
+            label:
+              en_US: 1792x1024 (Landscape)
+              ja_JP: 1792x1024 (Landscape)
+              pt_BR: 1792x1024 (Landscape)
+              zh_Hans: 1792x1024 (Landscape)
+            value: 1792x1024
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        - auto_generate: null
+          default: doubao-seedream-3-0-t2i-250415
+          form: form
+          human_description:
+            en_US: Model version to use for image generation.
+            ja_JP: Model version to use for image generation.
+            pt_BR: Model version to use for image generation.
+            zh_Hans: Model version to use for image generation.
+          label:
+            en_US: Model Version
+            ja_JP: Model Version
+            pt_BR: Model Version
+            zh_Hans: Model Version
+          llm_description: ''
+          max: null
+          min: null
+          name: model
+          options:
+          - icon: ''
+            label:
+              en_US: Doubao Seedream 3.0
+              ja_JP: Doubao Seedream 3.0
+              pt_BR: Doubao Seedream 3.0
+              zh_Hans: Doubao Seedream 3.0
+            value: doubao-seedream-3-0-t2i-250415
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        params:
+          model: ''
+          prompt: ''
+          size: ''
+        provider_id: allenwriter/doubao_image/doubao
+        provider_name: allenwriter/doubao_image/doubao
+        provider_type: builtin
+        selected: false
+        title: Text to Image
+        tool_configurations:
+          model:
+            type: constant
+            value: doubao-seedream-3-0-t2i-250415
+          size:
+            type: constant
+            value: 1024x1024
+        tool_description: Generate images with Doubao (豆包) AI.
+        tool_label: Text to Image
+        tool_name: text2image
+        tool_parameters:
+          prompt:
+            type: mixed
+            value: '{{#1742448203649.text#}}'
+        type: tool
+        version: '2'
+      height: 147
+      id: '1756722259268'
+      position:
+        x: 760.6116753479622
+        y: 130
+      positionAbsolute:
+        x: 760.6116753479622
+        y: 130
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 484.8776393731629
+      y: 250.90317866537526
+      zoom: 0.73954297436607

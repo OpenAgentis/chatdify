@@ -1,0 +1,377 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: user_feedback_router
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: if-else
+      id: 10000002-true-10000003-target
+      source: '10000002'
+      sourceHandle: 'true'
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: if-else
+      id: 10000002-false-10000004-target
+      source: '10000002'
+      sourceHandle: 'false'
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: end
+      id: 10000004-true-10000005-target
+      source: '10000004'
+      sourceHandle: 'true'
+      target: '10000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: end
+      id: 10000004-false-10000006-target
+      source: '10000004'
+      sourceHandle: 'false'
+      target: '10000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: end
+      id: 10000003-source-10000007-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: end
+      id: 10000003-true-10000007-target
+      source: '10000003'
+      sourceHandle: 'true'
+      target: '10000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户反馈输入
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 用户反馈
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: feedback
+        version: '1'
+      height: 118
+      id: '10000001'
+      parentId: null
+      position:
+        x: 30
+        y: 30
+      positionAbsolute:
+        x: 30
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        classes:
+        - id: 'true'
+          name: 正向反馈
+        - id: 'false'
+          name: 负向反馈
+        desc: 判断用户反馈的情感倾向（正向/负向）
+        instruction: 请仔细分析用户反馈内容的情感倾向，准确判断是正向反馈还是负向反馈。正向反馈通常包含表扬、感谢、满意等积极情绪；负向反馈通常包含抱怨、批评、不满等消极情绪。分类准确率需达到90%以上。
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '10000001'
+        - feedback
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 情感分类器
+        topics: []
+        type: question-classifier
+        version: '1'
+      height: 200
+      id: '10000002'
+      parentId: null
+      position:
+        x: 334
+        y: 150
+      positionAbsolute:
+        x: 334
+        y: 150
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: aec2b72e-7d06-41ea-b86e-6d3c7e803811
+            value: 'true'
+            varType: string
+            variable_selector:
+            - '10000002'
+            - class_name
+          id: 'true'
+          logical_operator: and
+        desc: 将正向反馈路由到市场品牌部
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 正向反馈路由
+        type: if-else
+        version: '1'
+      height: 154
+      id: '10000003'
+      parentId: null
+      position:
+        x: 638
+        y: 57.63444624589741
+      positionAbsolute:
+        x: 638
+        y: 57.63444624589741
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: aec2b72e-7d06-41ea-b86e-6d3c7e803811
+            value: 售后
+            varType: string
+            variable_selector:
+            - '10000002'
+            - class_name
+          id: 'true'
+          logical_operator: or
+        - case_id: 'false'
+          conditions:
+          - comparison_operator: not contains
+            id: 083411ab-178c-4461-b356-55fece233c6f
+            value: 售后
+            varType: string
+            variable_selector:
+            - '10000002'
+            - class_name
+          id: 'false'
+          logical_operator: and
+        desc: 条件分支节点，用于进一步判断负向反馈是否为售后问题
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 售后问题判断
+        type: if-else
+        version: '1'
+      height: 218
+      id: '10000004'
+      parentId: null
+      position:
+        x: 638
+        y: 300
+      positionAbsolute:
+        x: 638
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 最终处理节点，将售后问题转给交通部门
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000001'
+          - feedback
+          variable: output
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 转交通部门
+        type: end
+        version: '1'
+      height: 134
+      id: '10000005'
+      parentId: null
+      position:
+        x: 942
+        y: 300
+      positionAbsolute:
+        x: 942
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 最终处理节点，将非售后问题转给产品体验部门
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000001'
+          - feedback
+          variable: output
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 转产品体验部门
+        type: end
+        version: '1'
+      height: 134
+      id: '10000006'
+      parentId: null
+      position:
+        x: 942
+        y: 450
+      positionAbsolute:
+        x: 942
+        y: 450
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 最终输出节点，确认反馈已处理
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000001'
+          - feedback
+          variable: output
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 处理完成确认
+        type: end
+        version: '1'
+      height: 118
+      id: '10000007'
+      parentId: null
+      position:
+        x: 1013.2534271817362
+        y: 44.43936713816842
+      positionAbsolute:
+        x: 1013.2534271817362
+        y: 44.43936713816842
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -66.36121338353178
+      y: 236.6076187996635
+      zoom: 0.757858283255199

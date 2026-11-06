@@ -1,0 +1,421 @@
+app:
+  mode: workflow
+  name: market_trend_analysis
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: tool
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: code
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 10000004-source-10000005-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 10000005-source-10000006-target
+      source: '10000005'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000006-source-10000007-target
+      source: '10000006'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的行业关键词和时间范围
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - label: 行业关键词
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: industry_keywords
+        - label: 时间范围
+          max_length: 50
+          required: true
+          type: text-input
+          variable: time_range
+        version: '1'
+      height: 54
+      id: '10000001'
+      parentId: null
+      position:
+        x: 30
+        y: 30
+      positionAbsolute:
+        x: 30
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 根据输入的行业关键词和时间范围进行市场数据收集
+        parameters: {}
+        provider_id: tavily
+        provider_name: tavily
+        provider_type: builtin
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 30
+        title: Tavily市场数据搜索
+        tool_configurations:
+          exclude_domains: null
+          include_answer: 0
+          include_domains: null
+          include_images: 0
+          include_raw_content: 0
+          max_results: 10
+          search_depth: basic
+        tool_label: TavilySearch
+        tool_name: tavily_search
+        tool_parameters:
+          query:
+            type: mixed
+            value: '{{#10000001.industry_keywords#}} 市场数据 {{#10000001.time_range#}}'
+        type: tool
+        version: '1'
+      height: 90
+      id: '10000002'
+      parentId: null
+      position:
+        x: 334
+        y: 150
+      positionAbsolute:
+        x: 334
+        y: 150
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nimport pandas as pd\nfrom typing import Dict, Any\n\n\
+          def extract_json_from_markdown(markdown_text: str) -> str:\n    \"\"\"从markdown提取JSON内容\"\
+          \"\"\n    start = markdown_text.find('```json')\n    if start == -1:\n \
+          \       start = markdown_text.find('```')\n        if start == -1:\n   \
+          \         return markdown_text.strip()\n    \n    start = markdown_text.find('\\\
+          n', start) + 1\n    end = markdown_text.rfind('```')\n    return markdown_text[start:end].strip()\n\
+          \ndef main(market_data: str) -> Dict[str, Any]:\n    \"\"\"\n    市场数据预处理和分析\n\
+          \    \n    参数:\n        market_data: 从Tavily搜索获取的市场数据\n    \n    返回:\n \
+          \       Dict[str, Any]: 包含清洗后的数据和基本统计信息\n    \"\"\"\n    try:\n        #\
+          \ 预处理输入数据\n        json_text = extract_json_from_markdown(market_data)\n\
+          \        data = json.loads(json_text)\n        \n        # 转换为DataFrame进行清洗\n\
+          \        df = pd.DataFrame(data)\n        \n        # 数据清洗\n        df =\
+          \ df.dropna()  # 删除缺失值\n        df = df.drop_duplicates()  # 删除重复值\n   \
+          \     \n        # 计算基本统计信息\n        stats = {\n            'count': len(df),\n\
+          \            'columns': list(df.columns),\n            'numeric_stats':\
+          \ df.describe().to_dict() if len(df.select_dtypes(include=['number']).columns)\
+          \ > 0 else {}\n        }\n        \n        return {\n            'cleaned_data':\
+          \ df.to_dict('records'),\n            'statistics': stats,\n           \
+          \ 'status': 'success',\n            'error': None\n        }\n        \n\
+          \    except Exception as e:\n        return {\n            'cleaned_data':\
+          \ None,\n            'statistics': None,\n            'status': 'failed',\n\
+          \            'error': str(e)\n        }"
+        code_language: python3
+        desc: 对收集到的市场数据进行预处理和清洗，输出清洗后的数据和基本统计信息
+        outputs:
+          cleaned_data:
+            children: null
+            type: array[object]
+          error:
+            children: null
+            type: string
+          statistics:
+            children: null
+            type: object
+          status:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 市场数据预处理
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: market_data
+        version: '1'
+      height: 90
+      id: '10000003'
+      parentId: null
+      position:
+        x: 638
+        y: 270
+      positionAbsolute:
+        x: 638
+        y: 270
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析市场数据中的关键趋势指标和主要驱动因素
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位资深市场分析师，擅长从复杂数据中识别关键趋势和驱动因素。请根据提供的市场数据，分析并回答以下问题：
+
+
+            1. 识别3-5个最关键的市场趋势指标
+
+            2. 分析每个趋势背后的主要驱动因素
+
+            3. 评估这些趋势对行业未来的潜在影响
+
+
+            输出要求：
+
+            - 使用Markdown格式
+
+            - 每个趋势指标单独列出
+
+            - 驱动因素分析要具体且有数据支持
+
+            - 潜在影响评估要基于行业知识'
+        - role: user
+          text: '市场数据：
+
+            {{#10000003.cleaned_data#}}
+
+
+            请按照上述要求进行分析'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 市场趋势分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 90
+      id: '10000004'
+      parentId: null
+      position:
+        x: 932
+        y: 390
+      positionAbsolute:
+        x: 932
+        y: 390
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nfrom typing import Dict, Any\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(analysis_result:\
+          \ str) -> Dict[str, Any]:\n    \"\"\"\n    处理市场分析结果并生成可视化建议\n    \n    参数:\n\
+          \        analysis_result: 市场趋势分析结果(Markdown格式)\n    \n    返回:\n        Dict[str,\
+          \ Any]: 包含可视化建议的数据\n    \"\"\"\n    try:\n        # 提取JSON数据\n        json_text\
+          \ = extract_json_from_markdown(analysis_result)\n        data = json.loads(json_text)\
+          \ if json_text else {}\n        \n        # 生成可视化建议\n        result = {\n\
+          \            'chart_types': ['line', 'bar', 'pie'],\n            'metrics':\
+          \ ['trend_1', 'trend_2', 'trend_3'],\n            'time_periods': ['Q1',\
+          \ 'Q2', 'Q3', 'Q4'],\n            'status': 'success',\n            'error':\
+          \ None\n        }\n        \n        return result\n        \n    except\
+          \ Exception as e:\n        return {\n            'chart_types': [],\n  \
+          \          'metrics': [],\n            'time_periods': [],\n           \
+          \ 'status': 'failed',\n            'error': str(e)\n        }"
+        code_language: python3
+        desc: 处理市场分析结果并生成可视化图表建议数据
+        outputs:
+          chart_types:
+            children: null
+            type: array[string]
+          error:
+            children: null
+            type: string
+          metrics:
+            children: null
+            type: array[string]
+          status:
+            children: null
+            type: string
+          time_periods:
+            children: null
+            type: array[string]
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 可视化建议生成
+        type: code
+        variables:
+        - value_selector:
+          - '10000004'
+          - text
+          variable: analysis_result
+        version: '1'
+      height: 90
+      id: '10000005'
+      parentId: null
+      position:
+        x: 1226
+        y: 390
+      positionAbsolute:
+        x: 1226
+        y: 390
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 基于市场分析结果和可视化建议生成战略行动方案
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: "你是一位资深战略顾问，擅长将市场分析转化为可执行的商业策略。请根据提供的市场趋势分析和可视化建议，制定3-5个具体的战略行动方案。\n\
+            \n输出要求：\n1. 每个行动方案必须包含：\n   - 行动名称\n   - 实施步骤\n   - 预期效果\n   - 所需资源\n\
+            2. 使用Markdown格式\n3. 优先考虑高影响力、低成本的方案\n4. 确保方案与市场趋势分析中的关键发现一致"
+        - role: user
+          text: '市场趋势分析：
+
+            {{#10000004.text#}}
+
+
+            可视化建议：
+
+            {{#10000005.chart_types#}}
+
+            {{#10000005.metrics#}}
+
+            {{#10000005.time_periods#}}
+
+
+            请根据以上信息生成战略行动建议'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 战略行动建议生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 90
+      id: '10000006'
+      parentId: null
+      position:
+        x: 1520
+        y: 390
+      positionAbsolute:
+        x: 1520
+        y: 390
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终的市场趋势分析报告
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000006'
+          - text
+          variable: market_analysis_report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 市场趋势分析报告
+        type: end
+        version: '1'
+      height: 54
+      id: '10000007'
+      parentId: null
+      position:
+        x: 1814
+        y: 390
+      positionAbsolute:
+        x: 1814
+        y: 390
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

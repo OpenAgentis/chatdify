@@ -1,0 +1,41 @@
+# chatdify configuration template.
+# Copy to ~/.chatdify/config.toml (chmod 600) and replace every <...> value with your own.
+# `chatdify config` shows the effective values; `chatdify dify status` checks the Dify side.
+
+# --- LLM used by chatdify itself (any OpenAI-compatible endpoint) ---
+llm_base_url = "https://open.bigmodel.cn/api/coding/paas/v4"
+llm_model = "GLM-5.3-Flash"
+llm_api_key = "<your-llm-api-key>"
+llm_extra_body = { thinking = { type = "enabled" } }
+
+# --- Static validation against Dify's node entities (needs a Dify source tree) ---
+dify_static_validation = true
+# dify_src = "/path/to/dify"   # optional; otherwise the submodule or `chatdify dify fetch` is used
+
+# --- Dynamic validation: import and run the workflow on a Dify instance ---
+# Use a dedicated test workspace; every validation creates an app there.
+dify_url = "http://localhost"
+dify_email = "<your-dify-email>"
+dify_password = "<your-dify-password>"
+dify_dynamic_validation = true
+
+# --- Models used by the generated workflow's nodes ---
+# These must be models installed in YOUR Dify workspace (Settings > Model Provider).
+# The values below are chatdify's defaults; change them to match your Dify.
+[workflow_llm]
+provider = "langgenius/deepseek/deepseek"
+name = "deepseek-v4-flash"
+mode = "chat"
+completion_params = { max_tokens = 32000, temperature = 0.2, thinking = false, top_p = 0.6 }
+
+# LLM nodes with vision enabled; leave out to reuse workflow_llm.
+# [workflow_vision_llm]
+# name = "<a-vision-model-in-your-dify>"
+
+[workflow_rerank]
+provider = "langgenius/siliconflow/siliconflow"
+model = "BAAI/bge-reranker-v2-m3"
+
+[workflow_embedding]
+provider = "langgenius/siliconflow/siliconflow"
+model = "BAAI/bge-m3"

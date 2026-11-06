@@ -1,0 +1,111 @@
+node_usage:
+  节点类型: code
+  使用规范:
+      - Code节点用于执行Python代码，允许用户在工作流中编写自定义的数据处理逻辑。
+      - 它可以接收上游节点的输出作为输入变量，执行Python代码后返回处理结果。
+      - 支持复杂的数据处理、计算、格式转换等操作。
+      - 代码必须包含一个main函数作为入口点，该函数接收输入变量并返回结果。
+      - 支持正常返回分支和异常返回分支，用于处理不同的执行结果。
+  输入规范:
+      - 节点接受以下配置：
+          - variables：输入变量列表，每个变量需要指定变量名和变量选择器路径。
+          - code：Python代码字符串，必须包含main函数。
+          - outputs：输出变量配置，定义返回值的结构和类型。
+      - 输入变量要求：
+          - 变量名不能为空。
+          - 变量选择器路径不能为空。
+          - 变量选择器不能重复。
+          - 引用的变量必须存在于变量池中。
+          - 【禁止 file / file-list 类型输入——OCR/多模态高频错误】Code 节点 variables 和 main() 参数不能引用 file / file-list 变量：
+              - Code 节点仅支持 string、number、boolean、object、array[*] 等可 JSON 序列化的数据作为输入/输出。
+      - 代码要求：
+          - 必须包含main函数作为入口点。
+          - 代码语法必须正确（生成后会先用 ast.parse 预校验，语法错误会被直接拦截）。
+          - main函数的参数必须与输入变量匹配。
+          - main 函数参数类型注解必须使用 Python 合法类型。
+          - 字符串字面量安全规则（这是历史失败用例中最常见的语法错误来源）：
+              - 多行文本（HTML、SQL、Prompt 模板、长 JSON 等）一律使用三引号 """...""" 或 '''...'''，不要用单行 "..." 拼接换行。
+              - 当字符串内部含有与外层相同的引号时，必须改用另一种引号或使用反斜杠转义，避免出现 `"<div class="x">"` 这种把字符串提前闭合的写法。
+              - 含反斜杠的字符串（正则表达式、Windows 路径、转义字符示例）必须使用原始字符串 r"..."，否则 \U、\x 等会被当成 unicode 转义触发 SyntaxError。
+              - f-string 内的表达式不能再使用与外层相同的引号，必要时拆分变量或换用另一种引号。
+              - 不要在字符串内部直接拼接未转义的 Python 代码片段；模板替换请使用 str.format / % / .replace 等方式。
+      - 输出配置要求：
+          - 输出变量类型必须是支持的类型：string、number、boolean、object、array[string]、array[number]、array[boolean]、array[object]。
+          - 【禁止 file / file-list 类型输出】outputs 不能声明 type 为 file 或 file-list，return 中也不能包含 File 对象（运行时会报错 Type is not JSON serializable：File）。
+          - 【类型对齐——最高频 runtime 错误之一】outputs 各字段的 type 必须与 main() 返回字典中对应值的 Python 类型严格一致，Dify 运行期逐项校验，声明错误会直接报错：
+              - Python 返回 bool（True/False）→ outputs 必须声明 boolean 类型；禁止声明为 string。
+              - 常见误写：is_last_round、is_valid、goal_achieved、has_error 等布尔标志位在 outputs 里写成 string，但 main 返回 True/False → 运行时报 must be a string got bool instead。
+              - 若业务需要字符串 true/false，应单独声明 string 并在 code 内显式 str()；不要把布尔语义字段默认写成 string。
+              - Python 返回 int/float → number 类型；返回 str → string 类型；返回 dict → object 类型；返回 list 且元素同质 → 对应 array 类型。
+              - string 类型不接受 bool/int/float/list/dict；boolean 类型只接受 bool（不接受 true/false 字符串或 0/1 数字，除非改声明为 string/number）。
+              - number 类型对 bool 有兼容（True→1/False→0），但 boolean 字段应优先用 boolean 类型而非 number。
+          - 正常返回分支和异常返回分支的返回变量必须一致。
+          - 正常返回分支中多个返回语句的变量必须一致。
+          - 输出变量名中不能包含'error'命名字段。请用其他名字替代，比如'err'。
+          - object 类型输出仅支持顶层字段引用 {{#code_id.field#}}，禁止 {{#code_id.field.subkey#}} 点号展开；子字段须在 code 内拆成多个顶层 outputs。
+  代码生成原则:
+      - 代码可以包含辅助函数，但应围绕当前节点职责保持必要且可读；不要为了通用兜底生成过长、难验证的解析框架。
+      - type hints 可以使用，但必须是 Python 合法类型，且 main 参数名必须与 variables 中的 variable 完全一致；不要引入未配置的参数。
+      - 异常与正常分支 return 的键集合必须完全一致，且每个 return 键集合相同。
+  上游_tool_tavily_search_检索结果:
+      - 适用场景：搜索后 code 提取 URL 列表
+      - 输入变量：引用 tool_tavily_search 的 json，如 value_selector [搜索节点ID, json]
+      - json 真实结构（勿猜错）：
+          - json 为 Array[Object]，每个元素含 query 与 results；results 才是 url/title/content 数组
+          - 禁止 for item in search_json 并 item.get(url) —— 须先 batch.get(results)
+          - 兼容单个 dict 时包装为 [json]
+      - 若下游是 tool_jina_reader，url_list 应输出 array[string]，让 iteration.item 直接是单个 URL 字符串
+      - 不要把 url_list 输出为 array[object] 后直接传给 tool_jina_reader；JinaReader 的 url 参数只接受 URL 字符串
+  上游_tool_jina_reader_网页正文:
+      - 适用场景：JinaReader 抓取网页后，下游 code/LLM 需要读取网页正文
+      - 输入变量：固定引用 tool_jina_reader 的 text 字段，如 value_selector [JinaReader节点ID, text]
+      - text 本身是 JSON 字符串，不是直接正文；须先 json.loads(text), 但是不需要extract_json_from_markdown函数处理
+      - 解析后顶层通常包含 code、status、data；data 是对象，data包含的字段只有 title、description、url、content（禁止使用其他非法字段），其中网页标题在 data.title，描述在 data.description，原始 URL 在 data.url，正文在 data.content
+      - 下游 code 应先判断 text 是否为空、是否为合法 JSON、code/status 是否成功、data.content 是否为空，再输出 is_valid/err_msg
+  上游_document-extractor_表格数据:
+      - 适用场景：CSV/Excel 经 document-extractor 后，text 常为 Markdown 表格（含 | 与 --- 分隔行），非原始逗号 CSV
+      - 不要在未检查格式时直接用 csv.DictReader 或 pd.read_csv(io.StringIO(doc_text))；若 text 已是 Markdown 表格，会把整行当作单列并混入 --- 行
+      - 推荐：优先识别输入是否为 Markdown 表格；是表格时用 pytablereader.MarkdownTableTextLoader，或按 | 分列并跳过 --- 分隔行
+  上游_llm_text_JSON解析:
+      - 适用场景：仅当上游 LLM 明确要求输出 JSON 且下游需要结构化字段时，才用 code 做 JSON 提取与校验
+      - 输入变量：引用 llm 的 text
+      - 可使用 extract_json_from_markdown 或等价逻辑剥离 ```json 代码块；
+      - 解析失败时可返回 err_msg，但不要吞掉字段缺失问题；必要时同时返回空结构和错误原因
+  常用第三方库_pytablereader:
+      - 适用场景：解析 document-extractor节点输出的 Markdown 表格、多表文本
+      - API 要点:
+          - 从字符串解析：MarkdownTableTextLoader
+          - load() 返回 TableData 迭代器；转 DataFrame 用 tables[0].as_dataframe()
+      - 参考代码（输入变量 doc_text 引用 document-extractor.text）:
+          - "def main(doc_text: str) -> dict:\n    try:\n        import pytablereader as ptr\n        tables = list(ptr.MarkdownTableTextLoader(doc_text).load())\n        if not tables:\n            return {\"rows\": [], \"err_msg\": \"未解析到 Markdown 表格\"}\n        df = tables[0].as_dataframe()\n        rows = df.fillna(\"\").astype(str).to_dict(orient=\"records\")\n        return {\"rows\": rows, \"err_msg\": \"\"}\n    except Exception as e:\n        return {\"rows\": [], \"err_msg\": str(e)}"
+  常见使用错误:
+      - 输出变量错误：输出变量名中不能包含'error'命名字段。请用其他名字替代，比如'err'。
+      - 变量选择器为空：确保配置了变量选择器。
+      - 变量不存在：确保变量池中存在所选的变量。
+      - 变量选择器重复：确保每个变量选择器路径唯一。
+      - 变量引用错误：确保引用的节点是当前节点的前置节点。
+      - 语法错误：检查 Python 代码语法是否正确，重点排查以下高频问题：
+          - "unterminated string literal" / "EOL while scanning string literal"：多行字符串未用三引号，或字符串内嵌引号未转义。
+          - "(unicode error) 'unicodeescape' codec can't decode" / "truncated \\UXXXXXXXX escape"：字符串中出现 \\U、\\x 等转义序列，应改用原始字符串 r"..." 或将反斜杠双写为 \\\\。
+          - "unexpected EOF" / "'(' was never closed"：()、[]、{} 等括号没成对闭合。
+          - "invalid syntax"：缺少冒号、缩进错误、关键字拼写错误或缺少括号。
+      - 输出变量错误：确保引用的输出变量存在于目标节点中。
+      - 正常返回分支和异常返回分支的返回变量不一致：确保两个分支返回相同的变量集合。
+      - 正常返回分支中返回语句的变量不一致：确保所有返回语句返回相同的变量。
+      - 创建节点失败：检查节点配置是否符合Pydantic模型要求。
+      - 输出类型错误：确保输出变量类型是支持的类型。
+      - 输出类型与返回值不一致（高频）：outputs 声明 string 但 main 返回 bool/int/list 等，或声明 boolean 却返回 true 字符串；运行期报错 must be a string got bool instead 等。布尔标志位务必 outputs 为 boolean 且 return True/False。
+      - File 类型输入/输出错误（OCR/多模态高频）：code 节点 variables 引用 start 的 image_file 等 file 变量，或 outputs/return 透传 File 对象，运行期报错 Type is not JSON serializable：File。
+      - JSON解析失败：检查生成的JSON格式是否正确。
+      - 运行时错误：检查代码逻辑和参数传递是否正确。
+      - 输出格式错误：确保输出数据格式符合预期（如数组元素类型一致）。
+      - Markdown 表格解析错误：
+          - 对 document-extractor.text 使用 pd.read_csv 或 csv.DictReader，导致键名变为 "| col1 | col2 |" 且混入 --- 分隔行
+          - 将 load() 迭代器直接传入 pd.DataFrame()，应先用 tables[0].as_dataframe()
+      - Tavily json 解析错误：
+          - 将 json 当作 list[result] 直接 item.get(url) —— 须 batch.get(results) 后再取 url
+          - is_valid 声明 string 却 return True/False；if-else 与字符串 true 比较始终走 false 分支
+      - LLM JSON 解析错误：
+          - 预期为 JSON object 时未校验根类型，或上游字段缺失时仍返回成功
+          - 只处理裸 JSON，未兼容 LLM 可能包裹的 ```json 代码块
+     

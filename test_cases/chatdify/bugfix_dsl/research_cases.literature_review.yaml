@@ -1,0 +1,368 @@
+app:
+  mode: workflow
+  name: literature_review
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: tool
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: document-extractor
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: parameter-extractor
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: parameter-extractor
+        targetType: llm
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 5-source-6-target
+      source: '5'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 6-source-7-target
+      source: '6'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的研究主题
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - label: 研究主题
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: topic
+        version: '1'
+      height: 90
+      id: '1'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 使用Tavily搜索工具进行学术论文检索
+        parameters: {}
+        provider_id: tavily
+        provider_name: tavily
+        provider_type: builtin
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 30
+        title: Tavily学术搜索
+        tool_configurations:
+          exclude_domains: null
+          include_answer: 0
+          include_domains: null
+          include_images: 0
+          include_raw_content: 0
+          max_results: 10
+          search_depth: advanced
+        tool_label: TavilySearch
+        tool_name: tavily_search
+        tool_parameters:
+          query:
+            type: mixed
+            value: '{{#1.topic#}}'
+        type: tool
+        version: '1'
+      height: 90
+      id: '2'
+      parentId: null
+      position:
+        x: 300
+        y: 200
+      positionAbsolute:
+        x: 300
+        y: 200
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 处理搜索结果中的PDF文档，提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: PDF文档提取器
+        type: document-extractor
+        variable_selector:
+        - '2'
+        - text
+        version: '1'
+      height: 90
+      id: '3'
+      parentId: null
+      position:
+        x: 500
+        y: 300
+      positionAbsolute:
+        x: 500
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从学术论文文本中提取关键研究方法和发现
+        instruction: 分析输入的学术论文文本，提取其中的关键研究方法和主要发现
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        parameters:
+        - description: 研究中采用的主要方法
+          name: research_methods
+          required: false
+          type: array[string]
+        - description: 研究中的主要发现或结论
+          name: key_findings
+          required: false
+          type: array[string]
+        - description: 研究中使用的实验设计或技术
+          name: experimental_design
+          required: false
+          type: string
+        - description: 研究中使用的数据分析方法
+          name: data_analysis
+          required: false
+          type: string
+        query:
+        - '3'
+        - text
+        reasoning_mode: prompt
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 研究方法与发现提取
+        type: parameter-extractor
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '4'
+      parentId: null
+      position:
+        x: 700
+        y: 400
+      positionAbsolute:
+        x: 700
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点将分析研究趋势和空白，生成初步分析报告
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的研究趋势分析师。基于提供的研究方法和发现数据，你需要：
+
+            1. 识别当前研究领域的主要趋势
+
+            2. 分析现有研究的空白和不足
+
+            3. 提出潜在的研究方向
+
+            4. 生成结构化的初步分析报告
+
+
+            报告要求：
+
+            - 使用学术性语言
+
+            - 包含具体数据支持
+
+            - 逻辑清晰，层次分明
+
+            - 避免主观臆断'
+        - role: user
+          text: '请分析以下研究数据：
+
+            研究方法：{{#4.research_methods#}}
+
+            研究发现：{{#4.key_findings#}}
+
+            实验设计：{{#4.experimental_design#}}
+
+            数据分析方法：{{#4.data_analysis#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 研究趋势与空白分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '5'
+      parentId: null
+      position:
+        x: 900
+        y: 500
+      positionAbsolute:
+        x: 900
+        y: 500
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 格式化LLM生成的初步分析报告，添加标题、章节等结构化元素
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: '<h1>文献综述报告：{{1.topic}}</h1>
+
+
+          <h2>研究趋势分析</h2>
+
+          <div>{{5.text}}</div>
+
+
+          <h2>研究方法总结</h2>
+
+          <div>{{4.research_methods}}</div>
+
+
+          <h2>主要研究发现</h2>
+
+          <div>{{4.key_findings}}</div>
+
+
+          <h2>研究空白与建议</h2>
+
+          <div>{{5.text}}</div>'
+        title: 报告格式化
+        type: template-transform
+        variables:
+        - value_selector:
+          - '5'
+          - text
+          variable: analysis_content
+        - value_selector:
+          - '4'
+          - research_methods
+          variable: methods_content
+        - value_selector:
+          - '4'
+          - key_findings
+          variable: findings_content
+        version: '1'
+      height: 98
+      id: '6'
+      parentId: null
+      position:
+        x: 1100
+        y: 600
+      positionAbsolute:
+        x: 1100
+        y: 600
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 结束节点输出最终的结构化文献综述报告
+        output_type: object
+        outputs:
+        - value_selector:
+          - '6'
+          - output
+          variable: final_report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文献综述报告输出
+        type: end
+        version: '1'
+      height: 90
+      id: '7'
+      parentId: null
+      position:
+        x: 1300
+        y: 700
+      positionAbsolute:
+        x: 1300
+        y: 700
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

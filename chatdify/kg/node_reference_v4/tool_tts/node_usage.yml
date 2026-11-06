@@ -1,0 +1,30 @@
+node_usage:
+  节点类型: tool_tts
+  输入规范:
+    - 工具名称（tool_name）：固定为"tts"
+    - 提供者ID（provider_id）：固定为"audio"
+    - 提供者名称（provider_name）：固定为"audio"
+    - 提供者类型（provider_type）：固定为"builtin"
+    - version：固定为'2'
+    - 核心参数（tool_parameters）：
+      - text：必填参数，待转换的文本内容
+        - type：支持"mixed"、"variable"、"constant"类型
+        - value：用于转换为语音的文本内容，支持变量引用和模板语法
+        - 说明：支持中英文文本，可包含各种文本内容如描述、对话、文章等
+    - 工具配置（tool_configurations）：
+      - model：AI模型选择
+        - type：constant
+        - value："langgenius/siliconflow/siliconflow#FunAudioLLM/CosyVoice2-0.5B"
+        - 说明：硅基流平台的FunAudioLLM/CosyVoice2-0.5B模型，专门用于文本转语音
+      - voice#langgenius/siliconflow/siliconflow#FunAudioLLM/CosyVoice2-0.5B：语音风格选择
+        - type：constant
+        - value：支持多种音色
+          - "FunAudioLLM/CosyVoice2-0.5B:anna"：女声音色
+          - "FunAudioLLM/CosyVoice2-0.5B:charles"：男声音色
+    - 可选配置：
+      - desc：节点描述，可为空
+      - is_team_authorization：团队授权，布尔值
+      - output_schema：输出模式，通常为null
+  输出格式:
+    - 音频文件：高质量的音频文件格式（WAV、MP3等）
+  常见使用错误: ""

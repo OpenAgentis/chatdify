@@ -1,0 +1,529 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: enterprise_wechat_customer_service_workflow
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/siliconflow:0.0.8@217f973bd7ced1b099c2f0c669f1356bdf4cc38b8372fd58d7874f9940b95de3
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 10000002-1-10000003-target
+      source: '10000002'
+      sourceHandle: '1'
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: http-request
+      id: 10000002-2-10000004-target
+      source: '10000002'
+      sourceHandle: '2'
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: end
+      id: 10000002-3-10000005-target
+      source: '10000002'
+      sourceHandle: '3'
+      target: '10000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 10000003-source-10000006-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 10000004-source-10000007-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000006-source-10000008-target
+      source: '10000006'
+      sourceHandle: source
+      target: '10000008'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 10000007-source-10000009-target
+      source: '10000007'
+      sourceHandle: source
+      target: '10000009'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的问题
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: 用户问题
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: user_input
+        version: '1'
+      height: 118
+      id: '10000001'
+      parentId: null
+      position:
+        x: 30
+        y: 319
+      positionAbsolute:
+        x: 30
+        y: 319
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        classes:
+        - id: '1'
+          name: 账户核验问题
+        - id: '2'
+          name: 企业核验进度查询
+        - id: '3'
+          name: 无关问题
+        desc: 问题分类器，分析用户问题类型
+        instruction: '请根据用户问题内容准确分类：
+
+          1. 账户核验问题：包含账户验证、身份核验等相关关键词
+
+          2. 企业核验进度查询：包含具体企业名称和核验、进度等关键词
+
+          3. 无关问题：与上述两类无关的其他问题'
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '10000001'
+        - user_input
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 问题分类器
+        topics: []
+        type: question-classifier
+        version: '1'
+      height: 238
+      id: '10000002'
+      parentId: null
+      position:
+        x: 334
+        y: 319
+      positionAbsolute:
+        x: 334
+        y: 319
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        desc: 从知识库检索账户核验相关信息
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: BAAI/bge-reranker-v2-m3
+            provider: langgenius/siliconflow/siliconflow
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: BAAI/bge-m3
+              embedding_provider_name: langgenius/siliconflow/siliconflow
+              vector_weight: 0.7
+        query_variable_selector:
+        - '10000002'
+        - class_name
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 账户核验知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 82
+      id: '10000003'
+      parentId: null
+      position:
+        x: 638
+        y: 319
+      positionAbsolute:
+        x: 638
+        y: 319
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - id: key-value-1
+            key: company_name
+            type: text
+            value: '{{#10000002.class_name#}}'
+          type: json
+        desc: 调用尽调平台API查询企业核验状态
+        headers: 'Content-Type: application/json'
+        isInIteration: false
+        isInLoop: false
+        method: POST
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 5000
+          max_read_timeout: 10000
+          max_write_timeout: 5000
+        title: 企业核验状态查询
+        type: http-request
+        url: https://api.example.com/company/verification/status
+        variables: []
+        version: '1'
+      height: 164
+      id: '10000004'
+      parentId: null
+      position:
+        x: 638
+        y: 441
+      positionAbsolute:
+        x: 638
+        y: 441
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        answer: 很抱歉，我只能回答与账户核验相关的问题。如果您有任何关于账户核验的疑问，请随时告诉我。
+        desc: 直接回复用户标准提示
+        format: text
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000002'
+          - class_name
+          variable: class_name
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: ''
+        title: 标准回复
+        type: end
+        variables: []
+        version: '1'
+      height: 118
+      id: '10000005'
+      parentId: null
+      position:
+        x: 638
+        y: 645
+      positionAbsolute:
+        x: 638
+        y: 645
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成智能回复指导客户
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 216843e4-021e-4655-8d6f-b527e193a06b
+          role: system
+          text: 你是一位专业的账户核验客服助手，负责根据知识库内容准确回答客户关于账户核验的问题。请确保回复内容专业、准确且易于理解。
+        - id: 67b1d286-743f-45f2-b555-29474a3ec6cf
+          role: user
+          text: '客户问题：{{#10000001.user_input#}}
+
+
+            相关知识库内容：{{#10000003.result#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 账户核验智能回复
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '10000006'
+      parentId: null
+      position:
+        x: 942
+        y: 319
+      positionAbsolute:
+        x: 942
+        y: 319
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\n\ndef main(http_response: dict) -> dict:\n    \"\"\"\n\
+          \    解析核验状态数据\n    \n    参数:\n        http_response: HTTP请求返回的原始数据\n   \
+          \     \n    返回:\n        格式化后的核验状态信息\n    \"\"\"\n    \n    def extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n        \"\"\"从markdown提取JSON内容\"\"\"\n        start = markdown_text.find('```json')\n\
+          \        if start == -1:\n            start = markdown_text.find('```')\n\
+          \            if start == -1:\n                return markdown_text.strip()\n\
+          \        \n        start = markdown_text.find('\\n', start) + 1\n      \
+          \  end = markdown_text.rfind('```')\n        return markdown_text[start:end].strip()\n\
+          \    \n    try:\n        # 获取HTTP响应体\n        response_body = http_response.get('body',\
+          \ '')\n        \n        # 处理可能的markdown包裹的JSON\n        json_text = extract_json_from_markdown(response_body)\n\
+          \        \n        # 解析JSON\n        data = json.loads(json_text)\n    \
+          \    \n        # 提取关键字段\n        company_name = data.get('company_name',\
+          \ '')\n        verification_status = data.get('status', '')\n        progress\
+          \ = data.get('progress', 0)\n        last_update = data.get('last_update',\
+          \ '')\n        \n        # 格式化输出\n        result = {\n            'company_name':\
+          \ company_name,\n            'verification_status': verification_status,\n\
+          \            'progress': f\"{progress}%\",\n            'last_update': last_update,\n\
+          \            'summary': f\"企业'{company_name}'的核验状态为：{verification_status}，当前进度{progress}%，最后更新时间：{last_update}\"\
+          \n        }\n        \n        return {\n            'status': 'success',\n\
+          \            'message': '',\n            'data': result\n        }\n   \
+          \     \n    except Exception as e:\n        return {\n            'status':\
+          \ 'error',\n            'message': f\"解析核验状态数据失败: {str(e)}\",\n        \
+          \    'data': None\n        }"
+        code_language: python3
+        desc: 解析核验状态数据，提取关键字段并格式化
+        outputs:
+          data:
+            children:
+              company_name:
+                type: string
+              last_update:
+                type: string
+              progress:
+                type: string
+              summary:
+                type: string
+              verification_status:
+                type: string
+            type: object
+          message:
+            children: null
+            type: string
+          status:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        timeout: 60
+        title: 核验状态解析器
+        type: code
+        variables:
+        - value_selector:
+          - '10000004'
+          - body
+          variable: http_response
+        version: '1'
+      height: 124
+      id: '10000007'
+      parentId: null
+      position:
+        x: 942
+        y: 479
+      positionAbsolute:
+        x: 942
+        y: 479
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 最终回复用户
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000006'
+          - text
+          variable: text
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 最终回复
+        type: end
+        version: '1'
+      height: 118
+      id: '10000008'
+      parentId: null
+      position:
+        x: 1246
+        y: 319
+      positionAbsolute:
+        x: 1246
+        y: 319
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 最终回复用户
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000007'
+          - data
+          variable: verification_result
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 核验进度回复
+        type: end
+        version: '1'
+      height: 118
+      id: '10000009'
+      parentId: null
+      position:
+        x: 1246
+        y: 482
+      positionAbsolute:
+        x: 1246
+        y: 482
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -27.999999999999943
+      y: 22
+      zoom: 0.7

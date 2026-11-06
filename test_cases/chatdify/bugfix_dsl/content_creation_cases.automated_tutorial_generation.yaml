@@ -1,0 +1,459 @@
+app:
+  mode: workflow
+  name: automated_tutorial_generation
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '4'
+        sourceType: iteration-start
+        targetType: code
+      id: 4start-source-5-target
+      source: 4start
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        iteration_id: '4'
+        sourceType: code
+        targetType: llm
+      id: 5-source-6-target
+      source: '5'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        iteration_id: '4'
+        sourceType: llm
+        targetType: code
+      id: 6-source-7-target
+      source: '6'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: end
+      id: 4-source-8-target
+      source: '4'
+      sourceHandle: source
+      target: '8'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的教程名称作为初始参数
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - label: 教程名称
+          max_length: 48
+          required: true
+          type: text-input
+          variable: course_name
+        version: '1'
+      height: 180
+      id: '1'
+      parentId: null
+      position:
+        x: 30
+        y: 295
+      positionAbsolute:
+        x: 30
+        y: 295
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成教程大纲，课程目录
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: fa51a950-08a7-45bf-936c-14aa386a2ec6
+          role: system
+          text: 你是一个{{#1.course_name#}}方面的专家，编写一个{{#1.course_name#}}教程的课程大纲，并仅以JSON列表的形式输出。
+        - id: 4a06912a-7141-497b-a68c-b425d459a97c
+          role: user
+          text: 编写一个{{#1.course_name#}}教程大纲，要求从入门到精通。整理成列表，并以JSON方式输出结果。
+        - id: 01f88599-5ae2-4978-a69b-1a13cc9b34be
+          role: assistant
+          text: "输出格式如下（每一章至少5-12篇内容）\n[\n  {\n    \"chapter\": \"第1章\",\n    \"title\"\
+            : \"xxxx\",\n    \"contents\":\n    [\n        \"1.1 xxx\",\n        ...\n\
+            \    ]\n  },\n  ...\n]"
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: LLM 生成课程大纲
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 124
+      id: '2'
+      parentId: null
+      position:
+        x: 333
+        y: 295
+      positionAbsolute:
+        x: 333
+        y: 295
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        code: "def main(text: str) -> dict:\n    import re, json\n\n    def extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n        \"\"\"从markdown提取JSON内容\"\"\"\n        start = markdown_text.find('```json')\n\
+          \        if start == -1:\n            start = markdown_text.find('```')\n\
+          \            if start == -1:\n                return markdown_text.strip()\n\
+          \        \n        start = markdown_text.find('\\n', start) + 1\n      \
+          \  end = markdown_text.rfind('```')\n        return markdown_text[start:end].strip()\n\
+          \n    try:\n        # 预处理输入\n        json_text = extract_json_from_markdown(text)\n\
+          \        data = json.loads(json_text)\n        \n        # 验证数据结构\n    \
+          \    if not isinstance(data, list):\n            return {\"result\": [],\
+          \ \"error\": \"Invalid data format: expected list of chapters\"}\n     \
+          \       \n        # 转换数据结构\n        structured_data = []\n        for chapter\
+          \ in data:\n            if not all(key in chapter for key in ['chapter',\
+          \ 'title', 'contents']):\n                return {\"result\": [], \"error\"\
+          : \"Missing required chapter fields\"}\n                \n            for\
+          \ content in chapter['contents']:\n                structured_data.append({\n\
+          \                    \"chapter\": chapter[\"chapter\"],\n              \
+          \      \"title\": chapter[\"title\"],\n                    \"subtitle\"\
+          : content\n                })\n        \n        return {\"result\": structured_data,\
+          \ \"error\": \"\"}\n        \n    except json.JSONDecodeError as e:\n  \
+          \      return {\"result\": [], \"error\": f\"JSON解析错误: {str(e)}\"}\n   \
+          \ except Exception as e:\n        return {\"result\": [], \"error\": f\"\
+          处理过程中发生错误: {str(e)}\"}"
+        code_language: python3
+        desc: 解析LLM生成的JSON大纲并转换为结构化数据
+        outputs:
+          error:
+            children: null
+            type: string
+          result:
+            children: null
+            type: array[object]
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 解析JSON大纲
+        type: code
+        variables:
+        - value_selector:
+          - '2'
+          - text
+          variable: text
+        version: '1'
+      height: 52
+      id: '3'
+      parentId: null
+      position:
+        x: 636
+        y: 295
+      positionAbsolute:
+        x: 636
+        y: 295
+      type: custom
+      width: 243
+      zIndex: 0
+    - data:
+        desc: 迭代处理每个课程章节
+        error_handle_mode: terminated
+        height: 190
+        is_parallel: false
+        iterator_selector:
+        - '3'
+        - result
+        output_selector:
+        - '7'
+        - result
+        output_type: array[object]
+        parallel_nums: 1
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        start_node_id: 4start
+        title: 迭代处理课程章节
+        type: iteration
+        version: '1'
+        width: 1080
+      height: 190
+      id: '4'
+      parentId: null
+      position:
+        x: 939
+        y: 295
+      positionAbsolute:
+        x: 939
+        y: 295
+      type: custom
+      width: 1080
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: ''
+        type: iteration-start
+        version: '1'
+      height: 48
+      id: 4start
+      parentId: '4'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 963
+        y: 363
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        code: "def main(item: dict) -> dict:\n    \"\"\"\n    提取章节详细信息\n    输入: 单个章节数据\
+          \ (来自迭代节点)\n    输出: 包含章节详细信息的字典\n    \"\"\"\n    try:\n        # 验证输入数据结构\n\
+          \        if not all(key in item for key in ['chapter', 'title', 'subtitle']):\n\
+          \            return {\"error\": \"Missing required chapter fields\", \"\
+          result\": {}}\n            \n        # 返回章节详细信息\n        return {\n    \
+          \        \"result\": {\n                \"chapter\": item[\"chapter\"],\n\
+          \                \"title\": item[\"title\"],\n                \"subtitle\"\
+          : item[\"subtitle\"]\n            },\n            \"error\": \"\"\n    \
+          \    }\n        \n    except Exception as e:\n        return {\"error\"\
+          : f\"处理过程中发生错误: {str(e)}\", \"result\": {}}"
+        code_language: python3
+        desc: 从迭代节点接收单个章节数据并提取详细信息
+        outputs:
+          error:
+            children: null
+            type: string
+          result:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 提取章节详细信息
+        type: code
+        variables:
+        - value_selector:
+          - '4'
+          - item
+          variable: item
+        version: '1'
+      height: 52
+      id: '5'
+      parentId: '4'
+      position:
+        x: 130.46261275218922
+        y: 65
+      positionAbsolute:
+        x: 1069.4626127521892
+        y: 360
+      type: custom
+      width: 243
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成章节详细内容、示例代码和专家分析
+        isInIteration: true
+        iteration_id: '4'
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 42d3ce21-8fa0-4fe3-b28b-3c6807fe8575
+          role: system
+          text: 你是一个{{#1.course_name#}}专家，正在编写详细的教程内容。请为每个章节提供专业、详尽的内容，包括示例代码和专家分析。
+        - id: a40f0999-e68c-4f9a-add9-46ab3cb7bb38
+          role: user
+          text: '请为{{#5.result.chapter#}} - {{#5.result.title#}}中的{{#5.result.subtitle#}}编写详细内容。要求：
+
+
+            1. 专业级的技术讲解
+
+            2. 实用的示例代码
+
+            3. 专家分析（优缺点、适用场景等）
+
+            4. 注意事项和最佳实践'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 生成章节内容
+        type: llm
+        variables:
+        - value_selector:
+          - '5'
+          - result
+          variable: chapter_info
+        version: '1'
+        vision:
+          enabled: false
+      height: 96
+      id: '6'
+      parentId: '4'
+      position:
+        x: 427.82204039715634
+        y: 65
+      positionAbsolute:
+        x: 1366.8220403971563
+        y: 360
+      type: custom
+      width: 243
+      zIndex: 1002
+    - data:
+        code: "def main(content: str, chapter_info: dict) -> dict:\n    \"\"\"\n \
+          \   整合章节内容和元数据\n    输入:\n        content: LLM生成的章节内容 (string)\n        chapter_info:\
+          \ 章节元数据 (dict)\n    输出: 包含整合后内容的字典\n    \"\"\"\n    import json\n    \n\
+          \    try:\n        # 预处理输入\n        if not content or not chapter_info:\n\
+          \            return {\"error\": \"缺少必要输入参数\", \"result\": {}}\n        \
+          \    \n        # 构建整合后的数据结构\n        result = {\n            \"chapter\"\
+          : chapter_info.get(\"chapter\", \"\"),\n            \"title\": chapter_info.get(\"\
+          title\", \"\"),\n            \"subtitle\": chapter_info.get(\"subtitle\"\
+          , \"\"),\n            \"content\": content,\n            \"metadata\": {\n\
+          \                \"course_name\": chapter_info.get(\"course_name\", \"\"\
+          ),\n                \"generated_at\": \"\"  # 可以添加时间戳等元数据\n            }\n\
+          \        }\n        \n        return {\"result\": result, \"error\": \"\"\
+          }\n        \n    except Exception as e:\n        return {\"error\": f\"\
+          处理过程中发生错误: {str(e)}\", \"result\": {}}"
+        code_language: python3
+        desc: 整合章节内容和元数据
+        isInIteration: true
+        iteration_id: '4'
+        outputs:
+          error:
+            children: null
+            type: string
+          result:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 整合章节内容和元数据
+        type: code
+        variables:
+        - value_selector:
+          - '6'
+          - text
+          variable: content
+        - value_selector:
+          - '5'
+          - result
+          variable: chapter_info
+        version: '1'
+      height: 52
+      id: '7'
+      parentId: '4'
+      position:
+        x: 741.8919201860167
+        y: 65
+      positionAbsolute:
+        x: 1680.8919201860167
+        y: 360
+      type: custom
+      width: 243
+      zIndex: 1002
+    - data:
+        desc: 输出结构化教程内容
+        output_type: object
+        outputs:
+        - value_selector:
+          - '1'
+          - course_name
+          variable: course_name
+        - value_selector:
+          - '4'
+          - output
+          variable: tutorial_content
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 结束
+        type: end
+        version: '1'
+      height: 114
+      id: '8'
+      parentId: null
+      position:
+        x: 2079
+        y: 295
+      positionAbsolute:
+        x: 2079
+        y: 295
+      type: custom
+      width: 243
+      zIndex: 0
+    type: custom

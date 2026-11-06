@@ -1,0 +1,484 @@
+app:
+  description: Translates, restructures, and refines a technical document about Dify
+    that's originally in Mandarin into English.
+  icon: pencil2
+  icon_background: '#ECE9FE'
+  mode: workflow
+  name: Dify doc rewrite (cn->en)
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.2
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1726366928368-source-17263698941350-target
+      source: '1726366928368'
+      sourceHandle: source
+      target: '17263698941350'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 17263698941350-source-1726385962162-target
+      source: '17263698941350'
+      sourceHandle: source
+      target: '1726385962162'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1726366928368-source-1726388136635-target
+      source: '1726366928368'
+      sourceHandle: source
+      target: '1726388136635'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 17263698941350-source-1726387345387-target
+      source: '17263698941350'
+      sourceHandle: source
+      target: '1726387345387'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 1726385962162-source-1726389092025-target
+      source: '1726385962162'
+      sourceHandle: source
+      target: '1726389092025'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 1726388136635-source-1726389092025-target
+      source: '1726388136635'
+      sourceHandle: source
+      target: '1726389092025'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1726387345387-source-1726389526616-target
+      source: '1726387345387'
+      sourceHandle: source
+      target: '1726389526616'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: llm
+      id: 1726389092025-source-1726389526616-target
+      source: '1726389092025'
+      sourceHandle: source
+      target: '1726389526616'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1726389526616-source-1726389764681-target
+      source: '1726389526616'
+      sourceHandle: source
+      target: '1726389764681'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: 文章
+          max_length: 10000
+          options: []
+          required: true
+          type: paragraph
+          variable: article
+      height: 88
+      id: '1726366928368'
+      position:
+        x: 92.11740989368343
+        y: 282
+      positionAbsolute:
+        x: 92.11740989368343
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1726366928368'
+          - article
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: claude-3-5-sonnet-20240620
+          provider: anthropic
+        prompt_template:
+        - id: bb6a8c2e-6f2e-43f6-bb9e-f69976c3f34b
+          role: system
+          text: 'You are an expert engineer who speaks both English and Mandarin.
+            You are familiar with python, typescript, and ORMs like SQLAlchemy. Additionally,
+            you also have extensive experience in using LLM models and developing
+            genAI apps.
+
+
+            The user has given you an article in Mandarin related to Dify, an open-source
+            genAI app building platform. The article is likely either help documentation,
+            a feature / architecture deep-dive, or a use case study.
+
+
+            Translate the article into English, while keeping all the formatting and
+            URLs. Be as brief and straightforward as possible and avoid complex expressions.
+            The article should be clear and understandable to amateurs and senior
+            programmers alike.'
+        - id: 4f9e6bde-0659-403d-bd43-c912c50c1514
+          role: user
+          text: '{{#context#}}'
+        selected: false
+        title: Translate (round 1)
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 96
+      id: '17263698941350'
+      position:
+        x: 393.0017318725586
+        y: 282
+      positionAbsolute:
+        x: 393.0017318725586
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '17263698941350'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: claude-3-5-sonnet-20240620
+          provider: anthropic
+        prompt_template:
+        - id: aab3512c-dd88-4bb1-9c62-cf9da57524d4
+          role: system
+          text: "You are an expert engineer & technical communicator like Richard\
+            \ Feynman, Martin Kleppmann, and Bret Victor. You obsess over clarity\
+            \ of language and conveying hard concepts in a clear and elegant manner.\
+            \ The user has given you an article related to Dify, an open-source genAI\
+            \ app building platform. The article is likely either help documentation,\
+            \ a feature / architecture deep-dive, or a use case study. The targeted\
+            \ audience is for anyone from tech amateurs to senior programmers who\
+            \ are using Dify to build LLM apps.\n\nCarefully read the article, focusing\
+            \ on the key messages it tries to get across and how these messages are\
+            \ conveyed. Give clear suggestions to modify the article structure so\
+            \ it flows naturally. \n\nOutput your suggestions ONLY. Be bold in your\
+            \ suggestions if needed. Be clear and descriptive. Avoid big words."
+        - id: ba2e0c2e-7bbc-4939-8830-6be3bc915bae
+          role: user
+          text: '{{#context#}}'
+        selected: false
+        title: Suggest restructure
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: true
+      height: 96
+      id: '1726385962162'
+      position:
+        x: 689.1913993511457
+        y: 282
+      positionAbsolute:
+        x: 689.1913993511457
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '17263698941350'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: claude-3-5-sonnet-20240620
+          provider: anthropic
+        prompt_template:
+        - id: e3e5ed36-9902-445a-9095-b24f93a9bd35
+          role: system
+          text: 'You are an expert engineer & technical communicator like Richard
+            Feynman, Martin Kleppmann, and Bret Victor. You obsess over clarity of
+            language and conveying hard concepts in a clear and elegant manner. The
+            user has given you an article related to Dify, an open-source genAI app
+            building platform. The article is likely either help documentation, a
+            feature / architecture deep-dive, or a use case study. The targeted audience
+            is for anyone from tech amateurs to senior programmers who are using Dify
+            to build LLM apps.
+
+
+            Carefully read the article, then improve its word / phrase use and sentence
+            complexity. Make sure the article is not bloated or unnecessarily complicated.
+            Avoid big words and long sentences whenever you can. Keep all the formatting
+            and URLs.'
+        - id: 822b1d85-804a-484b-b934-60d87c6a235d
+          role: user
+          text: '{{#context#}}'
+        selected: false
+        title: Translate (Round 2)
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: true
+      height: 96
+      id: '1726387345387'
+      position:
+        x: 689.1913993511457
+        y: 143.86152721200898
+      positionAbsolute:
+        x: 689.1913993511457
+        y: 143.86152721200898
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1726366928368'
+          - article
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: claude-3-5-sonnet-20240620
+          provider: anthropic
+        prompt_template:
+        - id: 499d92c2-6fac-432e-a6d4-b60205e641c0
+          role: system
+          text: "You are an expert engineer and writer who speaks both english and\
+            \ mandarin. You receive a technical article in mandarin from the user.\
+            \ \n\nCarefully read and identify the tone of the article. Then, describe\
+            \ its tone clearly from multiple angles in english. Be clear and descriptive.\
+            \ Avoid big words."
+        - id: 93db82c8-3f59-4cbc-b352-df500ce6d575
+          role: user
+          text: '{{#context#}}'
+        selected: false
+        title: Extract tone
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: true
+      height: 96
+      id: '1726388136635'
+      position:
+        x: 393.0017318725586
+        y: 405.0017318725586
+      positionAbsolute:
+        x: 393.0017318725586
+        y: 405.0017318725586
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        desc: ''
+        selected: false
+        template: '1. Restructure the article according to: {{ restruct_suggestions
+          }}
+
+          2. Make sure the tone of the article is: {{ tone }}'
+        title: Tasks
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1726388136635'
+          - text
+          variable: restruct_suggestions
+        - value_selector:
+          - '1726388136635'
+          - text
+          variable: tone
+      height: 52
+      id: '1726389092025'
+      position:
+        x: 992.1452521774128
+        y: 405.0017318725586
+      positionAbsolute:
+        x: 992.1452521774128
+        y: 405.0017318725586
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1726387345387'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: claude-3-5-sonnet-20240620
+          provider: anthropic
+        prompt_template:
+        - id: cd6f721b-850b-45bc-9236-03d88a10dbdf
+          role: system
+          text: 'You are an expert engineer & technical communicator like Richard
+            Feynman, Martin Kleppmann, and Bret Victor. You obsess over clarity of
+            language and conveying hard concepts in a clear and elegant manner. The
+            user has given you an article related to Dify, an open-source genAI app
+            building platform. The article is likely either help documentation, a
+            feature / architecture deep-dive, or a use case study. The targeted audience
+            is for anyone from tech amateurs to senior programmers who are using Dify
+            to build LLM apps.
+
+
+            Carefully read and understand the article. Then, improve it based on the
+            following tasks:
+
+
+            {{#1726389092025.output#}}
+
+
+            Only output the article.'
+        - id: 3d909c55-a19d-408d-9ee5-5c8fb8798408
+          role: user
+          text: '{{#context#}}'
+        selected: false
+        title: Translate (round 3)
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: true
+      height: 96
+      id: '1726389526616'
+      position:
+        x: 1294.298078317398
+        y: 143.86152721200898
+      positionAbsolute:
+        x: 1294.298078317398
+        y: 143.86152721200898
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1726389526616'
+          - text
+          variable: translation
+        selected: false
+        title: End
+        type: end
+      height: 88
+      id: '1726389764681'
+      position:
+        x: 1597.298078317398
+        y: 143.86152721200898
+      positionAbsolute:
+        x: 1597.298078317398
+        y: 143.86152721200898
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    viewport:
+      x: 232.87348579779416
+      y: 392.2849867760873
+      zoom: 0.48820540631722215

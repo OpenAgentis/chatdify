@@ -1,0 +1,607 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: Jina Reader Jinja
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tavily:0.1.2@aa7a8744b2ccf3a7aec818da6c504997a6319b29040e541bfc73b4fbaa9e98d9
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/jina_tool:0.0.7@08d5935b56b9ddaa633204874c0fd796c14971489b6379fad1a430b5ec99b569
+kind: app
+version: 0.3.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 1713262060182-source-1716911333343-target
+      selected: false
+      source: '1713262060182'
+      sourceHandle: source
+      target: '1716911333343'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '1716911333343'
+        sourceType: tool
+        targetType: llm
+      id: 1720758285748-source-1716959261724-target
+      source: '1720758285748'
+      sourceHandle: source
+      target: '1716959261724'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        iteration_id: '1716911333343'
+        sourceType: llm
+        targetType: template-transform
+      id: 1716959261724-source-1720758555344-target
+      source: '1716959261724'
+      sourceHandle: source
+      target: '1720758555344'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: code
+      id: 1716911333343-source-1720759755103-target
+      source: '1716911333343'
+      sourceHandle: source
+      target: '1720759755103'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: template-transform
+      id: 1720759755103-source-1720761482451-target
+      source: '1720759755103'
+      sourceHandle: source
+      target: '1720761482451'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 1720761482451-source-1713262577750-target
+      source: '1720761482451'
+      sourceHandle: source
+      target: '1713262577750'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1716911333343'
+        sourceType: iteration-start
+        targetType: tool
+      id: 1716911333343start0-source-1720758285748-target
+      source: 1716911333343start0
+      sourceHandle: source
+      target: '1720758285748'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: tool
+      id: 1713261835258-source-1753866769096-target
+      source: '1713261835258'
+      sourceHandle: source
+      target: '1753866769096'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: code
+      id: 1753866769096-source-1713262060182-target
+      source: '1753866769096'
+      sourceHandle: source
+      target: '1713262060182'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: 質問
+          max_length: 148
+          options: []
+          required: true
+          type: text-input
+          variable: Question
+      height: 90
+      id: '1713261835258'
+      position:
+        x: 30
+        y: 388.5
+      positionAbsolute:
+        x: 30
+        y: 388.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        is_team_authorization: true
+        output_schema: null
+        params:
+          auto_parameters: ''
+          chunks_per_source: ''
+          country: ''
+          days: ''
+          exclude_domains: ''
+          include_answer: ''
+          include_domains: ''
+          include_favicon: ''
+          include_image_descriptions: ''
+          include_images: ''
+          include_raw_content: ''
+          max_results: ''
+          query: ''
+          search_depth: ''
+          time_range: ''
+          topic: ''
+        provider_id: langgenius/tavily/tavily
+        provider_name: langgenius/tavily/tavily
+        provider_type: builtin
+        selected: false
+        title: Tavily Search
+        tool_configurations:
+          auto_parameters:
+            type: constant
+            value: false
+          chunks_per_source:
+            type: constant
+            value: 3
+          include_answer:
+            type: constant
+            value: false
+          include_favicon:
+            type: constant
+            value: false
+          include_image_descriptions:
+            type: constant
+            value: false
+          include_images:
+            type: constant
+            value: false
+          include_raw_content:
+            type: constant
+            value: false
+          max_results:
+            type: constant
+            value: 5
+        tool_description: 专为人工智能代理 (LLM) 构建的搜索引擎工具，可快速提供实时、准确和真实的结果。
+        tool_label: Tavily Search
+        tool_name: tavily_search
+        tool_node_version: '2'
+        tool_parameters:
+          country:
+            type: constant
+            value: united states
+          days:
+            type: constant
+            value: 7
+          exclude_domains:
+            type: mixed
+            value: null
+          include_domains:
+            type: mixed
+            value: null
+          query:
+            type: mixed
+            value: '{{#1713261835258.Question#}}'
+          search_depth:
+            type: constant
+            value: basic
+          time_range:
+            type: constant
+            value: not_specified
+          topic:
+            type: constant
+            value: general
+        type: tool
+      height: 272
+      id: '1753866769096'
+      position:
+        x: 331.7190223065919
+        y: 388.5
+      positionAbsolute:
+        x: 331.7190223065919
+        y: 388.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import re\nimport time\ndef main(arg1) -> dict:\n    time.sleep(13)\n\
+          \    urls = re.findall(r'http[s]?://[^\\s)]+', arg1)\n    return {\n   \
+          \     \"result\": urls[:5],\n    }"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: array[string]
+        selected: false
+        title: Code
+        type: code
+        variables:
+        - value_selector:
+          - '1753866769096'
+          - text
+          value_type: string
+          variable: arg1
+      height: 54
+      id: '1713262060182'
+      position:
+        x: 636.6799897607593
+        y: 388.5
+      positionAbsolute:
+        x: 636.6799897607593
+        y: 388.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1720761482451'
+          - output
+          variable: text
+        selected: false
+        title: End
+        type: end
+      height: 90
+      id: '1713262577750'
+      position:
+        x: 2595
+        y: 388.5
+      positionAbsolute:
+        x: 2595
+        y: 388.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        error_handle_mode: terminated
+        height: 377
+        is_parallel: false
+        iterator_selector:
+        - '1713262060182'
+        - result
+        output_selector:
+        - '1720758555344'
+        - output
+        output_type: array[string]
+        parallel_nums: 10
+        selected: false
+        startNodeType: tool
+        start_node_id: 1716911333343start0
+        title: Iteration
+        type: iteration
+        width: 985
+      height: 377
+      id: '1716911333343'
+      position:
+        x: 942
+        y: 388.5
+      positionAbsolute:
+        x: 942
+        y: 388.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 985
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        isIterationStart: true
+        iteration_id: '1716911333343'
+        provider_id:  langgenius/jina_tool/jina
+        provider_name:  langgenius/jina_tool/jina
+        provider_type: builtin
+        selected: false
+        title: JinaReader
+        tool_configurations:
+          gather_all_images_at_the_end:
+            type: constant
+            value: 0
+          gather_all_links_at_the_end:
+            type: constant
+            value: 0
+          image_caption:
+            type: constant
+            value: 0
+          no_cache:
+            type: constant
+            value: 0
+          proxy_server:
+            type: constant
+            value: null
+          summary:
+            type: constant
+            value: 0
+          target_selector:
+            type: constant
+            value: null
+          wait_for_selector:
+            type: constant
+            value: null
+        tool_label: JinaReader
+        tool_name: jina_reader
+        version: '2'
+        tool_parameters:
+          url:
+            type: mixed
+            value: '{{#1716911333343.item#}}'
+        type: tool
+      extent: parent
+      height: 272
+      id: '1720758285748'
+      parentId: '1716911333343'
+      position:
+        x: 119.28097769340798
+        y: 85
+      positionAbsolute:
+        x: 1061.280977693408
+        y: 473.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1001
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        isInIteration: true
+        iteration_id: '1716911333343'
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 1c7eeb97-1ebc-4579-b1ec-d0d649d57d2d
+          role: system
+          text: 'Summarize the following text.
+
+            {{#1720758285748.text#}}'
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      extent: parent
+      height: 90
+      id: '1716959261724'
+      parentId: '1716911333343'
+      position:
+        x: 421
+        y: 85
+      positionAbsolute:
+        x: 1363
+        y: 473.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: true
+        iteration_id: '1716911333343'
+        selected: false
+        template: '{{ arg1 }}\SP{{ text }}'
+        title: Combine URL and Summary
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1716911333343'
+          - item
+          variable: arg1
+        - value_selector:
+          - '1716959261724'
+          - text
+          variable: text
+      extent: parent
+      height: 54
+      id: '1720758555344'
+      parentId: '1716911333343'
+      position:
+        x: 725
+        y: 87.28097769340798
+      positionAbsolute:
+        x: 1667
+        y: 475.780977693408
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        code: "import time\ndef main(arg1) -> dict:\n    time.sleep(13)\n    result\
+          \ = []\n    for item in arg1:\n        url, text = item.split('\\\\SP')\n\
+          \        text = text.replace('\\n', ' ')\n        result.append({'url':url,\
+          \ 'text':text})\n    return {\n        \"result\": result,\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: array[object]
+        selected: false
+        title: Split URL and Text Summary
+        type: code
+        variables:
+        - value_selector:
+          - '1716911333343'
+          - output
+          variable: arg1
+      height: 54
+      id: '1720759755103'
+      position:
+        x: 1987
+        y: 388.5
+      positionAbsolute:
+        x: 1987
+        y: 388.5
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: '|URL|Summary|
+
+          |---|---|
+
+          {% for data in arg1 -%}
+
+          |{{data.url}}|{{data.text}}|
+
+          {% endfor -%}'
+        title: Result in Table
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1720759755103'
+          - result
+          variable: arg1
+      height: 54
+      id: '1720761482451'
+      position:
+        x: 2291
+        y: 388.5
+      positionAbsolute:
+        x: 2291
+        y: 388.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1716911333343start0
+      parentId: '1716911333343'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 966
+        y: 456.5
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    viewport:
+      x: -1375.3173669643547
+      y: 115.09345654065231
+      zoom: 0.7575698811057617

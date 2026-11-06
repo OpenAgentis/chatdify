@@ -1,0 +1,32 @@
+edge_usage:
+  节点类型: tool_markdown_convertor
+  使用规范:
+    - Markdown转换器工具节点是一个专门用于将Markdown文本转换为多种格式文件的工具节点
+    - 主要接受Markdown格式文本作为输入，支持转换为DOCX、PDF、HTML、PPTX、XLSX、CSV、JSON、XML、LaTeX、RST等多种格式
+    - 支持自定义输出文件名，文件名后缀会根据转换格式自动添加
+    - 支持从Markdown中提取代码块并生成对应语言的代码文件（.py、.js、.html、.sh等）
+    - 支持从Markdown中提取表格并转换为Excel或CSV格式
+    - 支持从Markdown中提取链接图片并下载为图片文件
+    - 可配置压缩选项，将多个输出文件打包为ZIP格式
+  应用场景:
+    适用场景:
+      - 文档格式转换：将Markdown文档转换为Word文档（DOCX）、PDF文件等常用办公格式
+      - 接收来自LLM节点生成的Markdown格式内容，进行格式转换和文件输出
+      - 演示文稿生成：将符合md2pptx语法的Markdown文本转换为PowerPoint演示文稿
+      - 数据提取和转换：从Markdown表格生成Excel文件，从代码块生成源代码文件
+      - 接收来自code节点处理后的Markdown内容，进行最终格式化输出
+      - 网页内容转换：将Markdown转换为HTML格式，支持在线展示
+      - 学术文档生成：转换为LaTeX格式，支持学术论文排版
+      - 电子书制作：转换为EPUB格式，支持电子书阅读器
+      - 输出文件可传递给end节点作为工作流最终结果
+      - 支持批量处理多种格式转换需求
+    连接模式:
+      - 输入连接：可接收来自LLM节点、code节点、variable-aggregator节点的Markdown文本
+      - 输出连接：转换后的文件通常连接到end节点作为最终输出
+      - 支持在迭代和循环中使用，处理批量Markdown内容转换
+  常见使用错误:
+    - 输入非Markdown格式文本会导致转换效果不佳
+    - PPTX转换时未遵循md2pptx语法规范会导致幻灯片格式错误
+    - 表格转换时Markdown表格格式不规范会影响Excel/CSV输出质量
+    - 代码块提取时未正确标注语言类型会影响文件扩展名识别
+    - 自定义文件名包含非法字符会导致文件生成失败

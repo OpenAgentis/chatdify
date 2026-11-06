@@ -1,0 +1,315 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: speech_pattern_extraction_and_imitation
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的话术文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 话术文件
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: file
+        version: '1'
+      height: 118
+      id: '1'
+      parentId: null
+      position:
+        x: 30
+        y: 271
+      positionAbsolute:
+        x: 30
+        y: 271
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从上传的文档中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1'
+        - file
+        version: '1'
+      height: 120
+      id: '2'
+      parentId: null
+      position:
+        x: 334
+        y: 271
+      positionAbsolute:
+        x: 334
+        y: 271
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 总结提炼文本内容
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的文本总结专家，擅长从长篇文本中提取核心内容并生成简洁准确的摘要。请遵循以下要求：
+
+            1. 仔细分析输入文本，识别关键信息和主旨
+
+            2. 生成的摘要应保留原文的核心意思和重要细节
+
+            3. 摘要长度适中，控制在原文长度的20%-30%之间
+
+            4. 使用清晰、简洁的语言表达
+
+            5. 保持客观中立，不添加个人观点或解释'
+        - role: user
+          text: '请对以下文本进行总结提炼：
+
+
+            {{#2.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文本总结
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '3'
+      parentId: null
+      position:
+        x: 638
+        y: 271
+      positionAbsolute:
+        x: 638
+        y: 271
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据摘要生成日常生活话术
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 43f8f230-61ec-4c19-97be-704840db66bf
+          role: system
+          text: '你是一位专业的日常生活话术生成专家，擅长根据摘要内容创作自然流畅的日常对话。请遵循以下要求：
+
+
+            1. 仔细分析输入的摘要内容，理解其核心意思
+
+            2. 创作的话术要符合日常生活场景，自然流畅
+
+            3. 保持与摘要内容一致的核心意思
+
+            4. 使用日常口语化的表达方式
+
+            5. 适当添加生活化的细节使对话更生动'
+        - id: b6e858a1-e670-4857-8d8c-dcf32e3bb9ef
+          role: user
+          text: '请根据以下摘要内容，生成一段自然流畅的日常生活话术：
+
+
+            {{#3.text#}}
+
+
+            原文参考:
+
+            /'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: true
+        title: 话术生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '4'
+      parentId: null
+      position:
+        x: 942
+        y: 271
+      positionAbsolute:
+        x: 942
+        y: 271
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终话术结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '4'
+          - text
+          variable: final_output
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 结束
+        type: end
+        version: '1'
+      height: 118
+      id: '5'
+      parentId: null
+      position:
+        x: 1246
+        y: 271
+      positionAbsolute:
+        x: 1246
+        y: 271
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -82.11548803532116
+      y: 261.85350487661117
+      zoom: 0.7578582832551991

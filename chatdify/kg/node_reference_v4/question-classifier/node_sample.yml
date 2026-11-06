@@ -1,0 +1,91 @@
+nodes:
+- data:
+    classes:
+    - id: '1'
+      name: 安装
+    - id: '2'
+      name: 提问
+    - id: '1720796069925'
+      name: 架构
+    - id: '1720839653345'
+      name: 其他
+    desc: ''
+    instruction: ''
+    instructions: ''
+    model:
+      completion_params:
+        frequency_penalty: 0.5
+        presence_penalty: 0.5
+        temperature: 0.2
+        top_p: 0.75
+      mode: chat
+      name: deepseek-chat
+      provider: deepseek
+    query_variable_selector:
+    - '1720795218540'
+    - text
+    selected: false
+    title: Question Classifier
+    topics: []
+    type: question-classifier
+  id: '1720795163496'
+  selected: false
+  type: custom
+- data:
+    classes:
+    - id: '1'
+      name: 单纯的文件分析请求，涉及数值，文本的回复
+    - id: '2'
+      name: 涉及对数据文件绘制图表
+    - id: '1744080813920'
+      name: 与其他两者无关
+    desc: ''
+    instructions: ''
+    model:
+      completion_params:
+        temperature: 0.7
+      mode: chat
+      name: deepseek-v3-250324
+      provider: langgenius/volcengine_maas/volcengine_maas
+    query_variable_selector:
+    - '1743992797516'
+    - sys.query
+    selected: false
+    title: 问题分类器
+    topics: []
+    type: question-classifier
+    vision:
+      enabled: false
+  id: '1744015394252'
+  selected: false
+  type: custom
+- data:
+    classes:
+    - id: '1715846546749'
+      name: 健康咨询
+    - id: '1715846565625'
+      name: 使用帮助
+    desc: ''
+    instruction: '分类依据
+
+      - 与App，运动腕带相关，都属于 **使用帮助** 这个类别
+
+      - 疾病、饮食、睡眠等其他分类，都属于 **健康咨询** 这个类别'
+    instructions: ''
+    model:
+      completion_params:
+        temperature: 0.1
+        top_p: 1
+      mode: chat
+      name: deepseek-chat
+      provider: deepseek
+    query_variable_selector:
+    - '1718246807593'
+    - text
+    selected: false
+    title: 问题分类器
+    topics: []
+    type: question-classifier
+  id: '1718246909580'
+  selected: false
+  type: custom

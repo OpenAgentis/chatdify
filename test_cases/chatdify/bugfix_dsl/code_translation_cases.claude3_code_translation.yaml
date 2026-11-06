@@ -1,0 +1,498 @@
+app:
+  mode: workflow
+  name: claude3_code_translation
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '10000004'
+        sourceType: iteration-start
+        targetType: llm
+      id: 10000004start-source-10000005-target
+      source: 10000004start
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: code
+      id: 10000004-source-10000006-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 10000006-source-10000007-target
+      source: '10000006'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 收集用户输入的代码翻译需求参数，包括源代码内容、文件名、源语言和目标语言
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - label: 需要翻译的代码文件内容
+          max_length: 33024
+          required: true
+          type: paragraph
+          variable: code_to_translate
+        - label: 相关依赖库的代码内容
+          max_length: 33024
+          required: false
+          type: paragraph
+          variable: related_files_content
+        - label: 待翻译文件的文件名
+          max_length: 256
+          required: true
+          type: text-input
+          variable: code_file_name
+        - label: 源代码语言(例如Python)
+          max_length: 48
+          options:
+          - python
+          - java
+          required: true
+          type: select
+          variable: src_lang
+        - label: 目标编程语言（例如Java）
+          max_length: 48
+          options:
+          - java
+          - python
+          required: true
+          type: select
+          variable: dest_lang
+        version: '1'
+      height: 194
+      id: '10000001'
+      parentId: null
+      position:
+        x: 30
+        y: 301.5
+      positionAbsolute:
+        x: 30
+        y: 301.5
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点，根据输入的参数生成目标代码的结构和签名
+        model:
+          completion_params:
+            stop:
+            - '```'
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 2e5e4e13-2974-440b-9ee5-c015d9aae4ba
+          role: system
+          text: "# Role\n你接下来cosplay一个专业的程序猿，精通python java go 等多种语言。\n\n# Task\n你的任务是帮助我将项目的编程语言从{{#10000001.src_lang#}}翻译到{{#10000001.dest_lang#}}。但是由于输出长度限制，你需要分两次回复来生成完整的代码。\n\
+            \n第一次回复的目的是生成代码主体结构，但对于中的类、函数，你只需要给出对应的签名即可，不要给出具体实现。\n注意分析相关代码文件，并据此帮你识别内置依赖库和自定义依赖，在你的回复中，不要遗漏import对应的库。\n\
+            \n# 相关代码文件\n如下是可能与原始代码有关的文件(可能为空)。\n{{#10000001.related_files_content#}}\n\
+            \n# 输出格式\n\n## 第一次输出\n输出采用YAML格式，其中`type`的取值及定义如下: \n- `import`表示依赖包引入代码\n\
+            - `class`表示类定义，注意java只允许有一个顶层类(通常是与文件同名的类)是public的，其余顶层类不可以使用public修饰。\n\
+            - `function`表示函数定义，每个函数都有自己的签名\n- `literal`表示不包含在任何函数或类中的代码行，如果存在，则需要给出完整目标语言的代码。main函数中的内容不要放在这里。\n\
+            \n### 限制\n- `type`的顺序需要严格按照目标翻译代码的嵌套关系及顺序排列，`type` 不可以为其他值，输出必须要满足YAML格式的有效性。\n\
+            - 生成的代码必须要符合目标语言{{#10000001.dest_lang#}}的语法规则，不要放错函数的位置。如果类中属性需要在此类外使用，则要定义相关的属性访问器。\n\
+            - `cls_attr` 中的 `need_public_getter` 表示是否需要生成public的getter方法，如果此属性被跨类访问，则必须为true。\n\
+            ### 第一次回复的结构示例\n```yaml\nout_file_name: <outfile.ext>\nthinking: | \n\
+            \  your thinking if any, better not exceeds 80 words.\n{dest_lang}:\n\
+            \    - type: import\n      codes: |\n        import java.util.ArrayList\n\
+            \        ...\n    - type: literal\n      codes: |\n        int a = 0;\n\
+            \        ...\n    - type: class\n      name: Main\n      signature: public\
+            \ static void main(String[] args) # 必须\n      attributes: # 必须，除非此类不包含任何属性\n\
+            \        - type: cls_attr\n          signature: private int a;\n     \
+            \     need_public_getter: true | false\n        - type: inst_attr\n  \
+            \        signature: String str;\n        - type: function\n          name:\
+            \ incr\n          signature: static int incr(int a, int b)\n        -\
+            \ type: function\n          name: main # this is required for the main\
+            \ class\n          signature: public static void main(String[] args) \n\
+            \        - type: class\n          name: Foo\n          signature: public\
+            \ class Foo\n        - ...\n    - ...\n```\n\n注意，你不需要给出任何解释，只需要给出代码主体即可。\n\
+            \n### 第一次回复的示例(python -> java)\n输入：\n- 文件名: dog.py\n```python\nimport\
+            \ time\n\ncurrent_time = time.time()\n\ndef my_func(a):\n    return a\
+            \ + 1\n\nclass Dog:\n    species = \"Canis familiaris\"\n\n    def __init__(self,\
+            \ name, age):\n        self.name = name\n        self.age = age\n\n  \
+            \  def description(self):\n        return self.name + \"is \" + self.age\
+            \ + \" years old\"\n\n    def speak(self, sound):\n        return self.name\
+            \ + \"says \" + sound\n\nmiles = Dog(\"Miles\", 4)\n\nprint(miles.description())\
+            \  # Output: Miles is 4 years old\n\nprint(\"Miles is a \" + miles.species)\
+            \  # Output: Miles is a Canis familiaris\n```\n\n输出：\n```yaml\nout_file_name:\
+            \ Dog.java\nthinking: | \n  your thinking ...\njava:\n    - type: import\n\
+            \      codes: |\n        import java.time.Instant;\n\n    - type: class\n\
+            \      name: Dog\n      signature: public class Dog\n      attributes:\n\
+            \        - type: cls_attr\n          signature: static String species\
+            \ = \"Canis familiaris\";\n          need_public_getter: false\n     \
+            \   - type: inst_attr\n          signature: String name;\n        - type:\
+            \ inst_attr\n          signature: Int age;\n        - type: function\n\
+            \          name: Dog\n          signature: Dog(String name, int age)\n\
+            \        - type: function\n          name: description\n          signature:\
+            \ String description()\n        - type: function\n          name: speak\n\
+            \          signature: String speak(String sound)\n        - type: function\n\
+            \          name: main\n          signature: public static void main(String[]\
+            \ args)\n```\n\n## 第二次输出\n在第二次输出中，我会让你输出一个或者多个特定的类或者函数的完整实现，直接给出代码即可，无需解释；且第一次生成结果中排在此类/函数之前的代码都已经生成了，你不要重复生成。\n\
+            你需要等到我的指令才能输出第二次响应。\n\n# 限制\n无论是第几次回复，你都要认真思考，不可以大意或者匆忙给出没有深思熟虑的代码。"
+        - id: 067b610f-6234-4f0d-bf20-9c7d86e7562d
+          role: user
+          text: '# 原始代码
+
+
+            - input_file_name: {{#10000001.code_file_name#}}
+
+
+            ```{{#10000001.src_lang#}}
+
+            {{#10000001.code_to_translate#}}
+
+            ```'
+        - id: e6ece9cd-4b04-42d6-870a-350a9cfcdcf6
+          role: assistant
+          text: '```yaml'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: LLM-生成目标代码签名
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 98
+      id: '10000002'
+      parentId: null
+      position:
+        x: 334
+        y: 301.5
+      positionAbsolute:
+        x: 334
+        y: 301.5
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nimport yaml\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef extract_signatures(yaml_data:\
+          \ dict, dest_lang: str) -> dict:\n    \"\"\"从YAML数据中提取类和函数签名\"\"\"\n   \
+          \ signatures = []\n    for item in yaml_data.get(dest_lang, []):\n     \
+          \   if item.get('type') in ['class', 'function']:\n            signatures.append({\n\
+          \                'type': item['type'],\n                'name': item.get('name',\
+          \ ''),\n                'signature': item.get('signature', '')\n       \
+          \     })\n    \n    return {\n        'out_file_name': yaml_data.get('out_file_name',\
+          \ ''),\n        'signatures': signatures,\n        'original_data': yaml_data\n\
+          \    }\n\ndef main(text: str, dest_lang: str) -> dict:\n    try:\n     \
+          \   # 预处理输入\n        yaml_text = extract_json_from_markdown(text)\n    \
+          \    data = yaml.safe_load(yaml_text)\n        \n        # 提取签名\n      \
+          \  result = extract_signatures(data, dest_lang)\n        \n        return\
+          \ {\n            'out_file_name': result['out_file_name'],\n           \
+          \ 'signatures': result['signatures'],\n            'original_data': result['original_data'],\n\
+          \            'error': ''\n        }\n    except Exception as e:\n      \
+          \  return {\n            'out_file_name': '',\n            'signatures':\
+          \ [],\n            'original_data': {},\n            'error': str(e)\n \
+          \       }"
+        code_language: python3
+        desc: 解析LLM生成的YAML格式输出，提取函数和类签名
+        outputs:
+          error:
+            children: null
+            type: string
+          original_data:
+            children: null
+            type: object
+          out_file_name:
+            children: null
+            type: string
+          signatures:
+            children: null
+            type: array[object]
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 解析YAML并提取签名
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: text
+        - value_selector:
+          - '10000001'
+          - dest_lang
+          variable: dest_lang
+        version: '1'
+      height: 54
+      id: '10000003'
+      parentId: null
+      position:
+        x: 638
+        y: 301.5
+      positionAbsolute:
+        x: 638
+        y: 301.5
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 迭代节点，对每个函数/类签名进行循环处理
+        error_handle_mode: terminated
+        height: 203
+        is_parallel: false
+        iterator_selector:
+        - '10000003'
+        - signatures
+        output_selector:
+        - '10000006'
+        - text
+        output_type: array[string]
+        parallel_nums: 1
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        startNodeType: llm
+        start_node_id: 10000005start
+        title: Iteration - 生成每个函数/类的代码
+        type: iteration
+        version: '1'
+        width: 377
+      height: 203
+      id: '10000004'
+      parentId: null
+      position:
+        x: 1246
+        y: 301.5
+      positionAbsolute:
+        x: 1246
+        y: 301.5
+      type: custom
+      width: 377
+      zIndex: 1
+    - data:
+        desc: 迭代开始节点，传递当前处理的函数/类签名
+        isInIteration: true
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: ''
+        type: iteration-start
+        version: '1'
+      height: 48
+      id: 10000004start
+      parentId: '10000004'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 1270
+        y: 369.5
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点，根据函数/类签名生成完整的实现代码
+        isInIteration: true
+        model:
+          completion_params:
+            stop:
+            - '```'
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 4741625b-505f-462d-b851-9aef4eab5fcd
+          role: system
+          text: '# Role
+
+            你接下来cosplay一个专业的程序猿，精通python java go 等多种语言。
+
+
+            # Task
+
+            你的任务是根据函数/类签名生成完整的实现代码。
+
+
+            # 要求
+
+            1. 只生成当前签名的完整实现代码，不要重复生成前置依赖代码
+
+            2. 代码必须符合目标语言{{#10000001.dest_lang#}}的语法规范
+
+            3. 保持代码风格一致
+
+            4. 不要包含任何解释性文字
+
+
+            # 输出格式
+
+            直接输出代码内容，用目标语言的代码块包裹（如```java或```python）'
+        - id: d4bc0226-67ce-411e-a44d-d7154ed15ef2
+          role: user
+          text: '目标语言: {{#10000001.dest_lang#}}
+
+            当前签名: {{#10000004.item#}}
+
+
+            请生成完整的实现代码:'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: LLM-生成函数/类实现
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '10000005'
+      parentId: '10000004'
+      position:
+        x: 117
+        y: 85
+      positionAbsolute:
+        x: 1363
+        y: 386.5
+      type: custom
+      width: 244
+      zIndex: 1001
+    - data:
+        code: "def main(code_snippets: list[str]) -> dict:\n    try:\n        # 合并所有代码片段\n\
+          \        combined_code = '\\n\\n'.join(code_snippets)\n        \n      \
+          \  return {\n            \"combined_code\": combined_code,\n           \
+          \ \"error\": \"\"\n        }\n    except Exception as e:\n        return\
+          \ {\n            \"combined_code\": \"\",\n            \"error\": str(e)\n\
+          \        }"
+        code_language: python3
+        desc: 合并所有生成的代码片段
+        outputs:
+          combined_code:
+            children: null
+            type: string
+          error:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 合并代码片段
+        type: code
+        variables:
+        - value_selector:
+          - '10000004'
+          - output
+          variable: code_snippets
+        version: '1'
+      height: 54
+      id: '10000006'
+      parentId: null
+      position:
+        x: 1646
+        y: 301.5
+      positionAbsolute:
+        x: 1646
+        y: 301.5
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终的翻译结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000006'
+          - combined_code
+          variable: final_code
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: End
+        type: end
+        version: '1'
+      height: 118
+      id: '10000007'
+      parentId: null
+      position:
+        x: 1900
+        y: 301.5
+      positionAbsolute:
+        x: 1900
+        y: 301.5
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

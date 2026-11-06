@@ -1,0 +1,97 @@
+nodes:
+- data:
+    desc: ''
+    is_team_authorization: true
+    output_schema:
+      properties:
+        images:
+          items:
+            properties:
+              size:
+                type: string
+              url:
+                type: string
+            type: object
+          type: array
+      type: object
+      default: 0
+      form: form
+      human_description:
+        en_US: Whether to add watermark.
+        ja_JP: Whether to add watermark.
+        pt_BR: Whether to add watermark.
+        zh_Hans: 生成图片是否包含水印，True 为生成，False为不生成，默认为不生成
+      label:
+        en_US: Watermark
+        ja_JP: Watermark
+        pt_BR: Watermark
+        zh_Hans: 水印
+      llm_description: 'Whether to add watermark. Default: false.'
+      max: null
+      min: null
+      name: watermark
+      options: []
+      placeholder: null
+      precision: null
+      required: false
+      scope: null
+      template: null
+      type: boolean
+    params:
+      height: ''
+      image: ''
+      image_urls: ''
+      prompt: ''
+      sequential_image_generation: ''
+      size: ''
+      watermark: ''
+      width: ''
+    provider_id: leo-digital/doubao-seedream/doubao-seedream
+    provider_name: leo-digital/doubao-seedream/doubao-seedream
+    provider_type: builtin
+    selected: false
+    title: ImageGenerations
+    tool_configurations:
+      height:
+        type: constant
+        value: null
+      image:
+        type: constant
+        value: null
+      image_urls:
+        type: mixed
+        value: null
+      prompt:
+        type: mixed
+        value: '{{#llm.text#}}'
+      sequential_image_generation:
+        type: constant
+        value: false
+      size:
+        type: constant
+        value: 2K
+      watermark:
+        type: constant
+        value: false
+      width:
+        type: constant
+        value: null
+    tool_description: 豆包文生图工具，使用 doubao-seedream-4.5 模型根据文本提示词生成图像
+    tool_label: ImageGenerations
+    tool_name: ImageGenerations
+    tool_parameters: {}
+    type: tool
+    version: '2'
+  height: 313
+  id: '1779793234417'
+  position:
+    x: 683
+    y: 282
+  positionAbsolute:
+    x: 683
+    y: 282
+  selected: false
+  sourcePosition: right
+  targetPosition: left
+  type: custom
+  width: 243

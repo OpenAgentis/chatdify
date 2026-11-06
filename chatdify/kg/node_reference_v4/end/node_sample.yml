@@ -1,0 +1,451 @@
+nodes:
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1721662209718'
+      - image_1_url
+      variable: image_1_url
+    - value_selector:
+      - '1721663585779'
+      - image_2_url
+      variable: image_2_url
+    - value_selector:
+      - '1721701419863'
+      - text
+      variable: red_content
+    - value_selector:
+      - '1721701644071'
+      - text
+      variable: red_hashtag
+    - value_selector:
+      - '1721712145556'
+      - text
+      variable: douyin_content
+    - value_selector:
+      - '1721714505836'
+      - text
+      variable: douyin_hashtag
+    - value_selector:
+      - '1721714550947'
+      - text
+      variable: x_thread_hashtag
+    - value_selector:
+      - '1721715546153'
+      - text
+      variable: ins_content_hashtag
+    - value_selector:
+      - '1721718701926'
+      - text
+      variable: bilibili_detail
+    - value_selector:
+      - '1721719115405'
+      - text
+      variable: youtube_detail
+    - value_selector:
+      - '1721726279422'
+      - image_3_url
+      variable: image_3_url
+    - value_selector:
+      - '1721726788584'
+      - image_4_url
+      variable: image_4_url
+    selected: false
+    title: 结束
+    type: end
+  id: '1721693244971'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '17323455383030'
+      - text
+      variable: cn
+    - value_selector:
+      - '1731079450460'
+      - text
+      variable: en
+    - value_selector:
+      - '17323455402970'
+      - text
+      variable: jp
+    selected: false
+    title: 结束
+    type: end
+  id: '1731079485152'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1728198077941'
+      - course_name
+      variable: course_name
+    - value_selector:
+      - '1728217105363'
+      - output
+      variable: course
+    selected: false
+    title: 结束
+    type: end
+  id: '1728198201864'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1732605368639'
+      - text
+      variable: text
+    - value_selector:
+      - '1732605537253'
+      - files
+      variable: tts
+    selected: false
+    title: 结束
+    type: end
+  id: '1732605556499'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1731555795064'
+      - status
+      variable: status
+    - value_selector:
+      - '1731555795064'
+      - content
+      variable: content
+    selected: false
+    title: 结束
+    type: end
+  id: '1731555960277'
+  selected: false
+  type: custom
+- data:
+    desc: 输出翻译结果
+    outputs:
+    - value_selector:
+      - '1720580885073'
+      - final_code
+      variable: final_code
+    selected: false
+    title: End
+    type: end
+  id: '1720582990256'
+  selected: true
+  type: custom
+- data:
+    desc: 生成视频描述信息
+    outputs:
+    - value_selector:
+      - '1737731818200'
+      - text
+      variable: name
+    selected: false
+    title: 结束
+    type: end
+  id: '1737731985294'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1731576295463'
+      - output
+      variable: output
+    selected: false
+    title: 结束
+    type: end
+  id: '1731576358614'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1731154414190'
+      - text
+      variable: text
+    selected: false
+    title: 结束
+    type: end
+  id: '1731154417489'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1745833171246'
+      - text
+      variable: status_result
+    selected: true
+    title: 结束
+    type: end
+  id: '1745196968185'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1740959206418'
+      - text
+      variable: text
+    selected: false
+    title: 结束
+    type: end
+  id: '1740959831740'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1732007419308'
+      - result
+      variable: output
+    selected: false
+    title: 结束
+    type: end
+  id: '1732007423290'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1719040452162'
+      - text
+      variable: answer
+    selected: false
+    title: 结束
+    type: end
+  id: '1719043735320'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1719054341069'
+      - output
+      variable: answer
+    selected: false
+    title: 结束 2
+    type: end
+  id: '1719047399639'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1719057705571'
+      - text
+      variable: answer
+    selected: false
+    title: 结束 3
+    type: end
+  id: '1719058363432'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1738651805602'
+      - result
+      variable: imageout
+    selected: false
+    title: 结束
+    type: end
+  id: '1738651831615'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1744107784971'
+      - output
+      variable: output
+    selected: false
+    title: 结束
+    type: end
+  id: '1744108757206'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1744108009563'
+      - text
+      variable: text
+    selected: false
+    title: 结束 2
+    type: end
+  id: '1744109017393'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1720795972410'
+      - output
+      variable: output
+    selected: false
+    title: End
+    type: end
+  id: '1720795855124'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1720801890321'
+      - text
+      variable: output
+    selected: false
+    title: End 2
+    type: end
+  id: '1720796099103'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1720802221378'
+      - text
+      variable: output
+    selected: false
+    title: End 3
+    type: end
+  id: '1720796150141'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1720802239924'
+      - text
+      variable: output
+    selected: false
+    title: End 4
+    type: end
+  id: '1720796175251'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1720839738650'
+      - text
+      variable: output
+    selected: false
+    title: End 5
+    type: end
+  id: '1720839772247'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1720761482451'
+      - output
+      variable: text
+    selected: false
+    title: End
+    type: end
+  id: '1713262577750'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1742437783058'
+      - text
+      variable: output
+    selected: true
+    title: 结束
+    type: end
+  id: '1742437797142'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1721731782529'
+      - image_url
+      variable: image_url
+    selected: false
+    title: End
+    type: end
+  id: '1721710662921'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1737015751556'
+      - output
+      variable: output
+    selected: false
+    title: 结束
+    type: end
+  id: '1737014987145'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1718853322658'
+      - text
+      variable: output
+    selected: false
+    title: 结束
+    type: end
+  id: '1719901804452'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs:
+    - value_selector:
+      - '1719028193404'
+      - result
+      variable: title_list
+    selected: false
+    title: 结束
+    type: end
+  id: '1719028267819'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    outputs: []
+    selected: false
+    title: 结束 4
+    type: end
+  id: '1719061487614'
+  selected: false
+  type: custom

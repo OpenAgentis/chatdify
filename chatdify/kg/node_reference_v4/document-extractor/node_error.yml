@@ -1,0 +1,8 @@
+node_error:
+- 'File variable not found for selector: [''list_operator_id'', ''item''] — list-operator无item输出，应使用[''list_operator_id'', ''result'']，且多文件时is_array_file为true'
+- Variable ['10000002', 'text'] is not an ArrayFileSegment
+- 'Unsupported Extension Type: .jpg'
+- Variable ['2', 'text'] is not an ArrayFileSegment
+- Variable ['10000005', 'text'] is not an ArrayFileSegment
+- Variable ['10000002', 'class_name'] is not an ArrayFileSegment
+- Variable ['10000001', 'target_product'] is not an ArrayFileSegment

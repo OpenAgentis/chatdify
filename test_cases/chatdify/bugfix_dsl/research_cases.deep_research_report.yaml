@@ -1,0 +1,286 @@
+app:
+  mode: workflow
+  name: deep_research_report
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: tool
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: document-extractor
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 5-source-6-target
+      source: '5'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的研究主题
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - label: Research Theme
+          max_length: 1024
+          required: true
+          type: paragraph
+          variable: Research_Theme
+        version: '1'
+      height: 90
+      id: '1'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 根据用户输入的研究主题进行网络搜索
+        parameters: {}
+        provider_id: tavily
+        provider_name: tavily
+        provider_type: builtin
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 30
+        title: 网络搜索
+        tool_configurations:
+          exclude_domains: null
+          include_answer: 0
+          include_domains: null
+          include_images: 0
+          include_raw_content: 0
+          max_results: 10
+          search_depth: basic
+        tool_label: TavilySearch
+        tool_name: tavily_search
+        tool_parameters:
+          query:
+            type: mixed
+            value: '{{#1.Research_Theme#}}'
+        type: tool
+        version: '1'
+      height: 98
+      id: '2'
+      parentId: null
+      position:
+        x: 400
+        y: 200
+      positionAbsolute:
+        x: 400
+        y: 200
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 处理搜索结果中的文档内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '2'
+        - text
+        version: '1'
+      height: 98
+      id: '3'
+      parentId: null
+      position:
+        x: 700
+        y: 300
+      positionAbsolute:
+        x: 700
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点，对提取的内容进行分析和整理
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的内容分析师。请对提供的文档内容进行深入分析和整理，提取关键信息并结构化呈现。确保分析结果准确、全面且易于理解。
+        - role: user
+          text: '请分析以下文档内容：
+
+            {{#3.text#}}
+
+
+            要求：
+
+            1. 提取核心观点和关键信息
+
+            2. 识别重要数据和事实
+
+            3. 组织成逻辑清晰的结构
+
+            4. 保持原始信息的准确性'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 内容分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '4'
+      parentId: null
+      position:
+        x: 1000
+        y: 400
+      positionAbsolute:
+        x: 1000
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 将LLM节点分析整理后的内容格式化为结构化的研究报告
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: '<h1>研究报告：{{ research_theme }}</h1>
+
+
+          <h2>分析摘要</h2>
+
+          <div>{{ analysis_summary }}</div>
+
+
+          <h2>关键发现</h2>
+
+          <div>{{ key_findings }}</div>
+
+
+          <h2>数据与事实</h2>
+
+          <div>{{ data_facts }}</div>
+
+
+          <h2>结论</h2>
+
+          <div>{{ conclusion }}</div>'
+        title: 研究报告格式化
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1'
+          - Research_Theme
+          variable: research_theme
+        - value_selector:
+          - '4'
+          - text
+          variable: analysis_summary
+        version: '1'
+      height: 98
+      id: '5'
+      parentId: null
+      position:
+        x: 1300
+        y: 400
+      positionAbsolute:
+        x: 1300
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终的研究报告结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '5'
+          - output
+          variable: report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 研究报告输出
+        type: end
+        version: '1'
+      height: 98
+      id: '6'
+      parentId: null
+      position:
+        x: 1600
+        y: 400
+      positionAbsolute:
+        x: 1600
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

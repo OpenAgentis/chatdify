@@ -1,0 +1,37 @@
+node_usage:
+  节点类型: loop-start
+  输入规范:
+    数据结构:
+      - 继承自BaseNodeData
+      - 无额外输入参数
+      - 不直接接收输入数据
+    必需字段:
+      - id: 节点唯一标识符
+      - parentId: 必须指向父Loop节点的ID
+      - type: 固定为"loop-start"
+      - isInLoop: 必须为true
+    配置要求:
+      - 不支持独立的数据输入输出操作
+      - 作为控制节点标记循环开始位置
+      - 通过父Loop节点的start_node_id进行关联
+  常见使用错误:
+    配置错误:
+      - 错误位置: 将loop-start节点放置在Loop节点外部
+      - parentId错误: parentId未指向正确的Loop节点ID
+      - 类型错误: type字段不是"loop-start"
+      - isInLoop未设置: isInLoop字段未设置为true
+      - 节点属性错误: 设置draggable或selectable为true
+    连接错误:
+      - loop_id不匹配: 边连接的loop_id与父Loop节点ID不一致
+      - 缺少下游节点: loop-start节点后没有连接处理节点
+      - 多个loop-start: 同一个Loop节点内存在多个loop-start节点
+      - 错误的sourceType: 边连接的sourceType不是"loop-start"
+    流程结构错误:
+      - 循环体为空: loop-start节点后没有实际的处理逻辑
+      - 循环依赖: 循环体内节点形成循环依赖关系
+      - 缺少循环控制: 没有适当的循环退出条件或计数控制
+    运行时错误:
+      - 父Loop节点配置错误: start_node_id未正确指向loop-start节点
+      - 循环图初始化失败: 循环图结构不完整或配置错误
+      - 变量池状态异常: 循环过程中变量池状态不正常
+      - 资源竞争: 并行模式下的资源访问冲突

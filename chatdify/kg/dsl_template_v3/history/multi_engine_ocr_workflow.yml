@@ -1,0 +1,366 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 多引擎OCR
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.10@ba0a7fc3151e89bf8645cd3abb3ccff971ee59e5b1127efca50b092dbb93bf80
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.0.25@2b6f549753c8fe1b8d0bda620eb0611b549d6d809da691baf0692ee75f6c507f
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1749037130780-source-1749037508048-target
+      selected: false
+      source: '1749037130780'
+      sourceHandle: source
+      target: '1749037508048'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1749037130780-source-1749037518986-target
+      source: '1749037130780'
+      sourceHandle: source
+      target: '1749037518986'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1749037130780-source-1749037526652-target
+      source: '1749037130780'
+      sourceHandle: source
+      target: '1749037526652'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: 1749037508048-source-1749037620540-target
+      source: '1749037508048'
+      sourceHandle: source
+      target: '1749037620540'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: 1749037518986-source-1749037620540-target
+      source: '1749037518986'
+      sourceHandle: source
+      target: '1749037620540'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: 1749037526652-source-1749037620540-target
+      source: '1749037526652'
+      sourceHandle: source
+      target: '1749037620540'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1749037620540-source-1749051076947-target
+      source: '1749037620540'
+      sourceHandle: source
+      target: '1749051076947'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - image
+          allowed_file_upload_methods:
+          - local_file
+          label: image
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: image
+      height: 90
+      id: '1749037130780'
+      position:
+        x: 59
+        y: 411
+      positionAbsolute:
+        x: 59
+        y: 411
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: chat
+          name: qwen-vl-max
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: 733ae742-0953-4f4d-a4a6-863ce22c8f59
+          role: system
+          text: 请提取图片内容，并输出为markdown格式，请不要省略内容，注意保留位置信息
+        - id: 8cf5c0cb-f53c-4781-9c00-ada7c0ac2d90
+          role: user
+          text: 输入的图片：{{#1749037130780.image#}}
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1749037130780'
+            - image
+          enabled: true
+      height: 90
+      id: '1749037508048'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: chat
+          name: qwen2.5-vl-72b-instruct
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: e033e2e3-d7d1-452b-a59d-d5345750b788
+          role: system
+          text: 请提取图片内容，并输出为markdown格式，请不要省略内容，注意保留位置信息
+        - role: user
+          text: 输入的图片：{{#1749037130780.image#}}
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1749037518986'
+      position:
+        x: 384
+        y: 411
+      positionAbsolute:
+        x: 384
+        y: 411
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: chat
+          name: qwen-vl-plus
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: f95c758f-ce1e-4eae-a0f7-c8ac917156c3
+          role: system
+          text: 请提取图片内容，并输出为markdown格式，请不要省略内容，注意保留位置信息
+        - role: user
+          text: 输入的图片：{{#1749037130780.image#}}
+        selected: false
+        title: LLM 3
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1749037130780'
+            - image
+          enabled: true
+      height: 90
+      id: '1749037526652'
+      position:
+        x: 384
+        y: 541
+      positionAbsolute:
+        x: 384
+        y: 541
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 4a49eda2-7ae8-4b66-9887-ca066917ef6c
+          role: system
+          text: '给你三个模型的OCR结果，请进行进一步的内容确认和融合，并将结果输出为markdown。
+
+            确认规则是：如果某个地方有两个或以上的模型识别结果一致，则认为是正确的，否则这个单元格的内容不符合需求，不需要输出。
+
+            '
+        - role: user
+          text: '模型1 OCR结果：{{#1749037508048.text#}}
+
+            模型2 OCR结果   {{#1749037518986.text#}}
+
+            模型3 OCR结果：{{#1749037526652.text#}}'
+        selected: false
+        title: LLM 4
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1749037620540'
+      position:
+        x: 738
+        y: 398
+      positionAbsolute:
+        x: 738
+        y: 398
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1749037620540'
+          - text
+          variable: text
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1749051076947'
+      position:
+        x: 1042
+        y: 398
+      positionAbsolute:
+        x: 1042
+        y: 398
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 62
+      y: -91
+      zoom: 1

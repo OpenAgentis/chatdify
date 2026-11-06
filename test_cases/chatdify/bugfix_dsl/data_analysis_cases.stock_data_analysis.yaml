@@ -1,0 +1,366 @@
+app:
+  mode: workflow
+  name: stock_data_analysis
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: http-request
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 10000004-source-10000005-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 10000005-source-10000006-target
+      source: '10000005'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的股票代码和时间范围参数
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 股票分析参数
+        type: start
+        variables:
+        - label: 股票代码
+          max_length: 10
+          required: true
+          type: text-input
+          variable: stock_code
+        - label: 开始日期(YYYY-MM-DD)
+          max_length: 10
+          required: true
+          type: text-input
+          variable: start_date
+        - label: 结束日期(YYYY-MM-DD)
+          max_length: 10
+          required: true
+          type: text-input
+          variable: end_date
+        - label: 时间周期
+          options:
+          - 1d
+          - 1w
+          - 1m
+          required: true
+          type: select
+          variable: time_frame
+        version: '1'
+      height: 180
+      id: '10000001'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - id: key-value-1
+            key: ''
+            type: text
+            value: "{\n  \"symbol\": \"{{#10000001.stock_code#}}\",\n  \"start_date\"\
+              : \"{{#10000001.start_date#}}\",\n  \"end_date\": \"{{#10000001.end_date#}}\"\
+              ,\n  \"interval\": \"{{#10000001.time_frame#}}\"\n}"
+          type: json
+        desc: 调用股票API获取历史K线数据
+        headers: accept:application/json
+        isInIteration: false
+        isInLoop: false
+        method: GET
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 获取股票K线数据
+        type: http-request
+        url: https://api.example.com/stock/history
+        variables: []
+        version: '1'
+      height: 136
+      id: '10000002'
+      parentId: null
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import pandas as pd\nimport numpy as np\n\ndef main(stock_data: dict)\
+          \ -> dict:\n    try:\n        # 将输入数据转换为DataFrame\n        df = pd.DataFrame(stock_data['data'])\n\
+          \        \n        # 计算MACD指标\n        exp12 = df['close'].ewm(span=12,\
+          \ adjust=False).mean()\n        exp26 = df['close'].ewm(span=26, adjust=False).mean()\n\
+          \        df['macd'] = exp12 - exp26\n        df['signal'] = df['macd'].ewm(span=9,\
+          \ adjust=False).mean()\n        df['hist'] = df['macd'] - df['signal']\n\
+          \        \n        # 计算RSI指标\n        delta = df['close'].diff()\n     \
+          \   gain = delta.where(delta > 0, 0)\n        loss = -delta.where(delta\
+          \ < 0, 0)\n        avg_gain = gain.rolling(window=14).mean()\n        avg_loss\
+          \ = loss.rolling(window=14).mean()\n        rs = avg_gain / avg_loss\n \
+          \       df['rsi'] = 100 - (100 / (1 + rs))\n        \n        # 返回计算结果\n\
+          \        return {\n            \"result\": {\n                \"dates\"\
+          : df['date'].tolist(),\n                \"close_prices\": df['close'].tolist(),\n\
+          \                \"macd\": df['macd'].tolist(),\n                \"signal\"\
+          : df['signal'].tolist(),\n                \"hist\": df['hist'].tolist(),\n\
+          \                \"rsi\": df['rsi'].tolist()\n            },\n         \
+          \   \"error\": None\n        }\n    \n    except Exception as e:\n     \
+          \   return {\n            \"result\": None,\n            \"error\": str(e)\n\
+          \        }"
+        code_language: python3
+        desc: 计算股票技术指标（MACD、RSI等）
+        outputs:
+          error:
+            children: null
+            type: string
+          result:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 计算技术指标
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - body
+          variable: stock_data
+        version: '1'
+      height: 180
+      id: '10000003'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析股票技术指标并生成趋势分析报告
+        model:
+          completion_params:
+            max_tokens: 1024
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        outputs:
+          text:
+            children: null
+            type: string
+        prompt_template:
+        - role: system
+          text: '你是一位专业的股票分析师。请根据提供的股票技术指标数据，包括收盘价、MACD指标、RSI指标等，生成一份详细的技术分析报告。报告应包括以下内容：
+
+
+            1. 当前股票价格趋势分析
+
+            2. MACD指标解读（金叉/死叉信号）
+
+            3. RSI指标解读（超买/超卖情况）
+
+            4. 综合买卖建议
+
+
+            请使用专业但易懂的语言，避免使用过于技术性的术语。报告格式应为Markdown格式，包含清晰的标题和分段。'
+        - role: user
+          text: '请分析以下股票技术指标数据并生成报告：
+
+
+            {{#10000003.result#}}'
+        retry_config:
+          max_retries: 2
+          retry_enabled: true
+          retry_interval: 30
+        timeout: 120
+        title: 股票趋势分析报告
+        type: llm
+        variables:
+        - value_selector:
+          - '10000003'
+          - result
+          variable: stock_indicators
+        version: '1'
+        vision:
+          enabled: false
+      height: 200
+      id: '10000004'
+      parentId: null
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+      type: custom
+      width: 300
+      zIndex: 0
+    - data:
+        code: "import json\nimport matplotlib.pyplot as plt\nimport base64\nfrom io\
+          \ import BytesIO\n\ndef extract_json_from_markdown(markdown_text: str) ->\
+          \ str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(analysis_report:\
+          \ str) -> dict:\n    try:\n        # 预处理输入\n        json_text = extract_json_from_markdown(analysis_report)\n\
+          \        data = json.loads(json_text)\n        \n        # 创建可视化图表\n   \
+          \     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 12))\n    \
+          \    \n        # 价格走势图\n        ax1.plot(data['dates'], data['close_prices'],\
+          \ label='收盘价', color='blue')\n        ax1.set_title('股票价格走势')\n        ax1.set_ylabel('价格')\n\
+          \        ax1.legend()\n        \n        # MACD指标图\n        ax2.plot(data['dates'],\
+          \ data['macd'], label='MACD', color='blue')\n        ax2.plot(data['dates'],\
+          \ data['signal'], label='信号线', color='orange')\n        ax2.bar(data['dates'],\
+          \ data['hist'], label='柱状图', color='gray')\n        ax2.set_title('MACD指标')\n\
+          \        ax2.set_ylabel('值')\n        ax2.legend()\n        \n        #\
+          \ RSI指标图\n        ax3.plot(data['dates'], data['rsi'], label='RSI', color='purple')\n\
+          \        ax3.axhline(70, color='red', linestyle='--', label='超买线')\n   \
+          \     ax3.axhline(30, color='green', linestyle='--', label='超卖线')\n    \
+          \    ax3.set_title('RSI指标')\n        ax3.set_ylabel('RSI值')\n        ax3.legend()\n\
+          \        \n        plt.tight_layout()\n        \n        # 将图表转换为base64编码\n\
+          \        buf = BytesIO()\n        plt.savefig(buf, format='png', dpi=100)\n\
+          \        plt.close()\n        image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')\n\
+          \        \n        return {\n            \"visualization\": image_base64,\n\
+          \            \"analysis_report\": analysis_report,\n            \"error\"\
+          : None\n        }\n        \n    except Exception as e:\n        return\
+          \ {\n            \"visualization\": None,\n            \"analysis_report\"\
+          : analysis_report,\n            \"error\": str(e)\n        }"
+        code_language: python3
+        desc: 将股票分析报告转换为可视化图表
+        outputs:
+          analysis_report:
+            children: null
+            type: string
+          error:
+            children: null
+            type: string
+          visualization:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 2
+          retry_enabled: true
+          retry_interval: 30
+        timeout: 120
+        title: 生成可视化图表
+        type: code
+        variables:
+        - value_selector:
+          - '10000004'
+          - text
+          variable: analysis_report
+        version: '1'
+      height: 200
+      id: '10000005'
+      parentId: null
+      position:
+        x: 1300
+        y: 100
+      positionAbsolute:
+        x: 1300
+        y: 100
+      type: custom
+      width: 300
+      zIndex: 0
+    - data:
+        desc: 输出最终分析结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000005'
+          - visualization
+          variable: visualization
+        - value_selector:
+          - '10000005'
+          - analysis_report
+          variable: analysis_report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 股票分析结果输出
+        type: end
+        version: '1'
+      height: 120
+      id: '10000006'
+      parentId: null
+      position:
+        x: 1600
+        y: 100
+      positionAbsolute:
+        x: 1600
+        y: 100
+      type: custom
+      width: 300
+      zIndex: 0
+    type: custom

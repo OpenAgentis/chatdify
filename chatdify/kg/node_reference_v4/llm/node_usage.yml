@@ -1,0 +1,29 @@
+node_usage:
+  节点类型: llm
+  输入规范:
+      - 提示词模板：支持Chat模式（消息列表）和Completion模式（单一文本），不能为空。
+      - 模型配置：需要选择合适的大语言模型，包括模型提供商、模型名称和模型参数。
+      - 变量选择器：在提示词中可以通过输入"/"或"{"呼出变量插入菜单，插入上游节点变量。 
+      - Jinja2变量：支持配置Jinja2变量，变量名和选择器路径不能为空。
+      - Vision配置：当启用视觉能力时，需要配置图片变量选择器。
+          - 【vision 只能引用文件类型变量】vision.configs.variable_selector 必须指向 file / file-list / array[file] 类型变量，通常是 start 节点的图片变量（如 10000001.image_file）。
+          - 禁止引用 object / array[object] / 字符串等非文件变量，禁止引用 code 节点输出，禁止引用值为 object 的迭代 item（运行期会报错 Invalid variable type：ObjectVariable）。
+          - 不要用 code 节点把图片 File 打包进 object 再让 vision 引用（既触发 ObjectVariable，也触发 Type is not JSON serializable：File）。
+          - 多模型并行 OCR 等场景：让 iteration 遍历模型名数组（array[string]，由 code 输出纯字符串列表），迭代内 LLM 的 model 用 item，vision 仍直接引用 start 节点的图片变量；或并列多个固定模型的 LLM 节点，vision 都引用 start 图片。
+      - Context配置：当启用上下文时，需要配置上下文变量选择器。
+      - 会话历史：在Chatflow类型应用中，支持插入AI与用户之间的聊天历史。 
+  常见使用错误:
+      - 提示词模板不能为空：确保Chat模式下每个消息或Completion模式下的文本不为空。
+      - 变量引用错误：确保引用的变量是当前节点的前置节点输出的变量，变量路径格式正确。
+      - 输出变量错误：确保引用的输出变量在节点的可用输出列表中。
+      - 变量名不能为空：Jinja2变量配置时，变量名必须填写。
+      - 变量选择器路径不能为空：所有变量选择器的路径都必须正确配置。
+      - Vision变量选择器不能为空：启用视觉功能时，必须配置图片变量选择器。
+      - Vision变量选择器不是文件类型：vision 引用了 object/array[object]/字符串或 code 输出或值为 object 的迭代 item，运行期报错 Invalid variable type：ObjectVariable。vision 必须直接引用 start 节点的 file/file-list 图片变量。
+      - Context变量选择器不能为空：启用上下文功能时，必须配置上下文变量选择器。
+      - 变量不存在：确保变量池中存在所选的变量。
+      - 节点不是前置节点：引用的节点必须是当前节点的前置节点。
+      - 迭代节点变量引用错误：迭代节点的输出变量名必须为item（迭代内部引用）或output（迭代外部引用）。
+      - If-Else节点变量引用错误：If-Else节点不能被作为变量引用。
+      - Agent节点变量引用错误：Agent节点的输出变量名必须为text。
+      - Question-Classifier节点变量引用错误：Question-Classifier节点的输出变量名必须为class_name。

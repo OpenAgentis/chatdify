@@ -1,0 +1,27 @@
+edge_usage:
+  节点类型: assigner
+  使用规范:
+      - 变量赋值节点用于向可写入变量进行变量赋值，主要用于 conversation.* 会话变量或 loop 变量等可写状态。 
+      - 通过变量赋值节点，可以将工作流内的变量赋值到会话变量中用于临时存储，并可以在后续对话中持续引用。 
+      - 支持多种操作类型：覆写(over-write)、清空(clear)、追加(append)、扩展(extend)、设置(set)、加法(+=)、减法(-=)、乘法(*=)、除法(/=)。
+      - 支持两种输入类型：变量(variable)和常量(constant)。
+      - 可以处理多种数据类型：字符串、数字、对象、数组等。
+      - 节点没有输出，主要用于修改变量池中的变量值。
+      - 在 workflow 批处理 iteration 中不要默认使用 assigner 汇总每轮结果；优先让 iteration.output_selector 指向迭代体内部最终节点输出。
+      - 只有明确需要写入 conversation.*、跨轮持久状态，或更新 loop/会话级可写变量时，才在 iteration/loop 内连接 assigner。
+  多轮对话场景（advanced-chat）:
+    - assigner 是 advanced-chat 多轮对话保存"跨轮状态"的核心节点：把节点输出或常量写入 conversation 会话变量（如 conversation.phase、conversation.current_round、conversation.dialogue_history），下一轮对话仍可读取。
+    - 典型用法：over-write 更新阶段/轮次，append 追加对话历史，+= 累加计数；写入目标 variable_selector 形如 [conversation, 变量名]。
+    - 与 answer 节点配合形成"暂停点"：assigner 更新状态后由 answer 输出本轮回复并等待用户下一条消息（sys.query）。
+    - 多轮对话请用 assigner + conversation 变量 + if-else 实现，不要用 agent 节点，也不要用 loop 在一次运行内跑满多轮。
+  应用场景:
+    适用场景:
+      - 多轮对话状态保存：将轮次计数、对话历史、当前阶段等写入 conversation 会话变量，供后续轮次读取
+      - loop 循环变量或会话状态更新：在循环/对话过程中更新可写变量
+      - 变量值初始化：为会话变量设置初始值或重置变量
+      - 数据聚合存储：仅当结果需要跨轮保存在 conversation.* 等可写变量中时，将节点输出追加/覆盖到数组变量
+    不适用场景:
+      - Assigner节点仅用于变量赋值，不进行复杂数据计算
+      - 不进行数据类型转换或格式化处理
+      - 普通 workflow iteration 的结果收集：应使用 iteration.output_selector，而不是 assigner append
+  常见使用错误: ""
