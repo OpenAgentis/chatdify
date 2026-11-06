@@ -1,12 +1,6 @@
 # ChatDify
 
-<p align="center">
-  <a href="https://arxiv.org/abs/2611.01563"><img src="https://img.shields.io/badge/arXiv-2611.01563-b31b1b.svg?logo=arxiv" alt="arXiv"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License: Apache 2.0"></a>
-  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3776AB.svg?logo=python&logoColor=white" alt="Python"></a>
-  <a href="#升级-dify"><img src="https://img.shields.io/badge/Dify-Workflow-1C64F2.svg" alt="Dify Workflow"></a>
-  <a href="https://github.com/OpenAgentis/chatdify/stargazers"><img src="https://img.shields.io/github/stars/OpenAgentis/chatdify?style=social" alt="GitHub stars"></a>
-</p>
+![arXiv](https://img.shields.io/badge/arXiv-2611.01563-b31b1b.svg?logo=arxiv)![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)![Python](https://img.shields.io/badge/Python-3776AB.svg?logo=python&logoColor=white)![Dify Workflow](https://img.shields.io/badge/Dify-Workflow-1C64F2.svg)![GitHub stars](https://img.shields.io/github/stars/OpenAgentis/chatdify?style=social)
 
 [English](README.md) | 简体中文
 
@@ -15,7 +9,7 @@
 ```bash
 git clone --recurse-submodules --shallow-submodules https://github.com/OpenAgentis/chatdify.git
 cd chatdify && pip install -e ".[dify]"
-chatdify init                                   # 配置任意 OpenAI 兼容的大模型
+chatdify init                                   
 chatdify generate "把用户输入的文本翻译成指定语言的文本" -o translate.yml
 ```
 
@@ -39,7 +33,6 @@ chatdify generate "把用户输入的文本翻译成指定语言的文本" -o tr
 ## 工作原理
 
 ![ChatDify 框架图](examples/ui/chatdify_framework.png)
-
 
 所有命令都运行同一个闭环：每一轮依次执行 Planner → Executor → Reviewer；Reviewer 不通过时，它的评审意见作为下一轮的反馈，最多 `max_retries` 轮。
 
