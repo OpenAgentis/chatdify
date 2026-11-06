@@ -1,0 +1,257 @@
+nodes:
+- data:
+    desc: ''
+    provider_id: langgenius/jina_tool/jina
+    provider_name: langgenius/jina_tool/jina
+    provider_type: builtin
+    selected: true
+    title: 获取单页面
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 1000
+    tool_configurations:
+      gather_all_images_at_the_end:
+        type: constant
+        value: 1
+      gather_all_links_at_the_end:
+        type: constant
+        value: 1
+      image_caption:
+        type: constant
+        value: 1
+      max_retries:
+        type: constant
+        value: 3
+      no_cache:
+        type: constant
+        value: 1
+      proxy_server:
+        type: constant
+        value: null
+      remove_selector:
+        type: constant
+        value: null
+      retain_images:
+        type: constant
+        value: 1
+      summary:
+        type: constant
+        value: 0
+      target_selector:
+        type: constant
+        value: null
+      wait_for_selector:
+        type: constant
+        value: null
+      with_iframe:
+        type: constant
+        value: 1
+      with_shadow_dom:
+        type: constant
+        value: 1
+    tool_label: 获取单页面
+    tool_name: jina_reader
+    tool_parameters:
+      request_params:
+        type: mixed
+        value: ''
+      url:
+        type: mixed
+        value: '{{#1740959153996.api_url#}}'
+    type: tool
+    version: '2'
+  id: '1741521838680'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    isInIteration: true
+    isIterationStart: true
+    iteration_id: '1716911333343'
+    provider_id: langgenius/jina_tool/jina
+    provider_name: langgenius/jina_tool/jina
+    provider_type: builtin
+    selected: false
+    title: JinaReader
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 1000
+    tool_configurations:
+      gather_all_images_at_the_end:
+        type: constant
+        value: 0
+      gather_all_links_at_the_end:
+        type: constant
+        value: 0
+      image_caption:
+        type: constant
+        value: 0
+      no_cache:
+        type: constant
+        value: 0
+      proxy_server:
+        type: constant
+        value: null
+      summary:
+        type: constant
+        value: 0
+      target_selector:
+        type: constant
+        value: null
+      wait_for_selector:
+        type: constant
+        value: null
+    tool_label: JinaReader
+    tool_name: jina_reader
+    tool_parameters:
+      url:
+        type: mixed
+        value: '{{#1716911333343.item#}}'
+    type: tool
+    version: '2'
+  extent: parent
+  id: '1720758285748'
+  parentId: '1716911333343'
+  selected: false
+  type: custom
+  zIndex: 1001
+- data:
+    desc: ''
+    provider_id: langgenius/jina_tool/jina
+    provider_name: langgenius/jina_tool/jina
+    provider_type: builtin
+    selected: false
+    title: 英文
+    tool_configurations:
+      gather_all_images_at_the_end:
+        type: constant
+        value: 0
+      gather_all_links_at_the_end:
+        type: constant
+        value: 0
+      image_caption:
+        type: constant
+        value: 0
+      max_retries:
+        type: constant
+        value: 3
+      no_cache:
+        type: constant
+        value: 0
+      proxy_server:
+        type: constant
+        value: null
+      summary:
+        type: constant
+        value: 0
+      target_selector:
+        type: constant
+        value: null
+      wait_for_selector:
+        type: constant
+        value: null
+    tool_label: 获取单页面
+    tool_name: jina_reader
+    tool_parameters:
+      url:
+        type: mixed
+        value: https://raw.githubusercontent.com/langgenius/dify-docs/refs/heads/main/en/{{#1731078730206.url#}}
+    type: tool
+    version: '2'
+  id: '17310793844280'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    provider_id: langgenius/jina_tool/jina
+    provider_name: langgenius/jina_tool/jina
+    provider_type: builtin
+    selected: false
+    title: 日文
+    tool_configurations:
+      gather_all_images_at_the_end:
+        type: constant
+        value: 0
+      gather_all_links_at_the_end:
+        type: constant
+        value: 0
+      image_caption:
+        type: constant
+        value: 0
+      max_retries:
+        type: constant
+        value: 3
+      no_cache:
+        type: constant
+        value: 0
+      proxy_server:
+        type: constant
+        value: null
+      summary:
+        type: constant
+        value: 0
+      target_selector:
+        type: constant
+        value: null
+      wait_for_selector:
+        type: constant
+        value: null
+    tool_label: 获取单页面
+    tool_name: jina_reader
+    tool_parameters:
+      url:
+        type: mixed
+        value: https://raw.githubusercontent.com/langgenius/dify-docs/refs/heads/main/jp/{{#1731078730206.url#}}
+    type: tool
+    version: '2'
+  id: '17310794023810'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    provider_id: langgenius/jina_tool/jina
+    provider_name: langgenius/jina_tool/jina
+    provider_type: builtin
+    selected: false
+    title: 中文
+    tool_configurations:
+      gather_all_images_at_the_end:
+        type: constant
+        value: 0
+      gather_all_links_at_the_end:
+        type: constant
+        value: 0
+      image_caption:
+        type: constant
+        value: 0
+      max_retries:
+        type: constant
+        value: 3
+      no_cache:
+        type: constant
+        value: 0
+      proxy_server:
+        type: constant
+        value: null
+      summary:
+        type: constant
+        value: 0
+      target_selector:
+        type: constant
+        value: null
+      wait_for_selector:
+        type: constant
+        value: null
+    tool_label: Fetch Single Page
+    tool_name: jina_reader
+    tool_parameters:
+      url:
+        type: mixed
+        value: https://raw.githubusercontent.com/langgenius/dify-docs/refs/heads/main/zh_CN/{{#1731078730206.url#}}
+    type: tool
+    version: '2'
+  id: '1732344950523'
+  selected: false
+  type: custom

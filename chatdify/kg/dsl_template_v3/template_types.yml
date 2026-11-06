@@ -1,0 +1,15 @@
+# 节点类型配置文件
+# 优先级：此配置文件 > 目录扫描
+template_types:
+  # 基础节点
+  - history
+  - self_gen
+  - crawl
+  - tool_usage
+
+# 配置元信息
+metadata:
+  version: "1.0"
+  description: "模版配置文件"
+  last_updated: "2025-08-27"
+  fallback_to_directory: true  # 当配置文件不存在时，是否降级到扫描所有子目录

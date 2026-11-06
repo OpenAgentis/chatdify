@@ -1,0 +1,39 @@
+nodes:
+- data:
+    agent_parameters:
+      model:
+        type: constant
+        value:
+          completion_params: {}
+          mode: chat
+          model: gpt-4o-mini
+          model_type: llm
+          provider: langgenius/openai/openai
+          type: model-selector
+      query:
+        type: constant
+        value: '{{#sys.query#}}'
+      storage_key:
+        type: constant
+        value: '{{#sys.conversation_id#}}'
+      task_schema:
+        type: constant
+        value: "      {\n        \"fields\": [\n          {\n            \"name\"\
+          : \"destination\",\n            \"question\": \"请问您想去哪里旅行？\",\n        \
+          \    \"required\": true\n          },\n          {\n            \"name\"\
+          : \"duration\",\n            \"question\": \"您计划旅行多长时间？\",\n           \
+          \ \"required\": true\n          },\n          {\n            \"name\": \"\
+          budget\",\n            \"question\": \"您的预算大约是多少？\",\n            \"required\"\
+          : true\n          }\n        ]\n      }"
+    agent_strategy_label: 多轮对话
+    agent_strategy_name: TOD
+    agent_strategy_provider_name: afeaad50-3ca8-4d6b-8e95-ca6993bb2951/agent/agent
+    desc: ''
+    output_schema: null
+    plugin_unique_identifier: afeaad50-3ca8-4d6b-8e95-ca6993bb2951/agent:0.0.1@041f354ba09c869b9e16a69d6a5dfea1f46acdb24fedd355e26a93c9bbc3b531
+    selected: false
+    title: Agent
+    type: agent
+  id: '1740645185279'
+  selected: true
+  type: custom

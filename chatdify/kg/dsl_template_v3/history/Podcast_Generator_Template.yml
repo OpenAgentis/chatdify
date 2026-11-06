@@ -1,0 +1,726 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: NotebookLM by Dify.AI
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.2
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: true
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 1
+    opening_statement: 'Click the button to start generating the podcast after uploading
+      the file👇
+
+      And choose the corresponding podcast length, tone, as well as the language of
+      the podcast and the name of the host.'
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - click me！
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      autoPlay: enabled
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1727675554894-source-1727591530544-target
+      selected: false
+      source: '1727675554894'
+      sourceHandle: source
+      target: '1727591530544'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: answer
+        targetType: llm
+      id: 1727591530544-source-1727675911704-target
+      selected: false
+      source: '1727591530544'
+      sourceHandle: source
+      target: '1727675911704'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1727675911704-source-1727676032290-target
+      selected: false
+      source: '1727675911704'
+      sourceHandle: source
+      target: '1727676032290'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1727578865729-source-1727580169317-target
+      selected: false
+      source: '1727578865729'
+      sourceHandle: source
+      target: '1727580169317'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 1727580169317-source-1727591428555-target
+      selected: false
+      source: '1727580169317'
+      sourceHandle: source
+      target: '1727591428555'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: answer
+        targetType: template-transform
+      id: 1727676032290-source-1729055989670-target
+      selected: false
+      source: '1727676032290'
+      sourceHandle: source
+      target: '1729055989670'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: answer
+      id: 1729056119524-source-1729056149073-target
+      selected: false
+      source: '1729056119524'
+      sourceHandle: source
+      target: '1729056149073'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1727591428555-source-1727675554894-target
+      selected: false
+      source: '1727591428555'
+      sourceHandle: source
+      target: '1727675554894'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: answer
+      id: 1729055989670-source-1729097333550-target
+      selected: false
+      source: '1729055989670'
+      sourceHandle: source
+      target: '1729097333550'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: answer
+        targetType: tool
+      id: 1729097333550-source-1729056119524-target
+      selected: false
+      source: '1729097333550'
+      sourceHandle: source
+      target: '1729056119524'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: file
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: file
+        - label: tone
+          max_length: 48
+          options:
+          - 'CASUAL = "TONE: The tone of the podcast should be casual and conversational"'
+          - 'FORMAL = "TONE: The tone of the podcast should be formal and professional"'
+          - '    HUMOROUS = "TONE: The tone of the podcast should be humorous and
+            light-hearted"    HUMOROUS = "TONE: The tone of the podcast should be
+            humorous and light-hearted"'
+          - 'SERIOUS = "TONE: The tone of the podcast should be serious and informative"'
+          - 'EDUCATIONAL = "TONE: The tone of the podcast should be educational and
+            instructive"'
+          - 'INSPIRATIONAL = "TONE: The tone of the podcast should be inspirational
+            and motivational"'
+          - 'CONTROVERSIAL = "TONE: The tone of the podcast should be controversial
+            and thought-provoking"'
+          - 'STORYTELLING = "TONE: The tone of the podcast should be narrative and
+            storytelling"'
+          - ' INVESTIGATIVE = "TONE: The tone of the podcast should be investigative
+            and analytical"'
+          - ' DEBATE = "TONE: The tone of the podcast should be debate-style and argumentative"'
+          required: true
+          type: select
+          variable: tone
+        - label: host_name
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: host_name
+        - label: guest_name
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: guest_name
+        - label: language
+          max_length: 48
+          options:
+          - 中文
+          - English
+          - 日本語
+          required: true
+          type: select
+          variable: language
+      height: 194
+      id: '1727578865729'
+      position:
+        x: 363.142957965791
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 363.142957965791
+        y: 274.87198362549776
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        is_array_file: false
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1727578865729'
+        - file
+      height: 94
+      id: '1727580169317'
+      position:
+        x: 661.7296503826896
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 661.7296503826896
+        y: 274.87198362549776
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-241226
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: e77d2b26-44a2-47d6-a64a-37c0d0e4d7b2
+          role: system
+          text: 你是一位世界级的播客制作人。你的任务是将提供的输入文本转化为引人入胜且富有信息量的播客脚本。你将收到一段可能结构不清晰或杂乱无章的文本，这些文本来源于PDF文件或网页。忽略无关的信息或格式问题。你的重点是提取出最有趣和最具洞察力的内容，以便进行播客讨论。
+        - id: cafd9e23-9b91-415d-a9a6-b5be7d6c5621
+          role: user
+          text: 'context：{{#1727580169317.text#}}
+
+
+            # Steps to Follow:
+
+
+            1. **分析输入：** 仔细检查文本，识别关键主题、观点以及可以推动引人入胜的播客对话的有趣事实或轶事。忽略不相关的信息或格式问题。 2.
+            **集思广益的想法：** 在“<scratchpad>”中，创造性地集思广益，以引人入胜的方式呈现要点。考虑： - 类比、讲故事的技巧或假设场景，使内容具有相关性
+            - 让普通受众能够理解复杂主题的方法 - 在播客期间探索发人深省的问题 - 创意填补信息空白的方法
+
+
+            '
+        selected: true
+        title: 分析输入
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - sys
+            - files
+          enabled: false
+      height: 98
+      id: '1727591428555'
+      position:
+        x: 661.7296503826896
+        y: 415.73439185131787
+      positionAbsolute:
+        x: 661.7296503826896
+        y: 415.73439185131787
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1727675554894.text#}}'
+        desc: ''
+        selected: false
+        title: 对话
+        type: answer
+        variables: []
+      height: 103
+      id: '1727591530544'
+      position:
+        x: 961.5606056628817
+        y: 415.73439185131787
+      positionAbsolute:
+        x: 961.5606056628817
+        y: 415.73439185131787
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1727580169317'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.8
+          mode: chat
+          name: deepseek-v3-241226
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 1a516c46-2987-48dc-b8b2-b328cce43e31
+          role: system
+          text: "您是世界级的播客制作人。 您的任务是将提供的输入文本转换为引人入胜且信息丰富的播客脚本。 您将收到一个可能是非结构化或混乱的文本作为输入，这些文本来自以下地方PDF\
+            \ 或网页。忽略不相关的信息或格式问题。 您的重点是为播客讨论提取最有趣和最有洞察力的内容。目标是在{{#1727578865729.host_name#}}\
+            \ 和 {{#1727578865729.guest_name#}}之间实现自然的对话流程\n角色与动态：指令定义了主持人和专家的角色，确保他们相辅相成。主持人热情地强调有趣的观点，而专家则提供分析、背景和更广泛的视角\
+            \ - 深入探讨：指令强调超越表面信息，以揭示关键见解和“知识金 nuggets”，让听众感到自己学到了新东西 - 目标受众：系统提示概述了理想听众的特征，他们重视效率，欣赏难忘细节，并寻求引人入胜的学习体验\
+            \ - 结构与传递：系统提示强调清晰结构和吸引人的传递方式的重要性，使用路标来引导听众，避免单调、机械化的语调\n   - 使用最佳想法来自\
+            \  \n{{#1727591428555.text#}} \n    令人难忘的例子：现实世界的例子和相关的轶事对于让信息深入人心至关重要。系统提示强调将信息生动化，促进参与，并确保学习超越这一集。\n\
+            \   - 确保复杂主题被清晰简单地解释。\n   - 专注于保持引人入胜且 \n {{#1727578865729.tone#}}以吸引听众。\n\
+            \   - 规则：\n        > 主持人总是先发言并采访嘉宾。嘉宾负责解释主题。\n        > 主持人应向嘉宾提问。\n \
+            \       > 主持人在最后应总结关键见解。\n        > 在主持人与嘉宾的回答中包含常见的口头填充词，如“呃”和“嗯”。这样可以使剧本更真实。\n\
+            \        > 主持人与嘉宾可以互相打断。\n        > 嘉宾不得包含营销或自我宣传内容。\n        > 嘉宾不得包括任何未在输入文本中证实的材料。\n\
+            \        > 这将是一场适合所有年龄段的对话。\n        > 当输出接近结尾时，剧本中无需提供结束部分；结束部分将在另一个剧本中给出。\n"
+        - id: 66bdff46-8857-4c3e-83f4-98d572e24dec
+          role: user
+          text: '现在，开发播客对话。 请使用播客指定的语言
+
+            - context：{{#context#}}
+
+            - language：{{#1727578865729.language#}}
+
+            - host：{{#1727578865729.host_name#}}
+
+            - guest：{{#1727578865729.guest_name#}}
+
+            - tone：{{#1727578865729.tone#}}
+
+            - 主持人和嘉宾的名字不受语言限制。 - 脚本格式和内容 -- 脚本以主持人说话开始 -- 主持人和嘉宾之间交替对话，一行在a time --
+            在每行开头省略发言者姓名 -- 使用提供的名称进行主人和客人的自我介绍 -- 以名字称呼对方，以营造友好的氛围 -- 专注于创建引人入胜的、来回的对话
+            - 输出要求 **脚本格式**：脚本应以主持人讲话开始。对话应由主人和客人轮流进行，每次说一行。每行开头请勿包含说话者姓名。 **输出要求**：最终脚本应仅包含对话内容。避免在输出中包含任何
+            XML 标签或其他格式。 通过遵循这些说明，您将创建一个内容丰富且引人入胜的高质量播客脚本
+
+            '
+        selected: false
+        title: 制作对话
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - sys
+            - files
+          enabled: false
+      height: 98
+      id: '1727675554894'
+      position:
+        x: 972.1049049903961
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 972.1049049903961
+        y: 274.87198362549776
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1727675554894'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            temperature: 1
+          mode: chat
+          name: deepseek-v3-241226
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 4db75ca9-eb9b-4885-b710-a4d860d0c58d
+          role: system
+          text: "在对话结束时，主持人和嘉宾应该自然地总结关键见解。这应该感觉像是一场随意的谈话，而不是正式的回顾，在签字之前最后一次强调主要观点，并进行自然过渡。**总结关键见解：**\
+            \ 自然地将关键点的总结融入对话的结尾部分。这应该感觉像是一场随意的谈话，而不是正式的回顾，在签字之前强化主要收获。  \n- 包括简短的“喘息”时刻，让听众吸收复杂信息\
+            \  \n- 以积极向上的方式结束，也许可以提出一个发人深省的问题或呼吁听众采取行动"
+        - id: 766cc983-8714-4a2f-866a-3a4d82cc0f9b
+          role: user
+          text: 'Context：{{#context#}}
+
+            host：{{#1727578865729.host_name#}}
+
+            guest：{{#1727578865729.guest_name#}}
+
+            language{{#1727578865729.language#}}
+
+            主宾姓名不受语言限制。 需要根据上下文得出结论，保持与上下文相同的格式。避免介绍和与上下文一致的重复内容。 * *脚本格式**：脚本应以主持人讲话开始。对话应由主人和客人轮流进行，每次说一行。每行开头请勿包含说话者姓名。
+            **输出要求**：最终脚本应仅包含对话内容。避免在输出中包含任何 XML 标签或其他格式。
+
+
+
+
+
+            '
+        selected: false
+        title: 结论
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - sys
+            - files
+          enabled: false
+      height: 98
+      id: '1727675911704'
+      position:
+        x: 1251.6784256829214
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 1251.6784256829214
+        y: 274.87198362549776
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1727675911704.text#}}'
+        desc: ''
+        selected: false
+        title: 结论
+        type: answer
+        variables: []
+      height: 103
+      id: '1727676032290'
+      position:
+        x: 1251.6784256829214
+        y: 415.73439185131787
+      positionAbsolute:
+        x: 1251.6784256829214
+        y: 415.73439185131787
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: '{{ arg1 }}
+
+          {{ arg2 }}'
+        title: 模版拼接
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1727675554894'
+          - text
+          variable: arg1
+        - value_selector:
+          - '1727675911704'
+          - text
+          variable: arg2
+      height: 54
+      id: '1729055989670'
+      position:
+        x: 1545.006879193237
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 1545.006879193237
+        y: 274.87198362549776
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: podcast_generator
+        provider_name: podcast_generator
+        provider_type: builtin
+        selected: false
+        title: 播客生成
+        tool_configurations:
+          host1_voice: alloy
+          host2_voice: nova
+        tool_label: 播客音频生成器
+        tool_name: podcast_audio_generator
+        tool_parameters:
+          script:
+            type: mixed
+            value: '{{#1729055989670.output#}}'
+        type: tool
+      height: 116
+      id: '1729056119524'
+      position:
+        x: 1832.4699727604766
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 1832.4699727604766
+        y: 274.87198362549776
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1729056119524.files#}}'
+        desc: ''
+        selected: false
+        title: podcast
+        type: answer
+        variables: []
+      height: 103
+      id: '1729056149073'
+      position:
+        x: 1832.4699727604766
+        y: 430.89827688046563
+      positionAbsolute:
+        x: 1832.4699727604766
+        y: 430.89827688046563
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '-----------------------------------
+
+          播客正在生成，请耐心等待...'
+        desc: ''
+        selected: false
+        title: 等待
+        type: answer
+        variables: []
+      height: 116
+      id: '1729097333550'
+      position:
+        x: 1545.006879193237
+        y: 415.73439185131787
+      positionAbsolute:
+        x: 1545.006879193237
+        y: 415.73439185131787
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        author: Dify
+        desc: ''
+        height: 221
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"你好，我将向你介绍如何使用这个聊天流程。这个聊天流程涉及文件上传、文件解析、文件引用和文件生成。首先，你需要在开始表单中配置播客的语气、嘉宾姓名、播客材料和语言。由于文件是通过开始表单中的自定义文件类型上传的，因此无需打开右上角的功能。","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: pink
+        title: ''
+        type: ''
+        width: 303
+      height: 221
+      id: '1729220866812'
+      position:
+        x: 358.6121697758786
+        y: 20.482231506748832
+      positionAbsolute:
+        x: 358.6121697758786
+        y: 20.482231506748832
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 303
+    - data:
+        author: Dify
+        desc: ''
+        height: 245
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"该提示的灵感来源于开源项目opennotebook:
+          https://github.com/gabrielchua/open-notebooklm/blob/main/prompts.py#L8。首先，分析材料的见解并头脑风暴一些生成后续脚本的想法。然后，创建一个播客脚本，最后根据该脚本生成播客摘要，使用模板节点将它们拼接在一起。","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: pink
+        title: ''
+        type: ''
+        width: 287
+      height: 245
+      id: '1729221205785'
+      position:
+        x: 979.5521416062959
+        y: 20.482231506748832
+      positionAbsolute:
+        x: 979.5521416062959
+        y: 20.482231506748832
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 287
+    - data:
+        author: Dify
+        desc: ''
+        height: 208
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"文档提取器是一个新的节点，它支持解析各种文档类型。文件类型变量不能被大语言模型（LLM）直接使用；它们必须首先通过文档解析器转换成字符串或字符串数组（当上传多个文件时），然后才能被利用。","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 275
+      height: 208
+      id: '1729221536606'
+      position:
+        x: 676.7121301137549
+        y: 20.482231506748832
+      positionAbsolute:
+        x: 676.7121301137549
+        y: 20.482231506748832
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 275
+    - data:
+        author: Dify
+        desc: ''
+        height: 222
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"对于播客生成器，具体的实现是使用OpenAI的TTS模型。生成的每一行脚本将逐一转换为语音，以便可以切换语调，最终拼接成一个完整的音频文件。因此，脚本必须满足以下要求：它应该包含两个主持人交替的字符串，每行之间用换行符分隔。","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 326
+      height: 222
+      id: '1729221609774'
+      position:
+        x: 1280.4345077051064
+        y: 20.482231506748832
+      positionAbsolute:
+        x: 1280.4345077051064
+        y: 20.482231506748832
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 326
+    - data:
+        author: Dify
+        desc: ''
+        height: 245
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"对于播客生成器，具体的实现是使用OpenAI的TTS模型。生成的每一行脚本将逐一转换为语音，以便可以切换语调，最终拼接成一个完整的音频文件。因此，脚本必须满足以下要求：它应该包含两个主持人交替的字符串，每行之间用换行符分隔。","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: pink
+        title: ' (1)'
+        type: ''
+        width: 287
+      height: 245
+      id: '17292218657750'
+      position:
+        x: 1626.6585757082282
+        y: 20.482231506748832
+      positionAbsolute:
+        x: 1626.6585757082282
+        y: 20.482231506748832
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 287
+    viewport:
+      x: -332.14969910359355
+      y: 110.39083345145798
+      zoom: 0.9423718244354472

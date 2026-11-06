@@ -1,0 +1,229 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: python_code_bug_detector
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的Python代码
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Python代码输入
+        type: start
+        variables:
+        - label: Python代码
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: python_code
+        version: '1'
+      height: 118
+      id: '10000001'
+      parentId: null
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析Python代码并识别潜在bug
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: system-prompt
+          role: system
+          text: '你是一位专业的Python代码审查专家，擅长识别代码中的潜在问题和错误。请仔细分析用户提供的Python代码，按照以下要求输出分析结果：
+
+            1. 首先判断代码是否存在潜在bug或问题
+
+            2. 详细解释每个问题的原因和可能导致的后果
+
+            3. 提供具体的修复建议
+
+            4. 给出修复后的完整代码
+
+
+            输出格式要求：
+
+            <代码问题分析>
+
+            [问题1描述]
+
+            [问题原因]
+
+            [修复建议]
+
+
+            [问题2描述]
+
+            [问题原因]
+
+            [修复建议]
+
+            </代码问题分析>
+
+
+            <修复后的代码>
+
+            [完整修复后的代码]
+
+            </修复后的代码>'
+        - id: user-prompt
+          role: user
+          text: '请分析以下Python代码：
+
+            ```python
+
+            {{#10000001.python_code#}}
+
+            ```'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Python代码分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '10000002'
+      parentId: null
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 向用户展示Python代码分析结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: analysis_result
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 代码分析结果
+        type: end
+        version: '1'
+      height: 118
+      id: '10000003'
+      parentId: null
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: 61
+      y: 20
+      zoom: 1

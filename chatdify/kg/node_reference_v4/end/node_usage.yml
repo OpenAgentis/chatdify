@@ -1,0 +1,24 @@
+node_usage:
+  节点类型: end
+  输入规范:
+      - 输出变量配置: 必须配置outputs字段，不能为空
+      - 变量结构要求:
+        - variable: 变量名不能为空
+        - value_selector: 选择器路径不能为空，必须是有效的变量选择器列表
+      - 变量引用规范: 只能引用当前节点的前置节点输出变量，不能引用后置节点或不存在的节点
+      - 数据类型: outputs必须是列表类型，每个输出项必须包含variable和value_selector字段
+      - 变量选择器格式: value_selector必须是[节点ID, 输出字段名]的格式
+      - 流式参数要求:
+        - end_dependencies: 依赖关系不能为空，必须是字典类型
+        - end_stream_variable_selector_mapping: 变量选择器映射不能为空
+  常见使用错误:
+      - 输出配置错误: "输出变量选择器列表不能为空" 
+      - 数据类型错误: outputs字段配置为字典而非列表格式, 报错信息"Input should be a valid list"
+      - 字段缺失错误: 缺少必需的value_selector字段, 报错信息"Field required [type=missing]"
+      - 变量名错误: variable字段为空或未配置, 报错信息"变量名不能为空" 
+      - 选择器路径错误: "变量的选择器路径不能为空" 
+      - 变量引用错误: "节点不是当前节点的前置节点"
+      - 输出变量错误: 引用了节点不存在的输出字段，报错信息"节点的可用输出为[...]，而不是[...]" 
+      - 节点不存在错误: 引用了不存在或类型不匹配的节点，报错信息"节点不能被作为变量引用" 
+      - 配置格式错误: 将输出配置写成字典格式而非标准的列表格式
+      - 流式参数错误: end_dependencies或end_stream_variable_selector_mapping配置不正确

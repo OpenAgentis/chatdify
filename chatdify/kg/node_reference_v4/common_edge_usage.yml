@@ -1,0 +1,70 @@
+common_edge_usage: |-
+  ### 搜索引擎节点规则
+  1. 请使用 tool_tavily 搜索节点
+  2. Tavily 搜索结果的 json 中，每条 results 已包含 title、url、content等字段，可直接供 code/LLM 使用，无需再逐条抓取 URL 全文。
+  3. 搜索后处理检索内容的推荐链路：tool_tavily_search.json -> code 解析 results 中的 title/url/content -> LLM 汇总分析；纯文本展示可直接引用 text 字段。若需更长原文，优先在 tool_tavily_search 开启 include_raw_content，而不是接 JinaReader。
+
+  ###  涉及网页请求或者解析的节点规则
+  1. 请使用 tool_jina_reader 节点进行网页请求或者解析
+  2. 禁止在 Tavily 搜索后接 iteration + tool_jina_reader 逐条重抓搜索结果 URL——Tavily 已返回每条结果的 content，重复抓取多余且易失败。
+  3. tool_jina_reader 适用场景：用户直接提供的 URL、非搜索来源的已知页面、或确需完整页面/Markdown 而 Tavily content/raw_content 仍不足时。
+  4. tool_jina_reader 的 url 参数必须是单个 URL 字符串，不能传 object、array 或整个 iteration item 对象。
+  5. 当 tool_jina_reader 位于 iteration 内：
+     - 若迭代器输入是 array[string] URL 列表，url 参数直接引用 {{#iteration_id.item#}}。
+     - 若迭代器输入是 array[object]，禁止直接引用 {{#iteration_id.item.url#}} 或 {{#iteration_idstart.item#}}；应先在 iteration 内增加 code 节点，从 {{#iteration_id.item#}} 中拆出顶层 url:string，再让 tool_jina_reader 引用该 code 节点的 url 输出。
+ 
+  ### iteration 内 assigner 使用控制
+  1. workflow 批处理型 iteration 默认通过 output_selector 汇总每轮输出，不要为了收集结果默认加入 assigner。
+  2. 只有明确需要写入 conversation.* 会话变量、跨轮保存状态、或更新 loop/会话级可写变量时，才在 iteration 内使用 assigner。
+  3. 若只是 Tavily/JinaReader/LLM/code 等节点逐条处理数组并汇总结果，应让 iteration.output_selector 指向迭代体内部最终节点输出。
+  
+  ### question-classifier节点规则
+  1. question-classifier节点所有输出分支必须有下游节点。
+
+  ### 多模态识别或者理解图片场景
+  1. 图片/多模态内容的"识别理解"必须使用LLM多模态大模型完成，禁止使用http-request节点或tool_jina_reader节点请求api进行多模态识别，否则会导致多模态识别失败。
+  2. 当图片是URL（如文生图tool输出的图片链接）时，可使用http-request以GET方式下载该URL得到file，再交给LLM vision识别；此时http-request仅负责"下载"，不负责"识别"。
+
+  ### 多轮对话「状态机」路由设计参考流程图（仅供参考）：以"模拟面试 N 轮"为例（机器人主导多轮，advanced-chat）
+  下图是多轮靠多次执行 + conversation 会话变量串联，整图无环（DAG）。会话变量：current_question:string=""、current_round:number=0、history:string=""、last_feedback:string=""、scores:array[number]=[]；岗位/题型/总轮数走 Start 表单字段，直接 {{#start.字段#}} 引用。
+  ```mermaid
+  flowchart TD
+    Start["Start 表单: position / question_types / total_rounds"] --> Q1{"current_question 为空?"}
+    Q1 -- "是: 首轮开场(kickoff)" --> AskFirst["LLM 生成第一个面试问题"]
+    Q1 -- "否: 本次是用户对上一问的回答" --> Score["LLM 对该回答打分并给反馈(JSON)"]
+    Score --> CodeS["Code 解析评分JSON; 拼本轮Q&A记录与新history全量文本"]
+    CodeS --> Asn1["Assigner 更新状态: current_round += 1; scores append 本轮分; history over-write 新全量; last_feedback over-write 本轮反馈"]
+    Asn1 --> Q2{"current_round 小于 total_rounds?"}
+    Q2 -- "是: 还有剩余轮次" --> AskNext["LLM 生成下一个面试问题"]
+    Q2 -- "否: 已答完最后一题" --> Final["LLM 生成综合评估(总分/维度/3强项/3建议)"]
+    AskFirst --> AsnA["Assigner: current_question over-write 新问题"]
+    AsnA --> AnsA["Answer 仅输出该问题(开场无反馈)"]
+    AskNext --> AsnB["Assigner: current_question over-write 新问题"]
+    AsnB --> AnsB["Answer 输出 last_feedback 本轮反馈 + 下一个问题"]
+    Final --> AnsC["Answer 输出 last_feedback 本轮反馈 + 综合评估"]
+  ```
+
+  ### 多轮对话「状态机」路由设计参考流程图（仅供参考）：以"记忆测试/出题测验"为例（机器人主导，advanced-chat）
+  下图是多轮靠多次执行 + conversation 会话变量串联，整图无环（DAG）。除首条 sys.query 为开场启动语外，后续轮次直接进入「问题→答案→评估」：首轮输出题目，下一轮用户 sys.query 即为答案并触发评估。会话变量：test_questions:string 存题目（空=尚未出题，非空=已出题待作答）；stage:string 可取 init / answering / done（可选）；用户信息及评分变量按需声明。每轮用户输入读 sys.query。
+  ```mermaid
+  flowchart TD
+    Start["Start 表单: name / age / gender 等"] --> S0{"test_questions 为空?"}
+    S0 -- "是: 开场 kickoff" --> Collect["Assigner 写入用户信息"]
+    Collect --> GenQ["LLM 生成记忆测试问题"]
+    GenQ --> AsnInit["Assigner: test_questions over-write 题目"]
+    AsnInit --> AnsQ["Answer 输出测试题目(问题)"]
+    S0 -- "否: 本次 sys.query 为用户答案" --> Eval["LLM 评估 sys.query 相对 test_questions"]
+    Eval --> CodeE["Code 解析评分 JSON、计算综合分"]
+    CodeE --> AsnScore["Assigner 写入 short/long/overall 等得分"]
+    AsnScore --> Pass{"overall_memory_score 大于 60?"}
+    Pass -- "是" --> Pos["LLM 生成正面反馈"]
+    Pass -- "否" --> Imp["LLM 生成改进建议"]
+    Pos --> AsnDone["Assigner: stage over-write done(可选)"]
+    Imp --> AsnDone
+    AsnDone --> AnsFB["Answer 输出评估反馈"]
+  ```
+  设计要点：
+  1. 首条 sys.query（如「开始记忆测试吧」）是开场启动语，走 kickoff 链路生成并输出题目，不要当作答案评估。
+  2. test_questions 非空后，下一轮 sys.query 直接视为用户答案，进入评估链路（答案+评估同一轮完成）。
+  3. 开场之后就是问题、答案、评估。
+

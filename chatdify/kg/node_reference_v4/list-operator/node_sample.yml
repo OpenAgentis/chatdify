@@ -1,0 +1,27 @@
+nodes:
+- data:
+    desc: 我们使用"最后一条记录"
+    filter_by:
+      conditions:
+      - comparison_operator: contains
+        key: ''
+        value: ''
+      enabled: false
+    item_var_type: string
+    limit:
+      enabled: false
+      size: 10
+    order_by:
+      enabled: false
+      key: ''
+      value: asc
+    selected: false
+    title: 列表操作
+    type: list-operator
+    var_type: array[string]
+    variable:
+    - conversation
+    - paper_insight
+  id: '1729478231227'
+  selected: false
+  type: custom

@@ -1,0 +1,85 @@
+nodes:
+- data:
+    desc: 提取字幕文件内容
+    is_array_file: false
+    selected: false
+    title: 文档提取器
+    type: document-extractor
+    variable_selector:
+    - '1737731709313'
+    - srtfile
+  id: '1737731807786'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    is_array_file: false
+    selected: false
+    title: 论文提取
+    type: document-extractor
+    variable_selector:
+    - '1729476461944'
+    - paper1
+  id: '1729476799012'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    is_array_file: false
+    selected: false
+    title: 文档提取器
+    type: document-extractor
+    variable_selector:
+    - '1740959153996'
+    - file
+  id: '1740959162304'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    is_array_file: false
+    selected: false
+    title: 文档提取器
+    type: document-extractor
+    variable_selector:
+    - '1727578865729'
+    - file
+  id: '1727580169317'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    is_array_file: false
+    selected: false
+    title: 文档提取器
+    type: document-extractor
+    variable_selector:
+    - '1744102481785'
+    - meeting_note_file
+  id: '1744103267507'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    is_array_file: true
+    selected: false
+    title: 文档提取器
+    type: document-extractor
+    variable_selector:
+    - sys
+    - files
+  id: '1731206199200'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    is_array_file: false
+    selected: false
+    title: 文档提取器
+    type: document-extractor
+    variable_selector:
+    - '1740472103530'
+    - file
+  id: '1740472111460'
+  selected: false
+  type: custom

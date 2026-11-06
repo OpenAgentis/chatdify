@@ -1,0 +1,261 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: auto_language_translation_workflow
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: code
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的待翻译文本和语言选择
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 待翻译文本
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: text
+        - label: 目标语言
+          options:
+          - 中文
+          - 英文
+          required: true
+          type: select
+          variable: lang
+        version: '1'
+      height: 144
+      id: '1'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "def main(text: str, lang: str) -> dict:\n    \"\"\"\n    根据输入文本和语言选择确定翻译方向\n\
+          \    \n    参数:\n        text: 待翻译文本\n        lang: 用户选择的语言('中文'或'英文')\n\
+          \    \n    返回:\n        dict: 包含原始文本和目标语言的字典\n    \"\"\"\n    \n    # 如果用户明确选择了语言，则优先使用用户选择\n\
+          \    if lang == '中文':\n        target_lang = 'zh'\n    elif lang == '英文':\n\
+          \        target_lang = 'en'\n    else:\n        # 自动检测语言\n        import\
+          \ langdetect\n        try:\n            detected_lang = langdetect.detect(text)\n\
+          \            target_lang = 'en' if detected_lang == 'zh' else 'zh'\n   \
+          \     except:\n            # 默认中译英\n            target_lang = 'en'\n   \
+          \ \n    return {\n        \"source_text\": text,\n        \"target_lang\"\
+          : target_lang\n    }"
+        code_language: python3
+        desc: 判断输入文本语言并确定翻译方向
+        outputs:
+          source_text:
+            children: null
+            type: string
+          target_lang:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 确定翻译方向
+        type: code
+        variables:
+        - value_selector:
+          - '1'
+          - text
+          variable: text
+        - value_selector:
+          - '1'
+          - lang
+          variable: lang
+        version: '1'
+      height: 82
+      id: '2'
+      parentId: null
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据提供的文本和目标语言进行高质量翻译
+        model:
+          completion_params:
+            max_tokens: 2000
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        outputs:
+          translated_text:
+            children: null
+            type: string
+        prompt_template:
+        - role: system
+          text: 你是一位专业的翻译专家，擅长中英文互译。请根据提供的文本和目标语言进行准确、流畅的翻译，保持原文意思不变。
+        - role: user
+          text: '请将以下文本翻译成{{#2.target_lang#}}：
+
+            {{#2.source_text#}}'
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        timeout: 60
+        title: 文本翻译
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 160
+      id: '3'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 向用户展示最终翻译结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '3'
+          - text
+          variable: result
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 翻译结果
+        type: end
+        version: '1'
+      height: 118
+      id: '4'
+      parentId: null
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -102.04237190879695
+      y: 255.36568535430075
+      zoom: 0.8705505632961241

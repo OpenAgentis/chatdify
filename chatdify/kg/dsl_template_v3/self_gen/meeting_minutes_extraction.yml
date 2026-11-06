@@ -1,0 +1,470 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: meeting_minutes_extraction
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: code
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '4'
+        sourceType: iteration-start
+        targetType: llm
+      id: 4start-source-5-target
+      source: 4start
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: llm
+      id: 4-source-6-target
+      source: '4'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 6-source-7-target
+      source: '6'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的会议文档文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .txt
+          - .pdf
+          - .docx
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 会议文档
+          max_length: 48
+          required: true
+          type: file
+          variable: meeting_document
+        version: '1'
+      height: 118
+      id: '1'
+      parentId: null
+      position:
+        x: 30
+        y: 440
+      positionAbsolute:
+        x: 30
+        y: 440
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从上传的会议文档中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1'
+        - meeting_document
+        version: '1'
+      height: 120
+      id: '2'
+      parentId: null
+      position:
+        x: 334
+        y: 440
+      positionAbsolute:
+        x: 334
+        y: 440
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "def main(text: str) -> dict:\n    \"\"\"\n    根据段落标记拆分会议文本，保持段落完整性\n\
+          \    \n    参数:\n        text: 完整的会议文本内容\n    \n    返回:\n        包含拆分后段落的字典，格式为\
+          \ {'paragraphs': List[str]}\n    \"\"\"\n    # 按双换行符拆分段落，保留原始段落结构\n    paragraphs\
+          \ = [p.strip() for p in text.split('\\n\\n') if p.strip()]\n    \n    #\
+          \ 如果段落太少，尝试按单换行符拆分\n    if len(paragraphs) <= 1:\n        paragraphs = [p.strip()\
+          \ for p in text.split('\\n') if p.strip()]\n    \n    return {\n       \
+          \ \"paragraphs\": paragraphs\n    }"
+        code_language: python3
+        desc: 将会议文本按段落拆分，保持语义完整性
+        outputs:
+          paragraphs:
+            children: null
+            type: array[string]
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 段落拆分
+        type: code
+        variables:
+        - value_selector:
+          - '2'
+          - text
+          variable: text
+        version: '1'
+      height: 98
+      id: '3'
+      parentId: null
+      position:
+        x: 638
+        y: 440
+      positionAbsolute:
+        x: 638
+        y: 440
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 迭代处理会议文档的各段落内容
+        error_handle_mode: terminated
+        height: 480
+        is_parallel: false
+        iterator_selector:
+        - '3'
+        - paragraphs
+        output_selector:
+        - '5'
+        - text
+        output_type: array[object]
+        parallel_nums: 1
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        start_node_id: 4start
+        title: 段落迭代处理
+        type: iteration
+        version: '1'
+        width: 1360
+      height: 480
+      id: '4'
+      parentId: null
+      position:
+        x: 942
+        y: 440
+      positionAbsolute:
+        x: 942
+        y: 440
+      selected: true
+      type: custom
+      width: 1360
+      zIndex: 0
+    - data:
+        desc: 迭代起始节点，分发单个段落进行处理
+        isInIteration: true
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 段落迭代开始
+        type: iteration-start
+        version: '1'
+      height: 48
+      id: 4start
+      parentId: '4'
+      position:
+        x: 1100
+        y: 200
+      positionAbsolute:
+        x: 2042
+        y: 640
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 使用qwen-72b模型从会议段落中提取结构化信息
+        isInIteration: true
+        iteration_id: '4'
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一个专业的会议信息提取助手。请从给定的会议段落中准确提取以下结构化信息：
+
+
+            1. 会议时间（精确到分钟）
+
+            2. 会议地点
+
+            3. 主持人姓名
+
+            4. 记录人姓名
+
+            5. 参会人员列表
+
+            6. 会议讨论要点
+
+            7. 会议结论
+
+
+            输出格式要求：
+
+            - 使用严格规范的JSON格式
+
+            - 只包含实际提取到的信息，未提及的字段留空
+
+            - 时间格式统一为YYYY-MM-DD HH:MM
+
+            - 人名使用全称
+
+            - 确保信息准确无误，不添加任何推测内容'
+        - role: user
+          text: '请从以下会议段落中提取结构化信息：
+
+
+            {{#4.item#}}'
+        retry_config:
+          max_retries: 1
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        title: 会议信息提取
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 160
+      id: '5'
+      parentId: '4'
+      position:
+        x: 1100
+        y: 300
+      positionAbsolute:
+        x: 2042
+        y: 740
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 整合所有段落信息，生成规范格式的会议纪要
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一个专业的会议纪要生成助手。请根据提供的会议段落分析结果，整合生成一份完整的会议纪要。
+
+
+            会议纪要必须包含以下结构化信息：
+
+            1. 会议时间（精确到分钟）
+
+            2. 会议地点
+
+            3. 主持人姓名
+
+            4. 记录人姓名
+
+            5. 参会人员列表
+
+            6. 会议讨论要点（按议题分类）
+
+            7. 会议结论（包括行动项和负责人）
+
+
+            输出格式要求：
+
+            - 使用Markdown格式
+
+            - 时间格式统一为YYYY-MM-DD HH:MM
+
+            - 人名使用全称
+
+            - 确保信息准确无误，不添加任何推测内容
+
+            - 讨论要点和结论需按逻辑顺序组织'
+        - role: user
+          text: '请根据以下会议段落分析结果生成完整的会议纪要：
+
+
+            {{#4.output#}}'
+        retry_config:
+          max_retries: 1
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        title: 会议纪要生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 160
+      id: '6'
+      parentId: null
+      position:
+        x: 2362
+        y: 440
+      positionAbsolute:
+        x: 2362
+        y: 440
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 工作流结束节点，输出最终会议纪要
+        output_type: object
+        outputs:
+        - value_selector:
+          - '6'
+          - text
+          variable: text
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 会议纪要输出
+        type: end
+        version: '1'
+      height: 118
+      id: '7'
+      parentId: null
+      position:
+        x: 2666
+        y: 440
+      positionAbsolute:
+        x: 2666
+        y: 440
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: 51.812872791670884
+      y: 98.97697169868891
+      zoom: 0.4020444242489622

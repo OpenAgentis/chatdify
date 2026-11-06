@@ -1,0 +1,39 @@
+node_error:
+- '输出变量错误: ''10000005.formatted_data.original_score'' — code 节点声明的输出为顶层字段 formatted_data（object），下游只能引用 {{#10000005.formatted_data#}}，不能点号展开子字段；子结构请在 code 内拆成多个顶层输出变量'
+- '正常返回分支和异常返回分支的返回变量不一致: 异常分支勿单独使用 default_result，须与正常分支 err_msg/业务字段集合一致'
+- '变量引用错误: ''10000003start.llm_output'' — 应写 ''10000003.xxx''，不要把 loop-start/iteration-start 的 start 后缀拼进节点 ID'
+- '变量引用错误: ''10000004.item.audience_type'' — 不支持 iteration.item.xx；迭代内用 item 整体，或迭代外用 output'
+- '正常返回分支和异常返回分支的返回变量不一致: 正常分支=[''result''], 异常分支=[''error''], 正常分支=[''result''], 异常分支=[''error'', ''result'']'
+- '输出变量错误: ''3.output'' - 节点 ''3'' (类型: code) 的可用输出为: [''error'', ''numeric_columns'',
+  ''sample_data'', ''statistics'', ''table_structure'']，而不是: ''output'''
+- '创建节点失败, 节点ID 3: 处理节点配置失败: 1 validation error for CodeNodeData variables.1.value_selector Field required [type=missing, input_value={''options'': [''中文'', ''...ble'': ''target_language''}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/missing'
+- '变量引用错误: ''env.apikey'' - 节点 ''env'' 不是当前节点的前置节点。请仔细检查任务工作流上下文，从可用前置节点列表中选择, 可用前置节点列表: 10000003, 10000002, 10000001'
+- '生成节点数据失败: 生成JSON失败: while parsing a flow sequence in "<unicode string>", line 1, column 1: [ ^ expected '','' or '']'', but got ''}'' in "<unicode string>", line 56, column 5: } ^'
+- '正常返回分支和异常返回分支的返回变量不一致: 正常分支=[''financial_ratios'', ''raw_data''], 异常分支=[''error'', ''financial_ratios'', ''raw_data'']'
+- 变量 'target_language' 的选择器路径不能为空
+- '变量引用错误: ''conversation.subtaskRet'' - 节点 ''conversation'' 不是当前节点的前置节点。请仔细检查任务工作流上下文，从可用前置节点列表中选择, 可用前置节点列表: 10000005start, 10000005, 10000004, 10000003, 10000002, 10000001'
+- 变量选择器重复：item 和其他变量引用相同路径 ['10000005', 'item']
+- Output extracted_data is not an object, got <class 'list'> instead.
+- 'Traceback (most recent call last): File "/var/sandbox/sandbox-python/tmp/aa7e7ac6_f714_4487_a739_e92273573db4.py", line 48, in <module> File "<string>", line 55, in <module> TypeError: main() got an unexpected keyword argument ''revenue_growth_rate'' error: exit status 255'
+- '正常返回分支中第2个返回语句的变量与第1个不一致: 第1个=[''result''], 第2个=[]'
+- '变量引用错误: ''3.text'' - (节点ID: 3, 节点类型: ''question-classifier'') 的输出变量名必须为 ''class_name, 而不是 ''text'' 。 正常返回分支和异常返回分支的返回变量不一致: 正常分支=[''result''], 异常分支=[''error'']'
+- Output .result.values is not a valid array. make sure all elements are of the same type.
+- Output error is missing.
+- '变量引用错误: ''10000009start.item'' - (节点ID: 10000009start, 节点类型: ''iteration-start'') 不能被作为变量引用。正确的变量引用建议使用: ''10000009.item''。'
+- 'Traceback (most recent call last): File "/var/sandbox/sandbox-python/tmp/aa7e7ac6_f714_4487_a739_e92273573db4.py",
+  line 48, in <module> File "<string>", line 55, in <module> TypeError: main() got
+  an unexpected keyword argument ''revenue_growth_rate'' error: exit status 255'
+- '语法错误: unterminated string literal (detected at line 16) | 第 16 行 第 24 列 | 出错代码:     html_template = "<!DOCTYPE html><html>... | 修复建议: 多行 HTML/JSON/SQL 模板请改用三引号 """...""" 或 ''''''...'''''' 包裹，不要用单行 "..." 拼接换行。'
+- '语法错误: invalid syntax | 第 5 行 第 28 列 | 出错代码:     html = "<div class="container">" + data + "</div>" | 修复建议: 字符串内部出现与外层相同的引号，请改用另一种引号或对内层引号使用反斜杠转义。'
+- '语法错误: (unicode error) ''unicodeescape'' codec can''t decode bytes in position 2-3: truncated \UXXXXXXXX escape | 第 3 行 第 12 列 | 出错代码:     path = "C:\Users\report.xlsx" | 修复建议: Windows 路径、正则表达式等含反斜杠的字符串请使用原始字符串 r"..."，或将每个反斜杠双写为 \\。'
+- 'document-extractor 输出为 Markdown 表格时，code 节点用 pd.read_csv 或 csv.DictReader 解析导致键名为 "| col1 | col2 |" 且混入 --- 分隔行：应改用 pytablereader.MarkdownTableTextLoader；参考 code/node_sample 10000003_md'
+- 'Tavily json 解析错误：将 search_json 当作 list 直接 item.get("url") —— json 为 Array[{query, results}]，须 batch.get("results") 后再取 url；参考 10000003_tavily'
+- '运行错误: Output is_complete must be a string, got bool instead —— outputs 声明 string 时 return 须 str()，布尔标志用 boolean 类型'
+- "list 对象无 items 属性 —— 上游为 list 时勿调用 .items()，须先 isinstance 区分 list 与 dict"
+- 'LLM JSON 解析：上游可能返回 ```json 代码块；若 code 需要结构化字段，应先剥离代码块并校验根类型与必需字段'
+- 'JinaReader text 解析错误：tool_jina_reader 的 text 是 JSON 字符串，须 json.loads(text) 后读取 data.content/data.title；不要把整段 text 当正文，也不要引用 body/content/result 等不存在输出'
+- 'iteration 输出变量错误: 10000006.output —— code 可用输出为 formatted_content/result 等，output_selector 须与实际 outputs 字段名一致'
+- 'AttributeError: module ''pytablereader'' has no attribute ''MarkdownTableLoader''：字符串解析应使用 MarkdownTableTextLoader，文件解析用 MarkdownTableFileLoader'
+- '运行错误: Type is not JSON serializable: File — code 节点不能引用/输出 file 变量；移除 variables 中的 image_file，LLM vision 直接引用 start 节点，code 只返回 ocr_engines 等配置'
+- '创建节点失败 outputs.image_file.type invalid type for code output, actual file — Code 节点 outputs 不支持 file 类型，且不能透传 File 对象'
+

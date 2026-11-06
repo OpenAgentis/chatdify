@@ -1,0 +1,870 @@
+app:
+  description: 通过工作流实现将复杂任务进行拆解成子问题，逐步解答子问题，最后聚合答案得到最终答案
+  icon: seedling
+  icon_background: '#D3F8DF'
+  mode: advanced-chat
+  name: 任务拆解
+  use_icon_as_answer_icon: true
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.10@ba0a7fc3151e89bf8645cd3abb3ccff971ee59e5b1127efca50b092dbb93bf80
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables:
+  - description: 记录迭代过程中的数据，在循环过程中能看见前面的结果
+    id: d2f1ac13-3c10-44ea-8cf0-dbd752577b6a
+    name: subtaskRet
+    selector:
+    - conversation
+    - subtaskRet
+    value: []
+    value_type: array[object]
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        sourceType: start
+        targetType: llm
+      id: 1728709838888-llm
+      selected: false
+      source: '1728709838888'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: parameter-extractor
+      id: llm-source-1728730008819-target
+      selected: false
+      source: llm
+      sourceHandle: source
+      target: '1728730008819'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '1728709933523'
+        sourceType: iteration-start
+        targetType: code
+      id: 1728709933523start-source-1728730342984-target
+      selected: false
+      source: 1728709933523start
+      sourceHandle: source
+      target: '1728730342984'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        iteration_id: '1728709933523'
+        sourceType: code
+        targetType: llm
+      id: 1728730342984-source-1728730552797-target
+      selected: false
+      source: '1728730342984'
+      sourceHandle: source
+      target: '1728730552797'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1728731078833-source-answer-target
+      selected: false
+      source: '1728731078833'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '1728709933523'
+        sourceType: llm
+        targetType: code
+      id: 1728730552797-source-1728905920547-target
+      selected: false
+      source: '1728730552797'
+      sourceHandle: source
+      target: '1728905920547'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: code
+      id: 1728709933523-source-1728906342693-target
+      selected: false
+      source: '1728709933523'
+      sourceHandle: source
+      target: '1728906342693'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 1728906342693-source-1728731078833-target
+      selected: false
+      source: '1728906342693'
+      sourceHandle: source
+      target: '1728731078833'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: assigner
+      id: 1728730008819-source-1750908551270-target
+      selected: false
+      source: '1728730008819'
+      sourceHandle: source
+      target: '1750908551270'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: iteration
+      id: 1750908551270-source-1728709933523-target
+      selected: false
+      source: '1750908551270'
+      sourceHandle: source
+      target: '1728709933523'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1728709933523'
+        sourceType: code
+        targetType: assigner
+      id: 1728905920547-source-1750909071626-target
+      selected: false
+      source: '1728905920547'
+      sourceHandle: source
+      target: '1750909071626'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 54
+      id: '1728709838888'
+      position:
+        x: 30
+        y: 479
+      positionAbsolute:
+        x: 30
+        y: 479
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            frequency_penalty: 0.3
+            presence_penalty: 0.2
+            temperature: 0.5
+            top_p: 0.85
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - edition_type: basic
+          id: e9dc2802-a5f3-4e1c-bae6-92a80e0e3634
+          role: system
+          text: '# Role:问题拆解专家
+
+
+            ## Goals:
+
+            对于用户提出的问题进行拆解，将复杂问题转换为多个字问题或步骤，便于后续解答
+
+
+            ## Constrains:
+
+            1. 不要直接给出答案
+
+            2. 拆解步骤要保证逻辑严谨，逐步推导
+
+            3. 拆解完成后即结束对话, 不会询问是否有其它问题
+
+            4. 如果是简单问题，不要硬拆，按1个步骤处理
+
+
+            ## Skills:
+
+            1. 具有强大的问题分析能力
+
+            2. 擅长将复杂问题拆解为简单子问题或步骤
+
+
+            ## Workflows:
+
+            1. 分析问题，提取问题的最终目的
+
+            2. 分解问题为简单子问题或步骤。为每一个解题步骤提供简单清晰的名称，帮助理解解题过程的结构。对每个步骤的任务进行简洁描述，确保问题解决的路径逐步清晰。
+
+            3. 按照格式输出
+
+
+            ## OutputFormat
+
+            """
+
+            [{"step":"步骤名称","desc":"任务描述"}]
+
+            """
+
+
+            ## Example1
+
+            ### input
+
+            2020年诺贝尔奖获得者的年龄
+
+            ### output
+
+            """
+
+            [{"step":"确定2020年诺贝尔奖的获奖者","desc":"我们需要查找2020年获得诺贝尔奖的所有获奖者的名单"},{"step":"收集获奖者的出生年份","desc":"从确定的获奖者名单中，收集每位获奖者的出生年份，以便后续计算他们的年龄。"},{"step":"计算每位获奖者的年龄","desc":"根据当前年份减去每位获奖者的出生年份，计算出他们各自的年龄。"}]
+
+            """
+
+
+            ## Example2
+
+            ### input
+
+            9.11和9.8 这两个数字谁更大？
+
+            ### output
+
+            """
+
+            [{"step":"获得整数和小数部分","desc":"分别获取数字的整数部分和小数部分"},{"step":"比较整数部分","desc":"按整数比较大小"},{"step":"比较小数部分","desc":"按小数比较大小"}]
+
+            """
+
+
+
+            '
+        - id: 4483f953-2d33-49e4-9bf5-14de82b86d71
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: 问题拆解
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 90
+      id: llm
+      position:
+        x: 334
+        y: 479
+      positionAbsolute:
+        x: 334
+        y: 479
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '------
+
+          ## 最终结论
+
+          {{#1728731078833.text#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 121
+      id: answer
+      position:
+        x: 765.5049840078232
+        y: 1260.9163854849558
+      positionAbsolute:
+        x: 765.5049840078232
+        y: 1260.9163854849558
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        error_handle_mode: terminated
+        height: 558
+        is_parallel: false
+        iterator_selector:
+        - '1728730008819'
+        - step_array
+        output_selector:
+        - '1728730552797'
+        - text
+        output_type: array[string]
+        parallel_nums: 10
+        selected: false
+        start_node_id: 1728709933523start
+        title: 迭代
+        type: iteration
+        width: 1359
+      height: 558
+      id: '1728709933523'
+      position:
+        x: 1381.4282304109422
+        y: 396.589542010552
+      positionAbsolute:
+        x: 1381.4282304109422
+        y: 396.589542010552
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 1359
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1728709933523start
+      parentId: '1728709933523'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 1405.4282304109422
+        y: 464.589542010552
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        desc: ''
+        instruction: '提取内容中的步骤数组，按如下格式输出：
+
+          [ { "step":"步骤名称", "desc":"任务描述" }, { "step":"步骤名称", "desc":"任务描述" }, ...
+          ]'
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        parameters:
+        - description: 提取内容中的步骤数组
+          name: step_array
+          required: true
+          type: array[object]
+        query:
+        - llm
+        - text
+        reasoning_mode: prompt
+        selected: false
+        title: 问题拆解后参数提取
+        type: parameter-extractor
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - sys
+            - files
+          enabled: false
+      height: 90
+      id: '1728730008819'
+      position:
+        x: 638
+        y: 479
+      positionAbsolute:
+        x: 638
+        y: 479
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(step_obj: dict, subtaskRet: list, index: int) -> dict:\n\
+          \    step = step_obj[\"step\"]\n    desc = step_obj[\"desc\"]\n    subtaskStr\
+          \ = json.dumps(subtaskRet)\n    return {\n        \"step\": step,\n    \
+          \    \"desc\": desc,\n        \"subtaskStr\": subtaskStr,\n        \"idx\"\
+          : index+1\n    }\n"
+        code_language: python3
+        desc: ''
+        isInIteration: true
+        iteration_id: '1728709933523'
+        outputs:
+          desc:
+            children: null
+            type: string
+          idx:
+            children: null
+            type: number
+          step:
+            children: null
+            type: string
+          subtaskStr:
+            children: null
+            type: string
+        selected: false
+        title: 解析对象
+        type: code
+        variables:
+        - value_selector:
+          - '1728709933523'
+          - item
+          variable: step_obj
+        - value_selector:
+          - conversation
+          - subtaskRet
+          variable: subtaskRet
+        - value_selector:
+          - '1728709933523'
+          - index
+          variable: index
+      height: 54
+      id: '1728730342984'
+      parentId: '1728709933523'
+      position:
+        x: 128
+        y: 66.85758021065351
+      positionAbsolute:
+        x: 1509.4282304109422
+        y: 463.4471222212055
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1728709933523'
+          - item
+        desc: ''
+        isInIteration: true
+        iteration_id: '1728709933523'
+        model:
+          completion_params:
+            frequency_penalty: 0.3
+            presence_penalty: 0.2
+            temperature: 0.5
+            top_p: 0.85
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: fbd3a380-635b-4076-ae77-d4f1aed749bd
+          role: system
+          text: '## 问题
+
+            {{#sys.query#}}
+
+
+            ## 任务背景
+
+            问题已在前置流程中拆分为多个字问题或步骤
+
+            ### 步骤
+
+            {{#llm.text#}}
+
+            ### 已完成步骤的结果
+
+            {{#1728730342984.subtaskStr#}}
+
+
+            ## 任务说明
+
+            根据已拆分的步骤，解答当前步骤的任务。
+
+            本次任务的名称是:{{#1728730342984.step#}}
+
+            任务描述为: {{#1728730342984.desc#}}
+
+
+            ## 注意事项
+
+            - 你只需要分析并回答当前步骤的问题，而非整个问题。
+
+            - 当前步骤根据需要参考前面已完成步骤的结果。
+
+
+            ## 输出要求
+
+            - 可以用markdown格式，但是不要使用标题格式，其他格式可以用
+
+            '
+        selected: false
+        title: 子任务处理
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 90
+      id: '1728730552797'
+      parentId: '1728709933523'
+      position:
+        x: 432
+        y: 69.14241978934649
+      positionAbsolute:
+        x: 1813.4282304109422
+        y: 465.7319617998985
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            frequency_penalty: 0.3
+            presence_penalty: 0.2
+            temperature: 0.5
+            top_p: 0.85
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 6685b05c-5b71-4cfa-bfc3-1f9bfa8e86d2
+          role: system
+          text: '## 问题
+
+            {{#sys.query#}}
+
+
+            ## 任务
+
+            查看原问题，并综合下面的分析，给出问题的最终正确答案。
+
+
+            分析过程
+
+            {{#1728906342693.result#}}
+
+            '
+        selected: false
+        title: 聚合回答
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 90
+      id: '1728731078833'
+      position:
+        x: 352.0842544601609
+        y: 1260.9163854849558
+      positionAbsolute:
+        x: 352.0842544601609
+        y: 1260.9163854849558
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(step: str, desc: str, ret: str) -> dict:\n    return {\n\
+          \        \"result\": {\n            'step': step,\n            'desc': desc,\n\
+          \            'ret': ret\n        }\n    }\n"
+        code_language: python3
+        desc: ''
+        isInIteration: true
+        iteration_id: '1728709933523'
+        outputs:
+          result:
+            children: null
+            type: object
+        selected: false
+        title: 聚合结果
+        type: code
+        variables:
+        - value_selector:
+          - '1728730342984'
+          - step
+          variable: step
+        - value_selector:
+          - '1728730342984'
+          - desc
+          variable: desc
+        - value_selector:
+          - '1728730552797'
+          - text
+          variable: ret
+      height: 54
+      id: '1728905920547'
+      parentId: '1728709933523'
+      position:
+        x: 636.0612294914924
+        y: 267.505825544829
+      positionAbsolute:
+        x: 2017.4894599024346
+        y: 664.095367555381
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        code: "\ndef main(subtaskRet: list) -> dict:\n    ret = json.dumps(subtaskRet,\
+          \ ensure_ascii=False)\n    result = \"\"\n    idx = 1\n    for item in subtaskRet:\n\
+          \        result += \"步骤\" + str(idx) + \":\" + item['desc'] + \"\\n结果\"\
+          \ + str(idx) + \":\" + item['ret'] + \"\\n\\n\"\n        idx += 1\n    return\
+          \ {\n        \"result\": result,\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 分析结果
+        type: code
+        variables:
+        - value_selector:
+          - conversation
+          - subtaskRet
+          variable: subtaskRet
+      height: 54
+      id: '1728906342693'
+      position:
+        x: 0.6342726976510562
+        y: 1260.9163854849558
+      positionAbsolute:
+        x: 0.6342726976510562
+        y: 1260.9163854849558
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        author: pipi
+        desc: ''
+        height: 88
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"font-size:
+          14px;","text":"2. 迭代处理子问题","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 240
+      height: 88
+      id: '1730610800029'
+      position:
+        x: -282.2442432909295
+        y: 698.3743920725884
+      positionAbsolute:
+        x: -282.2442432909295
+        y: 698.3743920725884
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 240
+    - data:
+        author: pipi
+        desc: ''
+        height: 88
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"font-size:
+          14px;","text":"1. 问题拆解","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 240
+      height: 88
+      id: '1730610837359'
+      position:
+        x: -277.04177217437274
+        y: 492.4798953476681
+      positionAbsolute:
+        x: -277.04177217437274
+        y: 492.4798953476681
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 240
+    - data:
+        author: pipi
+        desc: ''
+        height: 88
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"font-size:
+          14px;","text":"3. 聚合子问题答案得出最终结论","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 240
+      height: 88
+      id: '1730610853795'
+      position:
+        x: -282.2442432909295
+        y: 1260.9163854849558
+      positionAbsolute:
+        x: -282.2442432909295
+        y: 1260.9163854849558
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 240
+    - data:
+        desc: ''
+        items:
+        - input_type: variable
+          operation: clear
+          value: ''
+          variable_selector:
+          - conversation
+          - subtaskRet
+          write_mode: over-write
+        selected: false
+        title: 子任务结果清空
+        type: assigner
+        version: '2'
+      height: 88
+      id: '1750908551270'
+      position:
+        x: 965.990815576276
+        y: 360.379745290507
+      positionAbsolute:
+        x: 965.990815576276
+        y: 360.379745290507
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        isInIteration: true
+        isInLoop: false
+        items:
+        - input_type: variable
+          operation: over-write
+          variable_selector:
+          - conversation
+          - subtaskRet
+          write_mode: over-write
+        iteration_id: '1728709933523'
+        selected: false
+        title: 变量赋值
+        type: assigner
+        version: '2'
+      height: 88
+      id: '1750909071626'
+      parentId: '1728709933523'
+      position:
+        x: 1098.9999999999998
+        y: 292.82917755751055
+      positionAbsolute:
+        x: 2480.428230410942
+        y: 689.4187195680626
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    viewport:
+      x: 383.74541750125195
+      y: -428.17552793334755
+      zoom: 0.8753349769720372

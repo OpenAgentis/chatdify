@@ -1,0 +1,6 @@
+node_error:
+- '创建节点失败: advanced_settings.groups Field required — 即使 group_enabled 为 false，也必须写 groups: []（可为空列表），不能只写 {"group_enabled": false}'
+- 变量列表不能为空
+- 变量选择器必须是列表格式 [节点ID, 变量名]，不能是字典
+- 变量选择器重复
+- 启用分组(group_enabled=true)时 groups 内 group_name、output_type、variables 均不能为空

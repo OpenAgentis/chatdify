@@ -1,0 +1,236 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: file_scoring_and_suggestions
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的文件作为工作流输入
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 上传文件
+          max_length: 48
+          required: true
+          type: file
+          variable: file
+        version: '1'
+      height: 118
+      id: '10000001'
+      parentId: null
+      position:
+        x: 30
+        y: 30
+      positionAbsolute:
+        x: 30
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从上传的文件中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '10000001'
+        - file
+        version: '1'
+      height: 120
+      id: '10000002'
+      parentId: null
+      position:
+        x: 300
+        y: 150
+      positionAbsolute:
+        x: 300
+        y: 150
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点用于分析提取的文本内容并进行评分和提供修改建议
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: f4116016-5d65-44a4-a150-843df9867dbb
+          role: system
+          text: 你是一位专业的文档评估专家，负责对上传的文档内容进行评分并提供改进建议。请根据文档内容的质量、结构、逻辑性和表达清晰度等方面进行全面评估。
+        - id: e562aba8-5792-4f5c-91ad-aae4d983ed92
+          role: user
+          text: "请对以下文档内容进行评估并给出评分和改进建议：\n\n{{#10000002.text#}}\n\n评分标准（满分10分）：\n\
+            1. 内容完整性（0-2分）\n2. 逻辑清晰度（0-2分）\n3. 表达准确性（0-2分）\n4. 结构合理性（0-2分）\n5. 专业度（0-2分）\n\
+            \n请按照以下格式输出评估结果：\n\n<evaluation>\n  <score>[总分]</score>\n  <content_completeness>[内容完整性评分]</content_completeness>\n\
+            \  <logical_clarity>[逻辑清晰度评分]</logical_clarity>\n  <expression_accuracy>[表达准确性评分]</expression_accuracy>\n\
+            \  <structure_reasonableness>[结构合理性评分]</structure_reasonableness>\n  <professionalism>[专业度评分]</professionalism>\n\
+            \  <improvement_suggestions>\n    [列出具体的改进建议]\n  </improvement_suggestions>\n\
+            </evaluation>"
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档评估
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 134
+      id: '10000003'
+      parentId: null
+      position:
+        x: 600
+        y: 300
+      positionAbsolute:
+        x: 600
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 展示最终评分结果和修改建议
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000003'
+          - text
+          variable: evaluation_result
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 评分结果与建议
+        type: end
+        version: '1'
+      height: 118
+      id: '10000004'
+      parentId: null
+      position:
+        x: 900
+        y: 500
+      positionAbsolute:
+        x: 900
+        y: 500
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -443.5311654868134
+      y: 20.35721966034373
+      zoom: 0.757858283255199

@@ -1,0 +1,660 @@
+app:
+  mode: workflow
+  name: translation_quality_evaluation
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: loop
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInLoop: true
+        loop_id: '5'
+        sourceType: loop-start
+        targetType: llm
+      id: 5start-source-6-target
+      source: 5start
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInLoop: true
+        loop_id: '5'
+        sourceType: llm
+        targetType: llm
+      id: 6-source-7-target
+      source: '6'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInLoop: true
+        loop_id: '5'
+        sourceType: llm
+        targetType: code
+      id: 7-source-8-target
+      source: '7'
+      sourceHandle: source
+      target: '8'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInLoop: true
+        loop_id: '5'
+        sourceType: code
+        targetType: assigner
+      id: 8-source-9-target
+      source: '8'
+      sourceHandle: source
+      target: '9'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: loop
+        targetType: end
+      id: 5-source-10-target
+      source: '5'
+      sourceHandle: source
+      target: '10'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的原文内容
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - label: 原文内容
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: original_text
+        - label: 目标语言
+          options:
+          - 英文
+          - 中文
+          required: true
+          type: select
+          variable: target_language
+        version: '1'
+      height: 54
+      id: '1'
+      parentId: null
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 将原文翻译成目标语言
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '请将以下内容翻译成{{#1.target_language#}}。要求：
+
+            1. 保持原文意思准确无误
+
+            2. 使用自然流畅的表达方式
+
+            3. 保持专业术语的一致性
+
+            4. 直接输出翻译结果，无需额外解释'
+        - role: user
+          text: '待翻译内容：
+
+            {{#1.original_text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 翻译节点
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '2'
+      parentId: null
+      position:
+        x: 400
+        y: 282
+      positionAbsolute:
+        x: 400
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 对翻译结果进行质量评估
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的翻译质量评估专家。请根据以下标准对翻译结果进行评估：
+
+
+            1. 准确性：译文是否准确传达了原文的意思
+
+            2. 流畅性：译文是否自然流畅
+
+            3. 术语一致性：专业术语是否一致
+
+            4. 风格匹配：译文风格是否与原文匹配
+
+
+            请按照以下格式输出评估结果：
+
+
+            1. 准确性：[评分1-5分] [评语]
+
+            2. 流畅性：[评分1-5分] [评语]
+
+            3. 术语一致性：[评分1-5分] [评语]
+
+            4. 风格匹配：[评分1-5分] [评语]
+
+
+            评分标准：
+
+            5分：完美
+
+            4分：良好
+
+            3分：一般
+
+            2分：较差
+
+            1分：很差'
+        - role: user
+          text: '原文：{{#1.original_text#}}
+
+
+            译文：{{#2.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 翻译质量评估
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '3'
+      parentId: null
+      position:
+        x: 720
+        y: 282
+      positionAbsolute:
+        x: 720
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "def main(assessment_text: str) -> dict:\n    import re\n    \n    #\
+          \ 提取四个维度的评分\n    accuracy_match = re.search(r'准确性：(\\d+)分', assessment_text)\n\
+          \    fluency_match = re.search(r'流畅性：(\\d+)分', assessment_text)\n    terminology_match\
+          \ = re.search(r'术语一致性：(\\d+)分', assessment_text)\n    style_match = re.search(r'风格匹配：(\\\
+          d+)分', assessment_text)\n    \n    # 计算综合评分（平均分）\n    try:\n        accuracy\
+          \ = int(accuracy_match.group(1)) if accuracy_match else 0\n        fluency\
+          \ = int(fluency_match.group(1)) if fluency_match else 0\n        terminology\
+          \ = int(terminology_match.group(1)) if terminology_match else 0\n      \
+          \  style = int(style_match.group(1)) if style_match else 0\n        \n \
+          \       total_score = (accuracy + fluency + terminology + style) / 4\n \
+          \       \n        return {\n            \"score\": total_score,\n      \
+          \      \"accuracy\": accuracy,\n            \"fluency\": fluency,\n    \
+          \        \"terminology\": terminology,\n            \"style\": style,\n\
+          \            \"error\": \"\"\n        }\n    except Exception as e:\n  \
+          \      return {\n            \"score\": 0,\n            \"accuracy\": 0,\n\
+          \            \"fluency\": 0,\n            \"terminology\": 0,\n        \
+          \    \"style\": 0,\n            \"error\": str(e)\n        }"
+        code_language: python3
+        desc: 计算翻译质量评估的综合评分
+        outputs:
+          accuracy:
+            children: null
+            type: number
+          error:
+            children: null
+            type: string
+          fluency:
+            children: null
+            type: number
+          score:
+            children: null
+            type: number
+          style:
+            children: null
+            type: number
+          terminology:
+            children: null
+            type: number
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        timeout: 60
+        title: 计算综合评分
+        type: code
+        variables:
+        - value_selector:
+          - '3'
+          - text
+          variable: assessment_text
+        version: '1'
+      height: 54
+      id: '4'
+      parentId: null
+      position:
+        x: 1040
+        y: 282
+      positionAbsolute:
+        x: 1040
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        break_conditions:
+        - comparison_operator: ≥
+          id: 5b1a3f8d-2c4f-4e3a-b8d2-6e9f3c1d7a5b
+          value: '4.5'
+          varType: number
+          variable_selector:
+          - '4'
+          - score
+        desc: 循环评估翻译质量直到达到4.5分或最大循环次数
+        error_handle_mode: terminated
+        logical_operator: or
+        loop_count: 5
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        start_node_id: 5start
+        title: 翻译质量评估循环
+        type: loop
+        version: '1'
+      height: 319
+      id: '5'
+      parentId: null
+      position:
+        x: 1280
+        y: 282
+      positionAbsolute:
+        x: 1280
+        y: 282
+      type: custom
+      width: 1600
+      zIndex: 1
+    - data:
+        desc: 输出最终的翻译结果、评分和评估理由
+        output_type: object
+        outputs:
+        - value_selector:
+          - '2'
+          - text
+          variable: translation_result
+        - value_selector:
+          - '4'
+          - score
+          variable: translation_score
+        - value_selector:
+          - '3'
+          - text
+          variable: assessment_reason
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 翻译结果输出
+        type: end
+        version: '1'
+      height: 54
+      id: '10'
+      parentId: null
+      position:
+        x: 1520
+        y: 282
+      positionAbsolute:
+        x: 1520
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 循环开始节点，标记循环的起点
+        isInLoop: true
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 循环开始
+        type: loop-start
+        version: '1'
+      height: 48
+      id: 5start
+      parentId: '5'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 1304
+        y: 350
+      type: custom-loop-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 循环内的第一个LLM节点，负责重新翻译原文
+        isInLoop: true
+        loop_id: '5'
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '请将以下内容重新翻译成{{#1.target_language#}}。要求：
+
+            1. 保持原文意思准确无误
+
+            2. 使用自然流畅的表达方式
+
+            3. 保持专业术语的一致性
+
+            4. 直接输出翻译结果，无需额外解释'
+        - role: user
+          text: '待翻译内容：
+
+            {{#1.original_text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 重新翻译
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '6'
+      parentId: '5'
+      position:
+        x: 212.11842266664428
+        y: 68
+      positionAbsolute:
+        x: 1492.1184226666444
+        y: 350
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 循环内的第二个LLM节点，负责评估新的翻译质量
+        isInLoop: true
+        loop_id: '5'
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的翻译质量评估专家。请根据以下标准对优化后的翻译结果进行评估：
+
+
+            1. 准确性：译文是否准确传达了原文的意思
+
+            2. 流畅性：译文是否自然流畅
+
+            3. 术语一致性：专业术语是否一致
+
+            4. 风格匹配：译文风格是否与原文匹配
+
+
+            请按照以下格式输出评估结果：
+
+
+            1. 准确性：[评分1-5分] [评语]
+
+            2. 流畅性：[评分1-5分] [评语]
+
+            3. 术语一致性：[评分1-5分] [评语]
+
+            4. 风格匹配：[评分1-5分] [评语]
+
+
+            评分标准：
+
+            5分：完美
+
+            4分：良好
+
+            3分：一般
+
+            2分：较差
+
+            1分：很差'
+        - role: user
+          text: '原文：{{#1.original_text#}}
+
+
+            优化后的翻译：{{#6.text#}}
+
+
+            之前的评估反馈：{{#3.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 翻译质量评估（循环内）
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '7'
+      parentId: '5'
+      position:
+        x: 568.4022421770665
+        y: 69.68657482291684
+      positionAbsolute:
+        x: 1848.5206633332887
+        y: 351.68657482291684
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        code: "def main(assessment_text: str) -> dict:\n    import re\n    \n    #\
+          \ 提取四个维度的评分\n    accuracy_match = re.search(r'准确性：(\\d+)分', assessment_text)\n\
+          \    fluency_match = re.search(r'流畅性：(\\d+)分', assessment_text)\n    terminology_match\
+          \ = re.search(r'术语一致性：(\\d+)分', assessment_text)\n    style_match = re.search(r'风格匹配：(\\\
+          d+)分', assessment_text)\n    \n    # 计算综合评分（平均分）\n    try:\n        accuracy\
+          \ = int(accuracy_match.group(1)) if accuracy_match else 0\n        fluency\
+          \ = int(fluency_match.group(1)) if fluency_match else 0\n        terminology\
+          \ = int(terminology_match.group(1)) if terminology_match else 0\n      \
+          \  style = int(style_match.group(1)) if style_match else 0\n        \n \
+          \       total_score = (accuracy + fluency + terminology + style) / 4\n \
+          \       \n        return {\n            \"score\": total_score,\n      \
+          \      \"accuracy\": accuracy,\n            \"fluency\": fluency,\n    \
+          \        \"terminology\": terminology,\n            \"style\": style,\n\
+          \            \"error\": \"\"\n        }\n    except Exception as e:\n  \
+          \      return {\n            \"score\": 0,\n            \"accuracy\": 0,\n\
+          \            \"fluency\": 0,\n            \"terminology\": 0,\n        \
+          \    \"style\": 0,\n            \"error\": str(e)\n        }"
+        code_language: python3
+        desc: 计算翻译质量评估的综合评分
+        outputs:
+          accuracy:
+            children: null
+            type: number
+          error:
+            children: null
+            type: string
+          fluency:
+            children: null
+            type: number
+          score:
+            children: null
+            type: number
+          style:
+            children: null
+            type: number
+          terminology:
+            children: null
+            type: number
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        timeout: 60
+        title: 计算综合评分
+        type: code
+        variables:
+        - value_selector:
+          - '7'
+          - text
+          variable: assessment_text
+        version: '1'
+      height: 54
+      id: '8'
+      parentId: '5'
+      position:
+        x: 908.738768861454
+        y: 69.33959190672152
+      positionAbsolute:
+        x: 2188.738768861454
+        y: 351.3395919067215
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: 更新会话变量中的评分和翻译结果
+        isInLoop: true
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '8'
+          - score
+          variable_selector:
+          - translation_score
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '6'
+          - text
+          variable_selector:
+          - translation_result
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '7'
+          - text
+          variable_selector:
+          - assessment_reason
+          write_mode: over-write
+        loop_id: '5'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 更新会话变量
+        type: assigner
+        version: '2'
+      height: 144
+      id: '9'
+      parentId: '5'
+      position:
+        x: 1340
+        y: 68
+      positionAbsolute:
+        x: 2218.738768861454
+        y: 350
+      type: custom
+      width: 244
+      zIndex: 1002
+    type: custom

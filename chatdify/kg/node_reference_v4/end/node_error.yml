@@ -1,0 +1,11 @@
+node_error:
+- '变量引用错误: ''10000003.false'' - (节点ID: 10000003, 节点类型: ''if-else'') 不能被作为变量引用。请仔细检查任务工作流上下文，选择正确的变量引用。'
+- '创建节点失败, 节点ID 10000011: 处理节点配置失败: 1 validation error for EndNodeData outputs.0.value_selector Field required [type=missing, input_value={''value'': ''无法识别...iable'': ''error_message''}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/missing'
+- 输出变量选择器列表不能为空
+- '输出变量错误: ''10000004.output'' - 节点 ''10000004'' (类型: parameter-extractor) 的可用输出为: [''certifications'', ''contact'', ''education'', ''name'', ''projects'', ''skills'', ''work_experience'']，而不是: ''output'''
+- '变量引用错误: ''10000012.text'' - 节点 ''10000012'' 不是当前节点的前置节点。请仔细检查任务工作流上下文，从可用前置节点列表中选择, 可用前置节点列表: 10000011, 10000010, 10000006, 10000005, 10000003, 10000002, 10000001, 10000004, 10000007, 10000008, 10000009'
+- '创建节点失败, 节点ID 10000008: 处理节点配置失败: 1 validation error for EndNodeData outputs Input should be a valid list [type=list_type, input_value={''result'': {''children'': N...[''10000007'', ''result'']}}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/list_type'
+- '创建节点失败, 节点ID 10000004: 处理节点配置失败: 1 validation error for EndNodeData outputs Input should be a valid list [type=list_type, input_value={''svg_image'': {''value_sel...variable'': ''svg_image''}}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/list_type'
+- '创建节点失败, 节点ID 5: 处理节点配置失败: 1 validation error for EndNodeData outputs Input should be a valid list [type=list_type, input_value={''result'': {''type'': ''stri...ctor'': [''4'', ''result'']}}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/list_type'
+- '创建节点失败, 节点ID 7: 处理节点配置失败: 1 validation error for EndNodeData outputs Input should be a valid list [type=list_type, input_value={''output'': {''children'': None, ''type'': ''string''}}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/list_type'
+- '创建节点失败, 节点ID 10000013: 处理节点配置失败: 1 validation error for EndNodeData outputs Input should be a valid list [type=list_type, input_value={''output'': {''children'': N...[''10000010'', ''output'']}}, input_type=dict] For further information visit https://errors.pydantic.dev/2.10/v/list_type'

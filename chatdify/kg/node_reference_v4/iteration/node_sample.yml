@@ -1,0 +1,121 @@
+nodes:
+- data:
+    desc: 迭代生成各章节内容
+    error_handle_mode: terminated
+    height: 177
+    is_parallel: true
+    iterator_selector:
+    - '10000003'
+    - result
+    output_selector:
+    - '10000005'
+    - text
+    output_type: array[string]
+    parallel_nums: 5
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 10
+    selected: false
+    start_node_id: 10000004start
+    title: Generate Chapter Contents
+    type: iteration
+    version: '1'
+    width: 388
+  id: '10000004'
+  parentId: null
+  type: custom
+  zIndex: 1
+- data:
+    desc: 迭代处理会议文档的各段落内容
+    error_handle_mode: terminated
+    height: 480
+    is_parallel: false
+    iterator_selector:
+    - '3'
+    - paragraphs
+    output_selector:
+    - '5'
+    - text
+    output_type: array[object]
+    parallel_nums: 1
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    start_node_id: 4start
+    title: 段落迭代处理
+    type: iteration
+    version: '1'
+    width: 1360
+  id: '4'
+  parentId: null
+  selected: true
+  type: custom
+  zIndex: 0
+- data:
+    desc: ''
+    error_handle_mode: terminated
+    height: 377
+    is_parallel: false
+    iterator_selector:
+    - '1713262060182'
+    - result
+    output_selector:
+    - '1720758555344'
+    - output
+    output_type: array[string]
+    parallel_nums: 10
+    selected: false
+    startNodeType: tool
+    start_node_id: 1716911333343start0
+    title: Iteration
+    type: iteration
+    width: 985
+  id: '1716911333343'
+  selected: false
+  type: custom
+  zIndex: 1
+- data:
+    desc: ''
+    error_handle_mode: terminated
+    height: 1042
+    is_parallel: false
+    iterator_selector:
+    - '1739245548624'
+    - array
+    output_selector:
+    - '1739254296073'
+    - output
+    output_type: array[string]
+    parallel_nums: 10
+    selected: false
+    start_node_id: 1739244888446start
+    title: Iteration
+    type: iteration
+    width: 1186
+  id: '1739244888446'
+  selected: false
+  type: custom
+  zIndex: 1
+- data:
+    desc: ''
+    height: 203
+    iterator_selector:
+    - '1720508367130'
+    - signatures
+    output_selector:
+    - '1720580171037'
+    - text
+    output_type: array[string]
+    selected: false
+    startNodeType: llm
+    start_node_id: 1720580108806start0
+    title: Iteration - 生成每个函数/类的代码
+    type: iteration
+    width: 377
+  id: '1720580108806'
+  selected: false
+  type: custom
+  zIndex: 1

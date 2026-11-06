@@ -1,0 +1,204 @@
+app:
+  description: 识别图片，提取文字内容，按照markdown格式输出
+  icon: 🔠
+  icon_background: '#D3F8DF'
+  mode: workflow
+  name: 文字提取
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.2
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1731154408275-source-1731154414190-target
+      source: '1731154408275'
+      sourceHandle: source
+      target: '1731154414190'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1731154414190-source-1731154417489-target
+      source: '1731154414190'
+      sourceHandle: source
+      target: '1731154417489'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - image
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: pic
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: pic
+      height: 90
+      id: '1731154408275'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-241226
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 6a94c165-0260-465f-9567-27cd79b07544
+          role: system
+          text: '您的任务是将文件内容转录并格式化为 markdown。您的目标是创建一个结构良好、可读性强的 markdown 文档，该文档准确表示原始内容，同时添加适当的格式和标签。
+
+
+            请按照以下说明完成任务：
+
+
+            1. 仔细阅读整个文件内容。
+
+            2. 将内容转录为 markdown 格式，密切关注现有的格式和结构。例如分栏，需要符合阅读顺序。
+
+            3. 如果您在原始内容中发现任何不清楚的格式，请自行判断添加适当的 markdown 格式以提高可读性和结构。
+
+            4. 对于表格、标题和目录，请添加以下标签：
+
+            - 表格：将整个表格括在 [TABLE] 和 [/TABLE] 标签中。如果表格内容在下一页继续，请合并表格内容。
+
+            - 目录：用 [TOC] 和 [/TOC] 标签括起来
+
+            5. 转录表格时：
+
+            - 如果表格跨越多页，请将内容合并为一个连贯的表格。
+
+            - 使用适当的 markdown 表格格式，表格结构使用竖线 (|) 和连字符 (-)。
+
+            - 表格不需要使用```符号包裹
+
+            6. 对于公式，请使用latex格式，公式使用$符号包裹
+
+            7. 不要在转录中包含分页符。
+
+            8. 保持文档的逻辑流程和结构，确保使用 markdown 标题正确格式化章节和小节（# 表示主标题，## 表示副标题等）。
+
+            9. 根据需要对其他格式元素（如粗体、斜体、列表和代码块）使用适当的 markdown 语法。
+
+            10. 仅返回 markdown 格式的解析内容，包括表格、标题和目录的指定标签。'
+        selected: true
+        title: 文字提取
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1731154408275'
+            - pic
+          enabled: true
+      height: 98
+      id: '1731154414190'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1731154414190'
+          - text
+          variable: text
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1731154417489'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 209.1839240097686
+      y: 81.97026188184282
+      zoom: 1.0289033425349177

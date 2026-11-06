@@ -1,0 +1,584 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: pdf文档翻译
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: bowenliang123/md_exporter:1.10.0@c75d120ab14b2bbc6f56d15f854cf2a2d1dfb464b6245ab9ce56a3e9f98b1273
+kind: app
+version: 0.3.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: code
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '10000004'
+        sourceType: iteration-start
+        targetType: llm
+      id: 10000004start-source-10000005-target
+      source: 10000004start
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: iteration
+        targetType: llm
+      id: 10000004-source-1755645472944-target
+      source: '10000004'
+      sourceHandle: source
+      target: '1755645472944'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1755645472944-source-1755645670559-target
+      source: '1755645472944'
+      sourceHandle: source
+      target: '1755645670559'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: tool
+      id: 1755645670559-source-1755646030358-target
+      source: '1755645670559'
+      sourceHandle: source
+      target: '1755646030358'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: end
+      id: 1755646030358--1755646082623-target
+      source: '1755646030358'
+      sourceHandle: ''
+      target: '1755646082623'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的需要翻译的PDF文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: PDF文件上传
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .pdf
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: PDF文件
+          max_length: 48
+          required: true
+          type: file
+          variable: pdf_file
+        - label: 源语言
+          max_length: 48
+          options:
+          - 英文
+          required: true
+          type: select
+          variable: src_lang
+        - label: 目标语言
+          max_length: 48
+          options:
+          - 中文
+          required: true
+          type: select
+          variable: dst_lang
+        version: '1'
+      height: 169
+      id: '10000001'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从PDF文件中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: PDF文本提取
+        type: document-extractor
+        variable_selector:
+        - '10000001'
+        - pdf_file
+        version: '1'
+      height: 119
+      id: '10000002'
+      parentId: null
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import re\n\ndef main(pdf_text: str) -> dict:\n    \"\"\"\n    将PDF文本按章节分割成数组\n\
+          \    \n    参数:\n        pdf_text: 从PDF提取的完整文本内容\n        \n    返回:\n   \
+          \     包含章节数组的字典，格式为 {'chapters': List[str]}\n    \"\"\"\n    \n    # 使用正则表达式按章节标题分割文本\n\
+          \    # 假设章节标题格式为 'Chapter X' 或 'CHAPTER X'\n    chapter_pattern = re.compile(r'(?i)(Chapter|CHAPTER)\\\
+          s+\\d+\\s*\\n')\n    \n    # 分割文本\n    chapters = chapter_pattern.split(pdf_text)\n\
+          \    \n    # 过滤空章节并去除前后空白\n    chapters = [chap.strip() for chap in chapters\
+          \ if chap.strip()]\n    \n    return {\n        \"chapters\": chapters\n\
+          \    }"
+        code_language: python3
+        desc: 将PDF文本内容按章节分割成数组
+        outputs:
+          chapters:
+            children: null
+            type: array[string]
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 章节分割
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: pdf_text
+        version: '1'
+      height: 81
+      id: '10000003'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 迭代处理PDF文件的每个章节
+        error_handle_mode: terminated
+        height: 268
+        is_parallel: false
+        iterator_selector:
+        - '10000003'
+        - chapters
+        output_selector:
+        - '10000005'
+        - text
+        output_type: array[string]
+        parallel_nums: 1
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 10
+        selected: false
+        start_node_id: 10000004start
+        title: 章节迭代处理
+        type: iteration
+        version: '1'
+        width: 1860
+      height: 268
+      id: '10000004'
+      parentId: null
+      position:
+        x: 796
+        y: 395
+      positionAbsolute:
+        x: 796
+        y: 395
+      selected: true
+      type: custom
+      width: 1860
+      zIndex: 1
+    - data:
+        desc: 迭代起始节点，分发单个章节进行处理
+        isInIteration: true
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 章节迭代开始
+        type: iteration-start
+        version: '1'
+      height: 48
+      id: 10000004start
+      parentId: '10000004'
+      position:
+        x: 1000
+        y: 200
+      positionAbsolute:
+        x: 1796
+        y: 595
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点用于翻译章节内容
+        isInIteration: true
+        iteration_id: '10000004'
+        model:
+          completion_params:
+            frequency_penalty: 0
+            max_tokens: 4096
+            presence_penalty: 0
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: e9f65536-0e93-461a-9296-f3c3e1912ed9
+          role: system
+          text: '你是一位专业的翻译专家，负责将英文学术内容准确翻译成中文。请遵循以下规则：
+
+
+            1. 保持学术严谨性，专业术语翻译准确
+
+            2. 保持原文结构和段落格式
+
+            3. 中文表达自然流畅，符合学术写作规范
+
+            4. 保留所有图表、公式和特殊符号的原始格式
+
+            5. 章节标题需明确标注并保持层级关系'
+        - id: 0a665329-56bf-4389-9a8d-995bc0f73e15
+          role: user
+          text: '请将以下英文章节内容翻译成中文：
+
+
+            {{#10000004.item#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 章节翻译
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 117
+      id: '10000005'
+      parentId: '10000004'
+      position:
+        x: 1300
+        y: 100
+      positionAbsolute:
+        x: 2096
+        y: 495
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 请汇总按章节翻译的内容，并整理成markdown格式进行输出
+        - role: user
+          text: 章节翻译结果{{#10000004.output#}}
+        selected: false
+        title: 汇总并转成markdown
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1755645472944'
+      parentId: null
+      position:
+        x: 1900
+        y: 265
+      positionAbsolute:
+        x: 1900
+        y: 265
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import re\n\ndef main(text: str) -> str:\n    \"\"\"简洁版本：提取markdown内容\"\
+          \"\"\n    match = re.search(r'```markdown\\s*\\n(.*?)\\n```', text, re.DOTALL)\n\
+          \    return dict(md=match.group(1) if match else None)\n\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          md:
+            children: null
+            type: string
+        selected: false
+        title: 清洗大模型输出为纯markdown文本
+        type: code
+        variables:
+        - value_selector:
+          - '1755645472944'
+          - text
+          value_type: string
+          variable: text
+      height: 53
+      id: '1755645670559'
+      parentId: null
+      position:
+        x: 2204
+        y: 265
+      positionAbsolute:
+        x: 2204
+        y: 265
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        is_team_authorization: true
+        output_schema: null
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Markdown text
+            ja_JP: Markdown text
+            pt_BR: Markdown text
+            zh_Hans: Markdown格式文本
+          label:
+            en_US: Markdown text
+            ja_JP: Markdown text
+            pt_BR: Markdown text
+            zh_Hans: Markdown格式文本
+          llm_description: ''
+          max: null
+          min: null
+          name: md_text
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Optional custom output file name, and the filename suffix is not
+              required.
+            ja_JP: Optional custom output file name, and the filename suffix is not
+              required.
+            pt_BR: Optional custom output file name, and the filename suffix is not
+              required.
+            zh_Hans: 可选的自定义输出文件名，后缀名无需指定
+          label:
+            en_US: Output Filename
+            ja_JP: Output Filename
+            pt_BR: Output Filename
+            zh_Hans: 输出文件名
+          llm_description: ''
+          max: null
+          min: null
+          name: output_filename
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        params:
+          md_text: ''
+          output_filename: ''
+        provider_id: bowenliang123/md_exporter/md_exporter
+        provider_name: bowenliang123/md_exporter/md_exporter
+        provider_type: builtin
+        selected: false
+        title: Markdown 转 PDF 文件
+        tool_configurations: {}
+        tool_description: 将 Markdown 转换为 PDF 文件的工具
+        tool_label: Markdown 转 PDF 文件
+        tool_name: md_to_pdf
+        tool_parameters:
+          md_text:
+            type: mixed
+            value: '{{#1755645670559.md#}}'
+          output_filename:
+            type: mixed
+            value: /翻译结果文件名
+        type: tool
+        version: '2'
+      height: 85
+      id: '1755646030358'
+      parentId: null
+      position:
+        x: 2508
+        y: 265
+      positionAbsolute:
+        x: 2508
+        y: 265
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1755646030358'
+          - files
+          value_type: array[file]
+          variable: result
+        selected: false
+        title: 结束
+        type: end
+      height: 89
+      id: '1755646082623'
+      parentId: null
+      position:
+        x: 2812
+        y: 265
+      positionAbsolute:
+        x: 2812
+        y: 265
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -2427.5
+      y: 87.5
+      zoom: 1

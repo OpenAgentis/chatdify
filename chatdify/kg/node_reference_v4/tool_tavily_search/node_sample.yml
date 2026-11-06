@@ -1,0 +1,51 @@
+nodes:
+- data:
+    provider_id: langgenius/tavily/tavily
+    provider_name: langgenius/tavily/tavily
+    provider_type: builtin
+    tool_name: tavily_search
+    tool_label: TavilySearch
+    title: TavilySearch
+    retry_config:
+      max_retries: 3
+      retry_enabled: true
+      retry_interval: 1000
+    tool_configurations:
+      auto_parameters:
+        type: constant
+        value: false
+      chunks_per_source:
+        type: constant
+        value: 3
+      include_answer:
+        type: constant
+        value: false
+      include_favicon:
+        type: constant
+        value: false
+      include_image_descriptions:
+        type: constant
+        value: false
+      include_images:
+        type: constant
+        value: false
+      include_raw_content:
+        type: constant
+        value: false
+      max_results:
+        type: constant
+        value: 5
+    tool_parameters:
+      query:
+        type: mixed
+        value: '{{#1000001.topic#}}'
+    version: '2'
+    desc: 使用Tavily搜索引擎API进行网络搜索
+    selected: false
+    type: tool
+  parentId: null
+  type: custom
+  zIndex: 0
+  height: 246
+  width: 244
+  id: '1000002' 

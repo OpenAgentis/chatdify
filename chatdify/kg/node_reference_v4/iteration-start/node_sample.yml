@@ -1,0 +1,143 @@
+nodes:
+- data:
+    desc: 迭代起始节点，分发单个段落进行处理
+    isInIteration: true
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: 段落迭代开始
+    type: iteration-start
+    version: '1'
+  id: 4start
+  parentId: '4'
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    iteration_id: '4'
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: ''
+    type: iteration-start
+    version: '1'
+  id: 4start
+  parentId: '4'
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    retry_config:
+      max_retries: 0
+      retry_enabled: false
+      retry_interval: 0
+    selected: false
+    title: ''
+    type: iteration-start
+    version: '1'
+  id: 10000004start
+  parentId: '10000004'
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    selected: false
+    title: ''
+    type: iteration-start
+  draggable: false
+  id: 1731576069313start
+  parentId: '1731576069313'
+  selectable: false
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    selected: false
+    title: ''
+    type: iteration-start
+  draggable: false
+  id: 1728217105363start
+  parentId: '1728217105363'
+  selectable: false
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    selected: false
+    title: ''
+    type: iteration-start
+  draggable: false
+  id: 1752569774166start
+  parentId: '1752569774166'
+  selectable: false
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    selected: false
+    title: ''
+    type: iteration-start
+  draggable: false
+  id: 1719046938333start0
+  parentId: '1719046938333'
+  selectable: false
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    selected: false
+    title: ''
+    type: iteration-start
+  draggable: false
+  id: 1739244888446start
+  parentId: '1739244888446'
+  selectable: false
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    selected: false
+    title: ''
+    type: iteration-start
+  draggable: false
+  id: 1720580108806start0
+  parentId: '1720580108806'
+  selectable: false
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    selected: false
+    title: ''
+    type: iteration-start
+  draggable: false
+  id: 1716911333343start0
+  parentId: '1716911333343'
+  selectable: false
+  type: custom-iteration-start
+  zIndex: 1002
+- data:
+    desc: ''
+    isInIteration: true
+    selected: false
+    title: ''
+    type: iteration-start
+  draggable: false
+  id: 1728709933523start
+  parentId: '1728709933523'
+  selectable: false
+  type: custom-iteration-start
+  zIndex: 1002

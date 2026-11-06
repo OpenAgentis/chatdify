@@ -1,0 +1,44 @@
+common_node_usage: |-
+  ### 搜索引擎节点规则
+  1. 请使用 tool_tavily 搜索节点
+
+  ### **advanced-chat模式**规则
+  1. 如果工作流模式为**advanced-chat**，多轮对话中用户提问的问题变量，请引用sys.query变量。
+
+  ### 输出变量引用规则
+  1. http-request类型节点可用输出为status_code、body、headers、files，禁止使用http_response等不存在的字段名：
+    - body：HTTP响应正文（文本或JSON字符串），用于解析API返回、模板拼接等
+    - files：响应中的文件列表（如GET下载得到的图片/文档），供LLM vision或需要file类型的下游节点引用
+    - status_code、headers：仅在需要判断请求成败或读取响应头时引用
+  2. LLM类型节点输出使用text
+  3. document-extractor类型节点输出使用text
+  4. list-operator类型节点输出使用result（过滤后的数组）、first_record或last_record，禁止使用item（item仅属于iteration节点）
+  5. agent类型节点输出使用text
+  6. variable-aggregator类型节点输出使用output
+  7. template-transform类型节点输出使用output
+  8. question-classifier类型节点输出使用class_name
+  9. knowledge-retrieval类型节点输出使用result
+  10. iteration类型的节点在迭代外部输出使用output
+  11. iteration类型的节点在迭代内部输出使用item，禁止使用item.xx语法，不能引用item内部子变量
+  12. iteration-start类型的节点输出变量禁止被引用
+  13. loop-start类型的节点输出变量不能被引用
+  14. if-else类型的节点输出变量不能被引用
+  15. assigner类型的节点输出变量不能被引用
+  16. Tool中md_to_xx类型（如md_to_docx, md_to_pdf等）的节点输出使用files
+  17. Tool中tool_jina_reader类型节点输出使用text
+  18. Tool中tool_text2image类型节点输出规则：
+    - text：生成图片的 HTTP 链接文本；展示图片时引用该字段
+    - images：图片对象数组，元素含 url、size；供 code 节点提取 url字段
+    - files：工具文件列表；ImageGenerations 场景常为空
+  19. Tool中tavily_search类型节点输出纯文本展示请优先使用text字段（纯文本）。如果需要结构化检索结果，请使用json字段。json字段是一个数组格式（Array[Object],注意不是json字符串格式），数组中每个元素是一次搜索的完整结果对象，其结构如下：
+    - query：本次搜索使用的查询语句（string）
+    - results：检索结果数组（Array[Object]），是核心内容，每个结果元素包含：
+      - content：网页正文摘要内容（string）
+      - domain：来源网站域名（string，如"ithome.com"）
+      - main_topic：主题分类（string，如"product"）
+      - popularity_score：热度评分（number）
+      - raw_content：原始完整内容，仅当include_raw_content为true时有值，否则为null
+      - score：与查询的相关性得分（number，0~1之间）
+      - title：网页标题（string）
+      - url：网页链接（string）
+    引用结构化结果时需注意：取检索条目正文用{{#节点ID.json#}}后在下游（如代码/模板节点）遍历results数组并取content/title/url等字段，json字段不是json字符串格式，不能直接拼接为纯文本展示，纯文本展示请优先使用text字段

@@ -1,0 +1,270 @@
+app:
+  mode: workflow
+  name: web_content_summarizer
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: tool
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: document-extractor
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 5-source-6-target
+      source: '5'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的URL作为搜索查询
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - label: URL
+          max_length: 2048
+          required: true
+          type: text-input
+          variable: url
+        version: '1'
+      height: 90
+      id: '1'
+      parentId: null
+      position:
+        x: 30
+        y: 30
+      positionAbsolute:
+        x: 30
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 根据输入的URL执行网络搜索
+        parameters: {}
+        provider_id: tavily
+        provider_name: tavily
+        provider_type: builtin
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 30
+        title: TavilySearch
+        tool_configurations:
+          exclude_domains: null
+          include_answer: 0
+          include_domains: null
+          include_images: 0
+          include_raw_content: 1
+          max_results: 10
+          search_depth: basic
+        tool_label: TavilySearch
+        tool_name: tavily_search
+        tool_parameters:
+          query:
+            type: mixed
+            value: '{{#1.url#}}'
+        type: tool
+        version: '1'
+      height: 246
+      id: '2'
+      parentId: null
+      position:
+        x: 331.7190223065919
+        y: 150
+      positionAbsolute:
+        x: 331.7190223065919
+        y: 150
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从搜索结果中提取网页正文内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '2'
+        - text
+        version: '1'
+      height: 54
+      id: '3'
+      parentId: null
+      position:
+        x: 638
+        y: 150
+      positionAbsolute:
+        x: 638
+        y: 150
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据提取的内容生成摘要
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一个专业的摘要生成助手。请根据提供的文本内容，生成简洁、准确的摘要。摘要应包含原文的核心信息和关键点，同时保持语言流畅自然。
+        - role: user
+          text: '请为以下内容生成摘要：
+
+
+            {{#3.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 内容摘要生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '4'
+      parentId: null
+      position:
+        x: 942
+        y: 150
+      positionAbsolute:
+        x: 942
+        y: 150
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\n\ndef main(url: str, summary: str) -> dict:\n    try:\n\
+          \        # 创建表格格式数据\n        table_data = {\n            \"url\": url,\n\
+          \            \"summary\": summary\n        }\n        \n        # 返回格式化结果\n\
+          \        return {\n            \"result\": table_data,\n            \"error\"\
+          : None\n        }\n    except Exception as e:\n        return {\n      \
+          \      \"result\": None,\n            \"error\": str(e)\n        }"
+        code_language: python3
+        desc: 将URL和摘要整合成表格格式
+        outputs:
+          error:
+            children: null
+            type: string
+          result:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: URL与摘要整合
+        type: code
+        variables:
+        - value_selector:
+          - '1'
+          - url
+          variable: url
+        - value_selector:
+          - '4'
+          - text
+          variable: summary
+        version: '1'
+      height: 54
+      id: '5'
+      parentId: null
+      position:
+        x: 1250
+        y: 150
+      positionAbsolute:
+        x: 1250
+        y: 150
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终的表格结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '5'
+          - result
+          variable: table_result
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: End
+        type: end
+        version: '1'
+      height: 90
+      id: '6'
+      parentId: null
+      position:
+        x: 1500
+        y: 150
+      positionAbsolute:
+        x: 1500
+        y: 150
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

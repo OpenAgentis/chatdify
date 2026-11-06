@@ -1,0 +1,86 @@
+node_usage:
+  节点类型: tool_jina_reader
+  输入规范:
+    - 工具名称（tool_name）：固定为"langgenius/jina_tool/jina"
+    - 提供者ID（provider_id）：固定为"langgenius/jina_tool/jina"
+    - 提供者类型（provider_type）：固定为"builtin"
+    - version： 固定为'2' 
+    - 重试配置（retry_config）：
+      - max_retries：最大重试次数，默认3
+      - retry_enabled：是否启用重试，默认true
+      - retry_interval：重试间隔，默认1000
+    - 核心参数（tool_parameters）：
+      - url：必填参数，目标网页URL
+        - type：支持"mixed"、"variable"、"constant"类型
+        - value：URL地址，支持变量引用和模板语法
+      - request_params：可选参数，HTTP请求参数
+        - type：通常为"mixed"类型
+        - value：请求参数字符串
+    - 输出规范：
+      - text：固定输出字段，类型为 string；字段值通常是一个 JSON 字符串
+      - text 解析后通常包含 code、status、data；网页标题在 data.title，描述在 data.description，原始 URL 在 data.url，正文在 data.content
+      - 下游 code/LLM 应引用 [JinaReader节点ID, text]；不要臆造 body、content、result、json 等字段
+    - 工具配置（tool_configurations）：
+      - gather_all_images_at_the_end：是否收集所有图片到末尾
+        - type： constant
+        - value： 1
+        - 说明： 默认启用
+      - gather_all_links_at_the_end：是否收集所有链接到末尾
+        - type： constant
+        - value： 1ß
+        - 说明： 默认启用
+      - image_caption：是否生成图片描述
+        - type： constant
+        - value： 1
+        - 说明： 默认启用
+      - max_retries：最大重试次数
+        - type： constant
+        - value： 3
+        - 说明： 默认3次
+      - no_cache：是否禁用缓存
+        - type： constant
+        - value： 1
+        - 说明： 默认禁用缓存
+      - proxy_server：代理服务器地址
+        - type： constant
+        - value： null
+        - 说明： 默认不使用代理
+      - remove_selector：移除选择器
+        - type： constant
+        - value： null
+        - 说明： 默认不移除元素
+      - retain_images：是否保留图片
+        - type： constant
+        - value： 1
+        - 说明： 默认保留
+      - summary：是否生成内容摘要
+        - type： constant
+        - value： 0
+        - 说明： 默认不生成摘要
+      - target_selector：目标选择器
+        - type： constant
+        - value： null
+        - 说明： 默认选择全部内容
+      - wait_for_selector：等待选择器
+        - type： constant
+        - value： null
+        - 说明： 默认不等待
+      - with_iframe：是否解析iframe内容
+        - type： constant
+        - value： 1
+        - 说明： 默认解析iframe
+      - with_shadow_dom：是否解析shadow DOM
+        - type： constant
+        - value： 1
+        - 说明： 默认解析shadow DOM
+  常见使用错误:
+    - 基础配置错误：
+      - URL参数为空或格式错误
+      - 工具版本不正确，必须设置为'2'
+    - 变量引用错误：
+      - 引用不存在的变量或节点输出
+      - 在迭代中引用错误的迭代变量
+      - 下游引用 JinaReader 输出时使用 body/content/result，而不是固定输出 text
+    - 输出解析错误：
+      - 未对 text 执行 json.loads，直接把整段 JSON 字符串当有效正文生成摘要/报告
+      - 未判断 text 是否为空、JSON 是否解析成功、code/status 是否成功、data.content 是否为空

@@ -1,0 +1,299 @@
+nodes:
+- data:
+    desc: ''
+    instruction: Extract the return value in the output value as four independent
+      parameters.Avoids redundancy by tracking previously written content
+    model:
+      completion_params:
+        temperature: 0.7
+      mode: chat
+      name: gemini-2.0-flash-exp
+      provider: google
+    parameters:
+    - description: First question provided by previous LLM
+      name: Question1
+      required: false
+      type: string
+    - description: Second question provided by previous LLM
+      name: Question2
+      required: false
+      type: string
+    - description: Third question provided by previous LLM
+      name: Question3
+      required: false
+      type: string
+    - description: Fourth question provided by previous LLM
+      name: Question4
+      required: false
+      type: string
+    - description: 分组输出所有问题内容
+      name: Questions
+      required: false
+      type: array[string]
+    query:
+    - '1739088190247'
+    - text
+    reasoning_mode: prompt
+    selected: false
+    title: 问题参数提取
+    type: parameter-extractor
+    variables: []
+    vision:
+      enabled: false
+  id: '1739089738469'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    instruction: '请对以下网页内容进行清洗，并抽取网页中的文章内容信息。请避免包含文章内容无关的信息，例如：html标签、页头、页尾。请对清洗后的信息进行markdown的格式输出。请对抽取的完整正文进行智能分段并保留原文的配图信息。
+
+
+
+      ### 约束条件
+
+      1.文本信息中如果有明显的标题信息请直接抽取，不需要自定义生成或加工
+
+      2.文本的正文内容请尊重原本描述抽取，不需要自定义生成或加工
+
+      3.关键词将用作图片多模态检索，请不要包含无意义的词组或短语。
+
+      4.请完整抽取原文内容，并保持段落排版
+
+      5.请过滤版权信息、编辑、作者、来源、转载以及与原文内容无关的信息
+
+
+
+      ### 抓取内容如下：
+
+      ```
+
+      {{#1718967141318.text#}}
+
+      ```'
+    model:
+      completion_params:
+        temperature: 1
+      mode: chat
+      name: deepseek-chat
+      provider: deepseek
+    parameters:
+    - description: 原文标题
+      name: title
+      required: true
+      type: string
+    - description: 原文完整内容
+      name: content
+      required: false
+      type: string
+    - description: 关键词信息
+      name: keywords
+      required: true
+      type: string
+    query:
+    - '1718967141318'
+    - text
+    reasoning_mode: prompt
+    selected: false
+    title: 留图-原文内容抽取
+    type: parameter-extractor
+    variables: []
+  id: '17190386712500'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    instruction: '提取内容中的步骤数组，按如下格式输出：
+
+      [ { "step":"步骤名称", "desc":"任务描述" }, { "step":"步骤名称", "desc":"任务描述" }, ... ]'
+    model:
+      completion_params:
+        temperature: 0.7
+      mode: chat
+      name: gpt-4o-mini
+      provider: openai
+    parameters:
+    - description: 提取内容中的步骤数组
+      name: step_array
+      required: true
+      type: array[object]
+    query:
+    - llm
+    - text
+    reasoning_mode: prompt
+    selected: false
+    title: 问题拆解后参数提取
+    type: parameter-extractor
+    variables: []
+    vision:
+      configs:
+        detail: high
+        variable_selector:
+        - sys
+        - files
+      enabled: false
+  id: '1728730008819'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    instruction: 提取{{#1739112773493.subtitle1#}}中的2~6个关键词
+    model:
+      completion_params:
+        temperature: 0.7
+      mode: chat
+      name: gemini-2.0-flash-exp
+      provider: google
+    parameters:
+    - description: 提取语段中值得查询的2~6个关键词
+      name: Keyword1
+      required: false
+      type: array[string]
+    query:
+    - '1739112773493'
+    - subtitle1
+    reasoning_mode: prompt
+    selected: false
+    title: sub关键词提取1
+    type: parameter-extractor
+    variables: []
+    vision:
+      enabled: false
+  id: '1739191349072'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    instruction: 提取{{#1739112773493.subtitle2#}}中的2~6个关键词
+    model:
+      completion_params:
+        temperature: 0.7
+      mode: chat
+      name: gemini-2.0-flash-exp
+      provider: google
+    parameters:
+    - description: 提取语段中值得查询的2~6个关键词
+      name: Keyword2
+      required: false
+      type: array[string]
+    query:
+    - '1739112773493'
+    - subtitle2
+    reasoning_mode: prompt
+    selected: false
+    title: sub关键词提取2
+    type: parameter-extractor
+    variables: []
+    vision:
+      enabled: false
+  id: '17391916626840'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    instruction: 提取{{#1739112773493.subtitle3#}}中的2~6个关键词
+    model:
+      completion_params:
+        temperature: 0.7
+      mode: chat
+      name: gemini-2.0-flash-exp
+      provider: google
+    parameters:
+    - description: 提取语段中值得查询的2~6个关键词
+      name: Keyword3
+      required: false
+      type: array[string]
+    query:
+    - '1739112773493'
+    - subtitle3
+    reasoning_mode: prompt
+    selected: false
+    title: sub关键词提取3
+    type: parameter-extractor
+    variables: []
+    vision:
+      enabled: false
+  id: '17391916638460'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    instruction: 提取{{#1739112773493.subtitle4#}}中的2~6个关键词
+    model:
+      completion_params:
+        temperature: 0.7
+      mode: chat
+      name: gemini-2.0-flash-exp
+      provider: google
+    parameters:
+    - description: 提取语段中值得查询的2~6个关键词
+      name: Keyword4
+      required: false
+      type: array[string]
+    query:
+    - '1739112773493'
+    - subtitle4
+    reasoning_mode: prompt
+    selected: false
+    title: sub关键词提取4
+    type: parameter-extractor
+    variables: []
+    vision:
+      enabled: false
+  id: '17391916650280'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    instruction: "请分析文章的内容结构，将文本划分为一个或多个语义完整的章节，每个章节不少于400字。并为每个章节生成若干个用于检索图片的关键词或描述，多个关键词使用逗号进行分割。输出结构为json\n\
+      Example:{\n    \"sections\": [\n        {\n           ”keywords“: ”关键词或描述字符串“,\n\
+      \           ”section“: \"章节内容1\"\n        },\n        {\n           ”keywords“:\
+      \ ”关键词或描述字符串“,\n           ”section“: \"章节内容2\"\n        },\n         {\n  \
+      \         ”keywords“: ”关键词或描述字符串“,\n           ”section“: \"章节内容2\"\n      \
+      \  }\n    ]\n}\n"
+    model:
+      completion_params:
+        temperature: 1
+      mode: chat
+      name: deepseek-chat
+      provider: deepseek
+    parameters:
+    - description: 多个文章段落
+      name: sections
+      required: true
+      type: array[object]
+    query:
+    - '17190400701430'
+    - content
+    reasoning_mode: prompt
+    selected: false
+    title: 段落拆分-关键词生成
+    type: parameter-extractor
+    variables: []
+  id: '1719046777534'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    instruction: 提取URL的值
+    model:
+      completion_params:
+        temperature: 0.7
+      mode: chat
+      name: doubao
+      provider: volcengine_maas
+    parameters:
+    - description: 提取生成的图片链接
+      name: image_url
+      required: false
+      type: string
+    query:
+    - '1721710297246'
+    - body
+    reasoning_mode: prompt
+    selected: false
+    title: Parameter Extractor
+    type: parameter-extractor
+    variables: []
+  id: '1721731782529'
+  selected: false
+  type: custom

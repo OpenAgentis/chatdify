@@ -1,0 +1,14 @@
+edges:
+- - data:
+      isInIteration: false
+      isInLoop: true
+      loop_id: '1744689095698'
+      sourceType: loop-start
+      targetType: llm
+    id: 1744689095698start-source-1744689100689-target
+    source: 1744689095698start
+    sourceHandle: source
+    target: '1744689100689'
+    targetHandle: target
+    type: custom
+    zIndex: 1002

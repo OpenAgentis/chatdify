@@ -218,3 +218,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ChatDify
+.DS_Store
+/model/
+/output/
+/logs/
+/eval_results/
+/chatdify/output/
+/chatdify/logs/
+
+# local credentials
+env.sh

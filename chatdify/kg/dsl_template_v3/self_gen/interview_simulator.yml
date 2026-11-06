@@ -1,0 +1,826 @@
+app:
+  mode: advanced-chat
+  name: interview_simulator
+version: 0.5.0
+workflow:
+  conversation_variables:
+  - description: 面试阶段 init/await_answer/ask/done
+    name: phase
+    selector:
+    - conversation
+    - phase
+    value: init
+    value_type: string
+  - description: 已完成反馈的轮数
+    name: current_round
+    selector:
+    - conversation
+    - current_round
+    value: 0
+    value_type: number
+  - description: 对话记录 JSON 数组字符串
+    name: dialogue_history
+    selector:
+    - conversation
+    - dialogue_history
+    value: '[]'
+    value_type: string
+  - description: 当前等待作答的题目
+    name: pending_question
+    selector:
+    - conversation
+    - pending_question
+    value: ''
+    value_type: string
+  - description: 当前题目题型
+    name: pending_question_type
+    selector:
+    - conversation
+    - pending_question_type
+    value: ''
+    value_type: string
+  graph:
+    edges:
+    - id: 10000001-source-10000002-target
+      source: '10000001'
+      target: '10000002'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: start
+        targetType: code
+      zIndex: 0
+    - id: 10000002-source-10000003-target
+      source: '10000002'
+      target: '10000003'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: code
+        targetType: if-else
+      zIndex: 0
+    - id: 10000003-ask-10000004-target
+      source: '10000003'
+      target: '10000004'
+      sourceHandle: ask
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      zIndex: 0
+    - id: 10000004-source-10000005-target
+      source: '10000004'
+      target: '10000005'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: llm
+        targetType: assigner
+      zIndex: 0
+    - id: 10000005-source-10000006-target
+      source: '10000005'
+      target: '10000006'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: assigner
+        targetType: answer
+      zIndex: 0
+    - id: 10000003-feedback-10000007-target
+      source: '10000003'
+      target: '10000007'
+      sourceHandle: feedback
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      zIndex: 0
+    - id: 10000007-source-10000008-target
+      source: '10000007'
+      target: '10000008'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      zIndex: 0
+    - id: 10000008-source-10000009-target
+      source: '10000008'
+      target: '10000009'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: code
+        targetType: assigner
+      zIndex: 0
+    - id: 10000009-source-10000010-target
+      source: '10000009'
+      target: '10000010'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: assigner
+        targetType: if-else
+      zIndex: 0
+    - id: 10000010-true-10000014-target
+      source: '10000010'
+      target: '10000014'
+      sourceHandle: 'true'
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      zIndex: 0
+    - id: 10000014-source-10000011-target
+      source: '10000014'
+      target: '10000011'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: llm
+        targetType: assigner
+      zIndex: 0
+    - id: 10000011-source-10000012-target
+      source: '10000011'
+      target: '10000012'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: assigner
+        targetType: answer
+      zIndex: 0
+    - id: 10000010-false-10000013-target
+      source: '10000010'
+      target: '10000013'
+      sourceHandle: 'false'
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      zIndex: 0
+    - id: 10000013-source-answer-target
+      source: '10000013'
+      target: answer
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      zIndex: 0
+    - id: 10000003-finalize-10000013-target
+      source: '10000003'
+      target: '10000013'
+      sourceHandle: finalize
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      zIndex: 0
+    nodes:
+    - id: '10000001'
+      data:
+        title: 开始
+        type: start
+        version: '1'
+        variables:
+        - label: 目标岗位
+          max_length: 100
+          required: true
+          type: text-input
+          variable: target_role
+        - label: 面试题型偏好（逗号分隔多选，如 技术题,行为题,案例题）
+          max_length: 200
+          required: true
+          type: paragraph
+          variable: question_preferences
+        - label: 计划轮数（3-10）
+          required: true
+          type: number
+          variable: total_rounds
+          default: 5
+        desc: 收集岗位、题型偏好与计划轮数
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 120
+      width: 240
+      position:
+        x: 80
+        y: 280
+      positionAbsolute:
+        x: 80
+        y: 280
+    - id: '10000002'
+      data:
+        title: 阶段路由
+        type: code
+        code_language: python3
+        variables:
+        - value_selector:
+          - '10000001'
+          - target_role
+          variable: target_role
+        - value_selector:
+          - '10000001'
+          - question_preferences
+          variable: question_preferences
+        - value_selector:
+          - '10000001'
+          - total_rounds
+          variable: total_rounds
+        - value_selector:
+          - conversation
+          - phase
+          variable: phase
+        - value_selector:
+          - conversation
+          - current_round
+          variable: current_round
+        - value_selector:
+          - conversation
+          - pending_question
+          variable: pending_question
+        - value_selector:
+          - conversation
+          - dialogue_history
+          variable: dialogue_history
+        - value_selector:
+          - sys
+          - query
+          variable: user_query
+        code: "def main(target_role: str, question_preferences: str, total_rounds: float, phase: str, current_round: float, pending_question: str, dialogue_history: str, user_query: str) -> dict:\n    q = (user_query or \"\").strip()\n    total = int(total_rounds) if total_rounds is not None else 5\n    total = max(3, min(10, total))\n    rnd = int(current_round) if current_round is not None else 0\n    ph = (phase or \"init\").strip()\n    if ph == \"done\":\n        return {\"route\": \"finalize\", \"round_index\": rnd, \"question_type\": \"\", \"display_round\": rnd}\n    if ph == \"await_answer\" and q:\n        return {\"route\": \"feedback\", \"round_index\": rnd, \"question_type\": \"\", \"display_round\": rnd + 1}\n    if rnd >= total:\n        return {\"route\": \"finalize\", \"round_index\": rnd, \"question_type\": \"\", \"display_round\": rnd}\n    prefs = (question_preferences or \"技术题,行为题,案例题\").replace(\"，\", \",\")\n    types = [t.strip() for t in prefs.split(\",\") if t.strip()]\n    if not types:\n        types = [\"技术题\", \"行为题\", \"案例题\"]\n    qt = types[rnd % len(types)]\n    return {\"route\": \"ask\", \"round_index\": rnd, \"question_type\": qt, \"display_round\": rnd + 1}\n"
+        outputs:
+          route:
+            type: string
+          round_index:
+            type: number
+          question_type:
+            type: string
+          display_round:
+            type: number
+        timeout: 30
+        version: '1'
+        desc: 根据会话阶段与用户输入决定走出题、点评或综合评估分支
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 100
+      width: 240
+      position:
+        x: 380
+        y: 280
+      positionAbsolute:
+        x: 380
+        y: 280
+    - id: '10000003'
+      data:
+        title: 主流程分支
+        type: if-else
+        version: '1'
+        cases:
+        - case_id: ask
+          conditions:
+          - comparison_operator: is
+            id: cond-route-ask
+            value: ask
+            varType: string
+            variable_selector:
+            - '10000002'
+            - route
+          logical_operator: and
+        - case_id: feedback
+          conditions:
+          - comparison_operator: is
+            id: cond-route-feedback
+            value: feedback
+            varType: string
+            variable_selector:
+            - '10000002'
+            - route
+          logical_operator: and
+        - case_id: finalize
+          conditions:
+          - comparison_operator: is
+            id: cond-route-finalize
+            value: finalize
+            varType: string
+            variable_selector:
+            - '10000002'
+            - route
+          logical_operator: and
+        desc: ask=出题；feedback=用户已作答需点评；finalize=输出综合评估
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 140
+      width: 240
+      position:
+        x: 680
+        y: 280
+      positionAbsolute:
+        x: 680
+        y: 280
+    - id: '10000004'
+      data:
+        title: 生成本轮面试题
+        type: llm
+        version: '1'
+        model:
+          provider: langgenius/volcengine_maas/volcengine_maas
+          name: deepseek-v4-flash
+          mode: chat
+          completion_params:
+            max_tokens: 4096
+            temperature: 0.7
+            top_p: 0.8
+        prompt_template:
+        - role: system
+          text: "你是专业面试官。根据岗位与本轮题型生成 1 道面试题。\n要求：\n- 只输出题目正文，不要答案提示\n- 结合岗位考察点\n- 题型须符合本轮指定类型（技术/行为/案例）\n- 篇幅适中，便于候选人用多行文本作答"
+        - role: user
+          text: "岗位：{{#10000001.target_role#}}\n计划总轮数：{{#10000001.total_rounds#}}\n本轮序号：{{#10000002.display_round#}}\n本轮题型：{{#10000002.question_type#}}\n已完成轮次记录：{{#conversation.dialogue_history#}}\n\n请生成本轮面试问题。"
+        context:
+          enabled: false
+          variable_selector: []
+        vision:
+          enabled: false
+        desc: 按轮次与题型轮换生成单个面试问题
+        retry_config:
+          max_retries: 2
+          retry_interval: 5
+          retry_enabled: true
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 98
+      width: 240
+      position:
+        x: 980
+        y: 120
+      positionAbsolute:
+        x: 980
+        y: 120
+    - id: '10000005'
+      data:
+        title: 记录待答题目
+        type: assigner
+        version: '2'
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '10000004'
+          - text
+          variable_selector:
+          - conversation
+          - pending_question
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '10000002'
+          - question_type
+          variable_selector:
+          - conversation
+          - pending_question_type
+          write_mode: over-write
+        - input_type: constant
+          operation: set
+          value: await_answer
+          variable_selector:
+          - conversation
+          - phase
+          write_mode: over-write
+        desc: 保存题目并进入等待用户作答阶段
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 100
+      width: 240
+      position:
+        x: 1280
+        y: 120
+      positionAbsolute:
+        x: 1280
+        y: 120
+    - id: '10000006'
+      data:
+        title: 展示面试题
+        type: answer
+        answer: "### 第 {{#10000002.display_round#}} 轮面试（{{#10000002.question_type#}}）\n\n{{#10000004.text#}}\n\n---\n请在本轮作答（多行文本），提交后将给出评分与反馈。"
+        version: '1'
+        desc: 向用户展示当前面试题并等待下一轮用户输入
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 100
+      width: 240
+      position:
+        x: 1580
+        y: 120
+      positionAbsolute:
+        x: 1580
+        y: 120
+    - id: '10000007'
+      data:
+        title: 答案点评打分
+        type: llm
+        version: '1'
+        model:
+          provider: langgenius/volcengine_maas/volcengine_maas
+          name: deepseek-v4-flash
+          mode: chat
+          completion_params:
+            max_tokens: 2048
+            temperature: 0.3
+            top_p: 0.7
+        prompt_template:
+        - role: system
+          text: "你是面试官，对候选人本轮回答打分并反馈。\n输出必须是合法 JSON（不要 markdown 代码块），字段：\n- score: 1-10 整数\n- feedback: 不超过80字，涵盖内容深度/结构清晰度/表达表现\n- risk_note: 若存在明显事实错误或安全风险（如代码注入、违规建议）则简述，否则空字符串"
+        - role: user
+          text: "岗位：{{#10000001.target_role#}}\n题型：{{#conversation.pending_question_type#}}\n题目：{{#conversation.pending_question#}}\n\n候选人回答：\n{{#sys.query#}}"
+        context:
+          enabled: false
+          variable_selector: []
+        vision:
+          enabled: false
+        desc: 对 sys.query 中的用户作答进行评分与短反馈
+        retry_config:
+          max_retries: 2
+          retry_interval: 5
+          retry_enabled: true
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 98
+      width: 240
+      position:
+        x: 980
+        y: 400
+      positionAbsolute:
+        x: 980
+        y: 400
+    - id: '10000008'
+      data:
+        title: 追加对话记录
+        type: code
+        code_language: python3
+        variables:
+        - value_selector:
+          - '10000001'
+          - question_preferences
+          variable: question_preferences
+        - value_selector:
+          - '10000001'
+          - total_rounds
+          variable: total_rounds
+        - value_selector:
+          - conversation
+          - current_round
+          variable: current_round
+        - value_selector:
+          - conversation
+          - pending_question
+          variable: pending_question
+        - value_selector:
+          - conversation
+          - pending_question_type
+          variable: pending_question_type
+        - value_selector:
+          - conversation
+          - dialogue_history
+          variable: dialogue_history
+        - value_selector:
+          - sys
+          - query
+          variable: user_query
+        - value_selector:
+          - '10000007'
+          - text
+          variable: feedback_text
+        code: "import json\n\ndef main(question_preferences: str, total_rounds: float, current_round: float, pending_question: str, pending_question_type: str, dialogue_history: str, user_query: str, feedback_text: str) -> dict:\n    total = int(total_rounds) if total_rounds is not None else 5\n    total = max(3, min(10, total))\n    rnd = int(current_round) if current_round is not None else 0\n    try:\n        history = json.loads(dialogue_history) if dialogue_history else []\n    except Exception:\n        history = []\n    if not isinstance(history, list):\n        history = []\n    fb = feedback_text or \"\"\n    score = 0\n    feedback_short = fb[:80]\n    risk_note = \"\"\n    try:\n        s, e = fb.find(\"{\"), fb.rfind(\"}\")\n        if s != -1 and e > s:\n            data = json.loads(fb[s:e + 1])\n            score = int(data.get(\"score\", 0))\n            feedback_short = str(data.get(\"feedback\", \"\"))[:80]\n            risk_note = str(data.get(\"risk_note\", \"\"))\n    except Exception:\n        pass\n    history.append({\n        \"round\": rnd + 1,\n        \"question_type\": pending_question_type or \"\",\n        \"question\": pending_question or \"\",\n        \"answer\": (user_query or \"\").strip(),\n        \"score\": score,\n        \"feedback\": feedback_short,\n        \"risk_note\": risk_note,\n    })\n    new_round = rnd + 1\n    cont = new_round < total\n    prefs = (question_preferences or \"技术题,行为题,案例题\").replace(\"，\", \",\")\n    types = [t.strip() for t in prefs.split(\",\") if t.strip()]\n    if not types:\n        types = [\"技术题\", \"行为题\", \"案例题\"]\n    next_qt = types[new_round % len(types)]\n    return {\n        \"dialogue_history\": json.dumps(history, ensure_ascii=False),\n        \"current_round\": new_round,\n        \"continue_interview\": \"true\" if cont else \"false\",\n        \"next_phase\": \"ask\" if cont else \"done\",\n        \"next_question_type\": next_qt,\n        \"next_display_round\": new_round + 1,\n    }\n"
+        outputs:
+          dialogue_history:
+            type: string
+          current_round:
+            type: number
+          continue_interview:
+            type: string
+          next_phase:
+            type: string
+          next_question_type:
+            type: string
+          next_display_round:
+            type: number
+        timeout: 30
+        version: '1'
+        desc: 将本轮 Q&A 与反馈写入 dialogue_history
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 100
+      width: 240
+      position:
+        x: 1280
+        y: 400
+      positionAbsolute:
+        x: 1280
+        y: 400
+    - id: '10000009'
+      data:
+        title: 更新会话状态
+        type: assigner
+        version: '2'
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '10000008'
+          - dialogue_history
+          variable_selector:
+          - conversation
+          - dialogue_history
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '10000008'
+          - current_round
+          variable_selector:
+          - conversation
+          - current_round
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '10000008'
+          - next_phase
+          variable_selector:
+          - conversation
+          - phase
+          write_mode: over-write
+        desc: 持久化轮次与历史记录
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 100
+      width: 240
+      position:
+        x: 1580
+        y: 400
+      positionAbsolute:
+        x: 1580
+        y: 400
+    - id: '10000010'
+      data:
+        title: 是否继续面试
+        type: if-else
+        version: '1'
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: cond-continue-true
+            value: 'true'
+            varType: string
+            variable_selector:
+            - '10000008'
+            - continue_interview
+          logical_operator: and
+        - case_id: 'false'
+          conditions:
+          - comparison_operator: contains
+            id: cond-continue-false
+            value: 'false'
+            varType: string
+            variable_selector:
+            - '10000008'
+            - continue_interview
+          logical_operator: and
+        desc: 未达到计划轮数则继续出题，否则进入综合评估
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 120
+      width: 240
+      position:
+        x: 1880
+        y: 400
+      positionAbsolute:
+        x: 1880
+        y: 400
+    - id: '10000011'
+      data:
+        title: 记录下一轮题目
+        type: assigner
+        version: '2'
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '10000014'
+          - text
+          variable_selector:
+          - conversation
+          - pending_question
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '10000008'
+          - next_question_type
+          variable_selector:
+          - conversation
+          - pending_question_type
+          write_mode: over-write
+        - input_type: constant
+          operation: set
+          value: await_answer
+          variable_selector:
+          - conversation
+          - phase
+          write_mode: over-write
+        desc: 点评后继续下一轮时更新待答题目
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 100
+      width: 240
+      position:
+        x: 1280
+        y: 560
+      positionAbsolute:
+        x: 1280
+        y: 560
+    - id: '10000012'
+      data:
+        title: 展示反馈与下一题
+        type: answer
+        answer: "### 本轮反馈（第 {{#10000008.current_round#}} 轮）\n\n{{#10000007.text#}}\n\n---\n### 下一题（第 {{#10000008.next_display_round#}} 轮 · {{#10000008.next_question_type#}}）\n\n{{#10000014.text#}}\n\n---\n请继续作答。"
+        version: '1'
+        desc: 同一条回复中展示本轮反馈与下一道题目
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 100
+      width: 240
+      position:
+        x: 1580
+        y: 560
+      positionAbsolute:
+        x: 1580
+        y: 560
+    - id: '10000014'
+      data:
+        title: 生成下一轮面试题
+        type: llm
+        version: '1'
+        model:
+          provider: langgenius/volcengine_maas/volcengine_maas
+          name: deepseek-v4-flash
+          mode: chat
+          completion_params:
+            max_tokens: 4096
+            temperature: 0.7
+            top_p: 0.8
+        prompt_template:
+        - role: system
+          text: "你是专业面试官。根据岗位与本轮题型生成 1 道面试题。\n要求：只输出题目正文，不要答案提示。"
+        - role: user
+          text: "岗位：{{#10000001.target_role#}}\n本轮序号：{{#10000008.next_display_round#}}\n本轮题型：{{#10000008.next_question_type#}}\n已完成记录：{{#conversation.dialogue_history#}}\n\n请生成下一道面试问题。"
+        context:
+          enabled: false
+          variable_selector: []
+        vision:
+          enabled: false
+        desc: 点评同轮内继续生成下一题（不经过 loop）
+        retry_config:
+          max_retries: 2
+          retry_interval: 5
+          retry_enabled: true
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 98
+      width: 240
+      position:
+        x: 980
+        y: 560
+      positionAbsolute:
+        x: 980
+        y: 560
+    - id: '10000013'
+      data:
+        title: 综合评估
+        type: llm
+        version: '1'
+        model:
+          provider: langgenius/volcengine_maas/volcengine_maas
+          name: deepseek-v4-flash
+          mode: chat
+          completion_params:
+            max_tokens: 8192
+            temperature: 0.3
+            top_p: 0.7
+        prompt_template:
+        - role: system
+          text: "你是面试评估专家。根据完整面试记录输出 JSON（不要 markdown 代码块），字段：\n- total_score: 总分（各轮 score 加权平均后取整）\n- radar: 对象，键为 content_depth/structure/clarity/expression/job_fit，值为 1-10\n- strengths: 字符串数组，恰好3条\n- improvements: 字符串数组，恰好3条\n- dialogue: 与输入历史一致的对话记录数组（含 round, question_type, question, answer, score, feedback, risk_note）\n- summary: 200字以内总评"
+        - role: user
+          text: "岗位：{{#10000001.target_role#}}\n计划轮数：{{#10000001.total_rounds#}}\n\n面试记录 JSON：\n{{#conversation.dialogue_history#}}"
+        context:
+          enabled: false
+          variable_selector: []
+        vision:
+          enabled: false
+        desc: 全部轮次结束后生成结构化综合评估
+        retry_config:
+          max_retries: 2
+          retry_interval: 5
+          retry_enabled: true
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 98
+      width: 240
+      position:
+        x: 980
+        y: 720
+      positionAbsolute:
+        x: 980
+        y: 720
+    - id: answer
+      data:
+        title: 最终回复
+        type: answer
+        answer: "## 模拟面试综合评估\n\n{{#10000013.text#}}"
+        version: '1'
+        desc: 输出综合评估 JSON 文本
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 100
+      width: 240
+      position:
+        x: 1280
+        y: 720
+      positionAbsolute:
+        x: 1280
+        y: 720

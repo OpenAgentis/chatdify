@@ -1,0 +1,30 @@
+node_usage:
+  节点类型: http-request
+  输入规范:
+      - URL配置: 必须提供有效的HTTP/HTTPS URL，支持变量模板语法
+      - 请求方法: 选择合适的HTTP方法（GET、POST、PUT、DELETE等）
+      - 请求头: 可选配置，支持变量模板，格式为键值对
+      - 查询参数: 可选配置，支持变量模板，用于URL参数
+      - 请求体配置:
+        - binary: 用于文件上传，只能有一个文件变量
+        - json: JSON格式数据，只能有一个数据项
+        - raw-text: 原始文本数据，只能有一个数据项
+        - x-www-form-urlencoded: 表单编码格式，支持多个键值对
+        - form-data: 多部分表单数据，支持文本和文件混合
+      - 变量选择器: 所有变量选择器必须格式正确，不能为空，每个部分都必须是非空字符串
+      - 认证信息: 可选配置，支持各种认证方式
+  常见使用错误:
+      - JSON解析错误: 响应数据不是有效的JSON格式，错误信息"Failed to parse JSON:[数据]" 
+      - 请求体类型错误: binary类型请求体配置了多个数据项，报错信息"binary body type 应该只有一个数据项" 
+      - 请求体格式错误: json或raw-text类型配置了多个数据项，报错信息"json/raw-text body type 应该只有一个数据项" 
+      - 变量选择器错误: 变量选择器格式不正确或引用了不存在的变量
+      - 网络请求超时: 请求超时或网络连接失败
+      - 请求限制错误: 达到API调用频率限制或权限不足
+      - URL格式错误: 提供的URL格式不正确或协议不支持
+      - 认证失败: 认证信息错误或权限不足
+      - 文件上传错误: 文件变量不存在或文件格式不支持
+      - 响应处理错误: 响应数据格式异常或无法解析
+      - 变量模板语法错误: 变量模板语法不正确，无法正确解析变量
+  
+  常见URL:
+      - 获取股票数据: https://q.stock.sohu.com/hisHq?code=cn_300228&start=20250630&end=20250704&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp

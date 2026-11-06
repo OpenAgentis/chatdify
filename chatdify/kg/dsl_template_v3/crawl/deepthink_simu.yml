@@ -1,0 +1,366 @@
+app:
+  description: DeepSeek R1 是一款备受关注的 AI 模型，但在使用中也存在各种问题。因此，我们通过使用谷歌的尖端 AI 模型 Gemini，创建了一个能让用户更安全、更轻松地体验类似 DeepSeek R1 功能的环境。
+  icon: 🐋
+  icon_background: '#D1E9FF'
+  mode: advanced-chat
+  name: 深度思考模型模拟
+  use_icon_as_answer_icon: true
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/siliconflow:0.0.8@217f973bd7ced1b099c2f0c669f1356bdf4cc38b8372fd58d7874f9940b95de3
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: 您好！我是 Gemini。我们很高兴能为您介绍 Gemini R1（暂定名）—— 一个由 Gemini 驱动、对 DeepSeek R1 进行安全和创新改造的版本！它结合了 Gemini 尖端的自然语言处理能力、固有的安全特性以及 DeepSeek R1 的开创性概念。今天我能为您提供什么帮助？
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: answer
+      id: 1738335879691-source-1738335850236-target
+      selected: false
+      source: '1738335879691'
+      sourceHandle: source
+      target: '1738335850236'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 1738326656070-source-1738335929787-target
+      selected: false
+      source: '1738326656070'
+      sourceHandle: source
+      target: '1738335929787'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: answer
+      id: 1738335929787-source-1738335850236-target
+      selected: false
+      source: '1738335929787'
+      sourceHandle: source
+      target: '1738335850236'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1738326584857-source-1738326656070-target
+      selected: false
+      source: '1738326584857'
+      sourceHandle: source
+      target: '1738326656070'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 1738326584857-source-1738335879691-target
+      selected: false
+      source: '1738326584857'
+      sourceHandle: source
+      target: '1738335879691'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1733313536005-source-1738326584857-target
+      source: '1733313536005'
+      sourceHandle: source
+      target: '1738326584857'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 54
+      id: '1733313536005'
+      position:
+        x: 30
+        y: 279
+      positionAbsolute:
+        x: 30
+        y: 279
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 将用户模糊的输入转化为 AI 可以准确回答的清晰指令。
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+          provider: langgenius/siliconflow/siliconflow
+        prompt_template:
+        - edition_type: basic
+          id: 7a789bd8-a9db-423b-8143-b6870e16f4b8
+          role: system
+          text: "作为一名提示工程专家，您的角色是接收用户输入（问题或文本），并将其转化为更具体、更详细的提示，从而有效地预见用户的潜在意图。\n\n以下是流程分解：\n\n1.  **分析输入**：识别原始问题中任何不清楚、模糊或不完整的部分。对于技术性问题，这可能包括缺失的版本号、使用的工具或错误信息。\n2.  **预测用户需求**：推断用户的隐含请求以及他们期望的回应类型。例如，一个编程问题可能需要代码示例、调试步骤或最佳实践。考虑用户可能具有的潜在限制（时间、预算、技术等）。\n3.  **丰富上下文**：提供用户可能没有考虑到的额外信息、注意事项或替代解决方案。这可能包括安全风险、性能影响或其他相关细节。\n4.  **构建提示**：制定一个更具体、更具指导性的提示，引导 AI 生成相关的回应。避免要求用户澄清；相反，要做出明智的推断并自行填补空白。例如，对于一个技术性问题，您可以附加诸如“请逐步解释此过程，并考虑以下因素……”之类的指令。\n5.  **结构化以求清晰**：格式化提示以实现最佳的 AI 理解。使用项目符号、加粗关键词和其他格式化技术来突出重要元素，但要确保其读起来仍然自然。\n6.  **验证**：在提交之前，再次检查您的提示是否真正反映了用户的可能需求及其请求背后的上下文。\n\n通过遵循此流程，您可以创建出高效的提示，从而获得一流的 AI 生成回应。\n\n如果您需要任何调整或有其他要求，请告诉我！"
+        - edition_type: basic
+          id: 28f0448e-05e9-495d-a42b-d043d4d4e646
+          role: user
+          text: "# 用户问题\n\n{{#sys.query#}}"
+        retry_config:
+          max_retries: 3
+          retry_enabled: false
+          retry_interval: 1000
+        selected: false
+        title: 深度思考
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 150
+      id: '1738326584857'
+      position:
+        x: 334
+        y: 279
+      positionAbsolute:
+        x: 334
+        y: 279
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 整合用户问题和 AI 生成的附加信息，以生成清晰、有理有据答案的专家。
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            frequency_penalty: 0.1
+            presence_penalty: 0.1
+            temperature: 0.7
+          mode: chat
+          name: Qwen/Qwen2.5-7B-Instruct
+          provider: langgenius/siliconflow/siliconflow
+        prompt_config:
+          jinja2_variables:
+          - value_selector:
+            - '1738326584857'
+            - text
+            variable: text
+          - value_selector:
+            - sys
+            - query
+            variable: query
+        prompt_template:
+        - edition_type: basic
+          id: bdab8d05-5cca-4bbc-85d4-5f50f520ad1b
+          jinja2_text: ''
+          role: system
+          text: "您是整合“用户问题”和“AI 生成的附加信息”以生成清晰明确答案的专家。请遵循以下步骤：\n 1. 准确解读用户问题的意图\n 2. 从提供的附加信息中提取相关要素\n 3. 在融入您的专业知识的同时，以“问题 -> 附加信息 -> 答案”的逻辑结构进行解释\n 4. 必要时用通俗易懂的语言重新表述技术术语\n 5. 始终提供证据和具体示例。"
+        - edition_type: basic
+          id: d6c81b27-3300-46a2-8688-529ddc6e7479
+          jinja2_text: ''
+          role: user
+          text: "[用户问题]\n {{#sys.query#}}\n\n [AI 生成的附加信息]\n {{#1738326584857.text#}}\n\n\
+            \ ▼ 生成要求:\n ・答案应简洁，不超过3段\n ・当有数值数据时，使用比较性表述\n ・当需要决策时，提供多个选项\n ・在开头部分放置一个200字以内的摘要。"
+        retry_config:
+          max_retries: 3
+          retry_enabled: false
+          retry_interval: 1000
+        selected: false
+        title: 内容生成
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 166
+      id: '1738326656070'
+      position:
+        x: 638
+        y: 388
+      positionAbsolute:
+        x: 638
+        y: 388
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: "生成中...\n\n\n{{#1738335879691.output#}}\n\n\n{{#1738335929787.output#}}"
+        desc: ''
+        selected: false
+        title: 输出
+        type: answer
+        variables: []
+      height: 140
+      id: '1738335850236'
+      position:
+        x: 1246
+        y: 279
+      positionAbsolute:
+        x: 1246
+        y: 279
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: '<small style="color: gray;">{{ thinking }}</small>'
+        title: 模板
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1738326584857'
+          - text
+          variable: thinking
+      height: 54
+      id: '1738335879691'
+      position:
+        x: 942
+        y: 279
+      positionAbsolute:
+        x: 942
+        y: 279
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: '{{ arg1 }}'
+        title: 模板
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1738326656070'
+          - text
+          variable: arg1
+      height: 54
+      id: '1738335929787'
+      position:
+        x: 942
+        y: 388
+      positionAbsolute:
+        x: 942
+        y: 388
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        author: kojima
+        desc: ''
+        height: 136
+        selected: false
+        showAuthor: false
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"DeepSeek R1 是一款因其先进的自然语言处理技术而备受关注的AI模型，但在使用中也存在各种挑战。因此，我们利用谷歌的尖端AI模型Gemini，创建了一个能让用户更安全、更轻松地体验类似DeepSeek R1功能的环境。","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 555
+      height: 136
+      id: '1738414637658'
+      position:
+        x: 334
+        y: 108.32101552630658
+      positionAbsolute:
+        x: 334
+        y: 108.32101552630658
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 555
+    viewport:
+      x: -213.93101497649786
+      y: 102.0403962682451
+      zoom: 0.8134452082817935

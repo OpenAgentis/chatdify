@@ -1,0 +1,489 @@
+app:
+  mode: workflow
+  name: technical_documentation
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '5'
+        sourceType: iteration-start
+        targetType: llm
+      id: 5start-source-6-target
+      source: 5start
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: llm
+      id: 5-source-7-target
+      source: '5'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 7-source-8-target
+      source: '7'
+      sourceHandle: source
+      target: '8'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的API接口描述文档
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: Start
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .pdf
+          - .docx
+          - .txt
+          - .md
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: API文档文件
+          max_length: 48
+          required: true
+          type: file
+          variable: api_doc_file
+        - label: API文档URL
+          max_length: 256
+          required: false
+          type: text-input
+          variable: api_doc_url
+        version: '1'
+      height: 194
+      id: '1'
+      parentId: null
+      position:
+        x: 30
+        y: 30
+      positionAbsolute:
+        x: 30
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        desc: 从上传的文档中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1'
+        - api_doc_file
+        version: '1'
+      height: 54
+      id: '2'
+      parentId: null
+      position:
+        x: 334
+        y: 30
+      positionAbsolute:
+        x: 334
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 分析API描述并生成结构化文档
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的API文档工程师，擅长分析API描述并生成清晰的结构化文档。请根据提供的API描述文本，提取关键信息并生成符合OpenAPI规范的文档结构。输出格式为JSON，包含以下字段：
+
+
+            1. api_name: API名称
+
+            2. description: API功能描述
+
+            3. endpoint: API端点路径
+
+            4. method: HTTP方法
+
+            5. parameters: 参数列表（包括名称、类型、是否必需、描述）
+
+            6. responses: 响应结构（包括状态码、描述、示例）
+
+            7. examples: 调用示例
+
+
+            请确保输出格式规范，直接返回JSON内容，不要包含任何解释性文字。'
+        - role: user
+          text: '请分析以下API描述并生成文档结构：
+
+
+            {{#2.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: API文档生成器
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 98
+      id: '3'
+      parentId: null
+      position:
+        x: 638
+        y: 30
+      positionAbsolute:
+        x: 638
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        code: "import json\n\ndef extract_json_from_markdown(markdown_text: str) ->\
+          \ str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(api_doc_text: str)\
+          \ -> dict:\n    try:\n        # 预处理输入\n        json_text = extract_json_from_markdown(api_doc_text)\n\
+          \        api_data = json.loads(json_text)\n        \n        # 提取关键信息\n\
+          \        endpoints = []\n        if isinstance(api_data, list):\n      \
+          \      for api in api_data:\n                endpoint = {\n            \
+          \        \"api_name\": api.get(\"api_name\", \"\"),\n                  \
+          \  \"endpoint\": api.get(\"endpoint\", \"\"),\n                    \"method\"\
+          : api.get(\"method\", \"\"),\n                    \"description\": api.get(\"\
+          description\", \"\")\n                }\n                endpoints.append(endpoint)\n\
+          \        elif isinstance(api_data, dict):\n            endpoint = {\n  \
+          \              \"api_name\": api_data.get(\"api_name\", \"\"),\n       \
+          \         \"endpoint\": api_data.get(\"endpoint\", \"\"),\n            \
+          \    \"method\": api_data.get(\"method\", \"\"),\n                \"description\"\
+          : api_data.get(\"description\", \"\")\n            }\n            endpoints.append(endpoint)\n\
+          \        \n        return {\n            \"endpoints\": endpoints,\n   \
+          \         \"original_data\": api_data,\n            \"error\": None\n  \
+          \      }\n    except Exception as e:\n        return {\n            \"endpoints\"\
+          : [],\n            \"original_data\": None,\n            \"error\": str(e)\n\
+          \        }"
+        code_language: python3
+        desc: 处理API文档结构并提取关键信息
+        outputs:
+          endpoints:
+            children: null
+            type: array[object]
+          error:
+            children: null
+            type: string
+          original_data:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: API文档处理器
+        type: code
+        variables:
+        - value_selector:
+          - '3'
+          - text
+          variable: api_doc_text
+        version: '1'
+      height: 90
+      id: '4'
+      parentId: null
+      position:
+        x: 942
+        y: 30
+      positionAbsolute:
+        x: 942
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        desc: 对每个API端点进行文档生成
+        error_handle_mode: terminated
+        is_parallel: false
+        iterator_selector:
+        - '4'
+        - endpoints
+        output_selector:
+        - '6'
+        - text
+        output_type: array[string]
+        parallel_nums: 1
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        startNodeType: llm
+        start_node_id: 5start
+        title: API文档生成迭代
+        type: iteration
+        version: '1'
+      height: 203
+      id: '5'
+      parentId: null
+      position:
+        x: 1246
+        y: 30
+      positionAbsolute:
+        x: 1246
+        y: 30
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        desc: 迭代开始节点，提供当前迭代的API端点数据
+        isInIteration: true
+        iteration_id: '5'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: ''
+        type: iteration-start
+        version: '1'
+      height: 48
+      id: 5start
+      parentId: '5'
+      position:
+        x: 1246
+        y: 30
+      positionAbsolute:
+        x: 1246
+        y: 30
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 为当前API端点生成详细文档
+        isInIteration: true
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的API文档工程师，擅长为API端点生成详细的技术文档。请根据提供的API端点信息，生成包含以下内容的完整文档：
+
+
+            1. 端点概述：简要说明API端点的功能和用途
+
+            2. 请求方法：HTTP方法(GET/POST/PUT/DELETE等)
+
+            3. 请求URL：完整的端点路径
+
+            4. 请求参数：包括查询参数、路径参数和请求体参数（如有）
+
+            5. 请求示例：完整的请求示例
+
+            6. 响应结构：响应状态码和数据结构
+
+            7. 响应示例：成功的响应示例
+
+            8. 错误代码：可能的错误代码和说明
+
+            9. 使用限制：速率限制、认证要求等
+
+
+            请使用Markdown格式输出，确保文档结构清晰、内容完整。'
+        - role: user
+          text: '请为以下API端点生成详细文档：
+
+
+            {{#5.item#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: API端点文档生成器
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 98
+      id: '6'
+      parentId: '5'
+      position:
+        x: 1246
+        y: 98
+      positionAbsolute:
+        x: 1246
+        y: 98
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 整合所有API端点文档并生成最终的Markdown格式文档
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的API文档工程师，擅长整合多个API端点的文档并生成结构化的最终文档。请将提供的所有API端点文档整合为一个完整的Markdown格式文档，确保文档结构清晰、内容完整。文档应包含以下部分：
+
+
+            1. 文档标题和概述
+
+            2. 所有API端点的详细文档（保持原有结构不变）
+
+            3. 全局参数说明（如有）
+
+            4. 认证和授权说明
+
+            5. 错误代码和状态码
+
+            6. 使用限制和速率限制
+
+
+            请直接返回Markdown格式内容，不要包含任何解释性文字。'
+        - role: user
+          text: '请将以下API端点文档整合为一个完整的Markdown文档：
+
+
+            {{#5.output#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: API文档整合器
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 98
+      id: '7'
+      parentId: null
+      position:
+        x: 1246
+        y: 206
+      positionAbsolute:
+        x: 1246
+        y: 206
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        desc: 输出最终的技术文档
+        output_type: object
+        outputs:
+        - value_selector:
+          - '7'
+          - text
+          variable: final_document
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 技术文档输出
+        type: end
+        version: '1'
+      height: 98
+      id: '8'
+      parentId: null
+      position:
+        x: 1246
+        y: 324
+      positionAbsolute:
+        x: 1246
+        y: 324
+      type: custom
+      width: 244
+      zIndex: 1
+    type: custom

@@ -1,0 +1,707 @@
+nodes:
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: <
+        id: a1b2c3d4-e5f6-47a8-9b0c-1d2e3f4a5b6c
+        numberVarType: variable
+        value: '{{#10000001.total_rounds#}}'
+        varType: number
+        variable_selector:
+        - conversation
+        - current_round
+      id: 'true'
+      logical_operator: and
+    desc: 轮次门控。
+    selected: false
+    title: 轮次门控
+    type: if-else
+  id: '1731379291999'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: contains
+        id: aec2b72e-7d06-41ea-b86e-6d3c7e803811
+        value: '0'
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      id: 'true'
+      logical_operator: or
+    - case_id: 98657baa-79e3-4af1-9b19-3daa149c0fab
+      conditions:
+      - comparison_operator: contains
+        id: 083411ab-178c-4461-b356-55fece233c6f
+        value: '1'
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      id: 98657baa-79e3-4af1-9b19-3daa149c0fab
+      logical_operator: and
+    - case_id: dafa44fc-1c33-4060-a68a-38c5850bda96
+      conditions:
+      - comparison_operator: contains
+        id: 3ab9cfbc-791b-4d8f-a4ff-c8ebe3fb9d93
+        value: '2'
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      id: dafa44fc-1c33-4060-a68a-38c5850bda96
+      logical_operator: and
+    - case_id: 2d44a634-2764-4287-84a7-964fae566d5d
+      conditions:
+      - comparison_operator: contains
+        id: 6ec008b1-ca33-489f-bcef-816dca204eb1
+        value: '3'
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      id: 2d44a634-2764-4287-84a7-964fae566d5d
+      logical_operator: and
+    - case_id: e0a31ca5-21fa-4ec3-8c89-734c40116f8f
+      conditions:
+      - comparison_operator: contains
+        id: 180c7bdf-a872-4835-ba64-d149184e0000
+        value: '4'
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      id: e0a31ca5-21fa-4ec3-8c89-734c40116f8f
+      logical_operator: and
+    - case_id: fa4e8d8d-b178-415a-8c86-2d211b380df7
+      conditions:
+      - comparison_operator: contains
+        id: 6a8b04c7-a0dc-4c01-8094-66df3eb6b1f7
+        value: '5'
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      id: fa4e8d8d-b178-415a-8c86-2d211b380df7
+      logical_operator: and
+    - case_id: 3b6366ec-ad8e-476f-8918-bdd100359698
+      conditions:
+      - comparison_operator: contains
+        id: 13b675aa-cbd4-49b7-88e9-febbfd958bd5
+        value: '6'
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      id: 3b6366ec-ad8e-476f-8918-bdd100359698
+      logical_operator: and
+    - case_id: 69b06cfd-295b-461b-8955-c99b68984e2a
+      conditions:
+      - comparison_operator: contains
+        id: a7485990-467e-42d8-947c-6b9dbca378b9
+        value: '100'
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      id: 69b06cfd-295b-461b-8955-c99b68984e2a
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 条件分支
+    type: if-else
+  id: '1730191858003'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: '='
+        id: 21d9b08f-b4fb-40e0-80a1-323cc5fcfcf7
+        numberVarType: constant
+        value: '0'
+        varType: number
+        variable_selector:
+        - sys
+        - dialogue_count
+      id: 'true'
+      logical_operator: and
+    - case_id: 91eeee38-2f3d-41fe-aada-fbb552f38d09
+      conditions:
+      - comparison_operator: '='
+        id: 42d627dd-f6ad-4028-b17e-b5922c8a8555
+        numberVarType: constant
+        value: '1'
+        varType: number
+        variable_selector:
+        - sys
+        - dialogue_count
+      id: 91eeee38-2f3d-41fe-aada-fbb552f38d09
+      logical_operator: and
+    - case_id: ec873050-26b5-4519-ad2d-318d9c8507b4
+      conditions:
+      - comparison_operator: '='
+        id: 6e5199ca-f644-44e4-876c-6581f14ec964
+        numberVarType: constant
+        value: '2'
+        varType: number
+        variable_selector:
+        - sys
+        - dialogue_count
+      id: ec873050-26b5-4519-ad2d-318d9c8507b4
+      logical_operator: and
+    - case_id: 252919df-4a7b-45e9-b845-bcbc14277530
+      conditions:
+      - comparison_operator: '='
+        id: 93beb1fd-6a9d-4d8c-a308-4d149f2a5813
+        numberVarType: constant
+        value: '3'
+        varType: number
+        variable_selector:
+        - sys
+        - dialogue_count
+      id: 252919df-4a7b-45e9-b845-bcbc14277530
+      logical_operator: and
+    - case_id: fdc117e5-9c2d-4b3d-9fac-c1f030b8435d
+      conditions:
+      - comparison_operator: '='
+        id: 600fc8f9-83ec-4656-b256-65bbc11bb814
+        numberVarType: constant
+        value: '4'
+        varType: number
+        variable_selector:
+        - sys
+        - dialogue_count
+      id: fdc117e5-9c2d-4b3d-9fac-c1f030b8435d
+      logical_operator: or
+    desc: ''
+    selected: false
+    title: 条件分支
+    type: if-else
+  id: '1739087643444'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: not empty
+        id: e6f6a4e7-53f7-4f8e-95a3-c3ac21ef12b9
+        value: ''
+        varType: string
+        variable_selector:
+        - '17391136443240'
+        - text
+      - comparison_operator: not empty
+        id: d5dfab69-20e8-45b8-b727-3445e6afb98b
+        value: ''
+        varType: string
+        variable_selector:
+        - '17391136486630'
+        - text
+      - comparison_operator: not empty
+        id: deb174c0-8f96-43e6-b69c-a4d63a883437
+        value: ''
+        varType: string
+        variable_selector:
+        - '17391136521390'
+        - text
+      - comparison_operator: not empty
+        id: 3f5e218a-9d0c-4a3c-8434-e74238794536
+        value: ''
+        varType: string
+        variable_selector:
+        - llm
+        - text
+      - comparison_operator: not empty
+        id: 1a374e14-e3d5-4ff0-8c69-5c0b347ed0f6
+        value: ''
+        varType: string
+        variable_selector:
+        - '1739192479032'
+        - text
+      - comparison_operator: not empty
+        id: 2ee36e47-85cd-4e1d-88f3-2cd65a448407
+        value: ''
+        varType: string
+        variable_selector:
+        - '1739193987241'
+        - text
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 条件分支 2
+    type: if-else
+  id: '1739292584847'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: '='
+        id: fc959215-795b-48cb-be0d-dc4492976442
+        numberVarType: constant
+        value: '1'
+        varType: number
+        variable_selector:
+        - sys
+        - dialogue_count
+      id: 'true'
+      logical_operator: and
+    - case_id: 97757c07-3c0f-4058-87eb-191fbaf80592
+      conditions:
+      - comparison_operator: is
+        id: 72a87c1d-4256-4281-994a-1a87614c070d
+        value: '{{#env.chat2#}}'
+        varType: string
+        variable_selector:
+        - conversation
+        - chat_stage
+      id: 97757c07-3c0f-4058-87eb-191fbaf80592
+      logical_operator: and
+    - case_id: f9e7059f-5f9d-4eef-b394-284e718d793f
+      conditions:
+      - comparison_operator: is
+        id: f0cfc994-23ac-4cce-bb82-29d1d7c0156d
+        value: '{{#env.chatX#}}'
+        varType: string
+        variable_selector:
+        - conversation
+        - chat_stage
+      id: f9e7059f-5f9d-4eef-b394-284e718d793f
+      logical_operator: and
+    desc: IF/ELSE
+    selected: false
+    title: 对话阶段
+    type: if-else
+  id: '1729476517307'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: not empty
+        id: c6522221-60b5-4ed4-ac95-9fba1219de4a
+        value: ''
+        varType: string
+        variable_selector:
+        - conversation
+        - query1
+      - comparison_operator: not empty
+        id: 90672f46-9537-4ebc-8872-0b8c019af081
+        value: ''
+        varType: string
+        variable_selector:
+        - conversation
+        - query2
+      - comparison_operator: not empty
+        id: 735b492b-c7ef-4606-9dec-ed9d50110ce5
+        value: ''
+        varType: string
+        variable_selector:
+        - conversation
+        - query3
+      - comparison_operator: not empty
+        id: 8fc10afe-c57d-4528-b727-93c768009959
+        value: ''
+        varType: string
+        variable_selector:
+        - conversation
+        - query4
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 条件分支 3
+    type: if-else
+  id: '1739534132840'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: exists
+        id: 653d1c77-8477-4156-ac10-7589ac49a1f2
+        value: ''
+        varType: file
+        variable_selector:
+        - '1744102481785'
+        - meeting_note_file
+      id: 'true'
+      logical_operator: and
+    - case_id: afb2d2e5-ee2d-472f-98e4-569e8eee8ad1
+      conditions:
+      - comparison_operator: exists
+        id: 1939e807-7a15-48a5-b053-337111f253de
+        value: ''
+        varType: file
+        variable_selector:
+        - '1744102481785'
+        - meeting_audio
+      id: afb2d2e5-ee2d-472f-98e4-569e8eee8ad1
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 条件分支
+    type: if-else
+  id: '1744103478466'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: contains
+        id: '1720795612635'
+        value: 需要查询
+        variable_selector:
+        - '1720795218540'
+        - text
+      id: 'true'
+      logical_operator: and
+    conditions:
+    - comparison_operator: contains
+      id: '1720795612635'
+      value: 需要查询
+      variable_selector:
+      - '1720795218540'
+      - text
+    desc: ''
+    logical_operator: and
+    selected: false
+    title: IF/ELSE
+    type: if-else
+  id: '1720795610192'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: '='
+        id: '1719040112719'
+        value: '1'
+        variable_selector:
+        - '1718957126125'
+        - clean_img
+      logical_operator: and
+    conditions:
+    - comparison_operator: '='
+      id: '1719040112719'
+      value: '1'
+      variable_selector:
+      - '1718957126125'
+      - clean_img
+    desc: ''
+    logical_operator: and
+    selected: false
+    title: 是否清除图片
+    type: if-else
+  id: '1719040099490'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: '='
+        id: '1719057625965'
+        value: '1'
+        variable_selector:
+        - '1718957126125'
+        - single_img
+      logical_operator: and
+    conditions:
+    - comparison_operator: '='
+      id: '1719057625965'
+      value: '1'
+      variable_selector:
+      - '1718957126125'
+      - single_img
+    desc: ''
+    logical_operator: and
+    selected: false
+    title: 是否单图仿写
+    type: if-else
+  id: '1719057591382'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: '='
+        id: '1719061385545'
+        value: '1'
+        variable_selector:
+        - '1719061181576'
+        - crawl_empty
+      logical_operator: and
+    conditions:
+    - comparison_operator: '='
+      id: '1719061385545'
+      value: '1'
+      variable_selector:
+      - '1719061181576'
+      - crawl_empty
+    desc: ''
+    logical_operator: and
+    selected: false
+    title: 爬取结果判断
+    type: if-else
+  id: '1719061373860'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: contains
+        id: b1a44692-47c2-44e7-a82e-b5c18df52de6
+        value: 主动触达
+        varType: string
+        variable_selector:
+        - sys
+        - query
+      id: 'true'
+      logical_operator: and
+    desc: 早晚各一次，比较合适。
+    selected: false
+    title: 任务
+    type: if-else
+  id: '1726645343096'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: '='
+        id: ea362f54-05da-4d6a-9cbe-19da466be70e
+        numberVarType: constant
+        value: '1'
+        varType: number
+        variable_selector:
+        - sys
+        - dialogue_count
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 会话轮数
+    type: if-else
+  id: '1726648676648'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: '='
+        id: d53711d6-bf99-4a90-ba67-96de51cf3a62
+        numberVarType: constant
+        value: '1'
+        varType: number
+        variable_selector:
+        - '1731378644337'
+        - is_login
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 是否登录成功
+    type: if-else
+  id: '1731379291700'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: ≤
+        id: b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e
+        numberVarType: variable
+        value: '{{#10000001.total_rounds#}}'
+        varType: number
+        variable_selector:
+        - conversation
+        - current_round
+      id: 'true'
+      logical_operator: and
+    desc: 当前轮数(会话变量)与目标轮数(开始节点输入)比较；比较值是变量引用，故 numberVarType 必须为 variable
+    selected: false
+    title: 是否还有剩余轮次
+    type: if-else
+  id: '1731379291888'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: contains
+        id: b24c1755-37c5-4f6d-8045-5d668d2662c8
+        value: isimage
+        varType: string
+        variable_selector:
+        - sys
+        - query
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 图片
+    type: if-else
+  id: '1726646928955'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: contains
+        id: 428bac97-13fb-4a3f-bad3-17a73f666974
+        value: 不合理
+        varType: string
+        variable_selector:
+        - '1726647530848'
+        - text
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 条件分支 3
+    type: if-else
+  id: '1726647712433'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: '='
+        id: 5a11111f-b17b-4d59-b1c7-08e4cba23855
+        numberVarType: constant
+        value: '1'
+        varType: number
+        variable_selector:
+        - '1726649035816'
+        - result
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 分支
+    type: if-else
+  id: '1726649044498'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: contains
+        id: 3882bdc9-4df8-4b6e-85be-0b236d50b5aa
+        value: '1'
+        varType: string
+        variable_selector:
+        - '1726714060257'
+        - result
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 判定
+    type: if-else
+  id: '1726714102029'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: empty
+        id: c186fbe2-078d-4c96-b45b-cd1a3d22c1f6
+        value: ''
+        varType: string
+        variable_selector:
+        - conversation
+        - user_token
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: user_token
+    type: if-else
+  id: '1731378918101'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: not empty
+        id: 5c574fe3-fe2b-4007-9394-99a402dcdaf7
+        value: ''
+        varType: string
+        variable_selector:
+        - '1740959153996'
+        - api_url
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 条件分支
+    type: if-else
+  id: '1740961058395'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: contains
+        id: fbf142c1-ce1d-4c16-9e24-443a9236ee44
+        value: ''
+        varType: string
+        variable_selector:
+        - '1744102481785'
+        - context_words
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 条件分支 2
+    type: if-else
+  id: '1744108744957'
+  selected: false
+  type: custom
+- data:
+    cases:
+    - case_id: 'true'
+      conditions:
+      - comparison_operator: empty
+        id: ea67e4c3-1d70-4c66-b3e5-f73c1e406da0
+        value: ''
+        varType: string
+        variable_selector:
+        - conversation
+        - picture_url
+      id: 'true'
+      logical_operator: and
+    desc: ''
+    selected: false
+    title: 条件分支
+    type: if-else
+  id: '1742452572103'
+  selected: false
+  type: custom

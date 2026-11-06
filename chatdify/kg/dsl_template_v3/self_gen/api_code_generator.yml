@@ -1,0 +1,214 @@
+app:
+  mode: workflow
+  name: api_code_generator
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - id: 10000001-source-10000002-target
+      source: '10000001'
+      target: '10000002'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      zIndex: 0
+    - id: 10000002-source-10000003-target
+      source: '10000002'
+      target: '10000003'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      zIndex: 0
+    - id: 10000003-source-10000004-target
+      source: '10000003'
+      target: '10000004'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      zIndex: 0
+    nodes:
+    - id: '10000001'
+      data:
+        title: API文档上传
+        variables:
+        - type: file
+          variable: api_document
+          label: API文档文件
+          required: true
+          max_length: 48
+          allowed_file_types:
+          - document
+          allowed_file_extensions:
+          - .pdf
+          - .docx
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+        - type: select
+          variable: language
+          label: 目标编程语言
+          required: true
+          max_length: 48
+          options:
+          - curl
+          - python
+          - java
+          - golang
+          - nodejs
+        - type: paragraph
+          variable: additional_requirements
+          label: 额外需求说明
+          required: false
+          max_length: 32768
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        type: start
+        desc: 接收用户上传的API文档文件
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 180
+      width: 243
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+    - id: '10000002'
+      data:
+        title: API文档提取器
+        variable_selector:
+        - '10000001'
+        - api_document
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: 从上传的API文档中提取文本内容
+        is_array_file: false
+        type: document-extractor
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 91
+      width: 243
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+    - id: '10000003'
+      data:
+        title: API代码生成器
+        model:
+          provider: langgenius/volcengine_maas/volcengine_maas
+          name: deepseek-v3-250324
+          mode: chat
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+        prompt_template:
+        - role: system
+          text: '# 你是一个软件工程师，帮助用户解读API文档并直接生成代码。
+
+
+            ## 工作流程
+
+            1. 根据用户的要求解读API文档
+
+            2. 简要想用户介绍API文档中涉及到的接口
+
+            3. 根据用户的要求使用{{#10000001.language#}}编写测试代码
+
+
+            ## 工作要求
+
+            1. 如果在输入的接口文档找没有找到接口，请向用户澄清。
+
+            2. 如果输入的接口文档中找到了多个接口，请向用户澄清具体是哪个接口。
+
+            3. 如果文档中涉及到了api-key或认证相关内容，可以使用用户提供加入到接口中。
+
+            4. 如果文档中提及了某些必须传入的参数和认证用的api-key，而用户没有提供，请告知用户未生成代码的具体原因，并询问用户该如何处理必需的参数。如：按照API文档的描述，在调用XX接口时，需要提供XX参数，并询问用户该如何处理？
+
+            5. 请注意API文档中描述的输入和输出参数的格式，严格按照文档中描述的格式组织代码。
+
+
+            ## 输出格式
+
+            1. 编写测试代码
+
+            2. 解释每个输入参数和输出参数具体的含义'
+        - role: user
+          text: '接口文档内容如下{{#10000002.text#}}。
+
+            请使用 {{#10000001.language#}} 编写代码
+
+            用户要求：{{#10000001.additional_requirements#}}'
+        context:
+          enabled: false
+          variable_selector: []
+        vision:
+          enabled: false
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: 根据提取的API文档内容生成API代码
+        type: llm
+        variables: []
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 97
+      width: 243
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+    - id: '10000004'
+      data:
+        title: API代码输出
+        outputs:
+        - value_selector:
+          - '10000003'
+          - text
+          variable: api_code
+        output_type: object
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: 输出最终生成的API代码
+        type: end
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 89
+      width: 243
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+    type: custom

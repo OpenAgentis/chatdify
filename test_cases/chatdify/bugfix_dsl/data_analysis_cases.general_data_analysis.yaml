@@ -1,0 +1,422 @@
+app:
+  mode: workflow
+  name: general_data_analysis
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: code
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: code
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: code
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 5-source-6-target
+      source: '5'
+      sourceHandle: source
+      target: '6'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 6-source-7-target
+      source: '6'
+      sourceHandle: source
+      target: '7'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的Excel/CSV文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .xlsx
+          - .xls
+          - .csv
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 上传文件
+          max_length: 48
+          required: true
+          type: file
+          variable: file
+        version: '1'
+      height: 88
+      id: '1'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: 从上传文件中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1'
+        - file
+        version: '1'
+      height: 90
+      id: '2'
+      parentId: null
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: "import json\nimport re\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(text: str) -> dict:\n\
+          \    try:\n        # 预处理输入文本\n        cleaned_text = extract_json_from_markdown(text)\n\
+          \        \n        # 数据清洗逻辑\n        # 1. 去除多余空格和换行符\n        cleaned_text\
+          \ = ' '.join(cleaned_text.split())\n        \n        # 2. 处理特殊字符\n    \
+          \    cleaned_text = cleaned_text.replace('\\ufeff', '')\n        \n    \
+          \    # 3. 尝试解析为JSON\n        try:\n            data = json.loads(cleaned_text)\n\
+          \            return {\n                \"cleaned_data\": data,\n       \
+          \         \"status\": \"success\"\n            }\n        except json.JSONDecodeError:\n\
+          \            # 如果不是JSON格式，返回原始文本\n            return {\n               \
+          \ \"cleaned_text\": cleaned_text,\n                \"status\": \"success\"\
+          \n            }\n    except Exception as e:\n        return {\n        \
+          \    \"error\": str(e),\n            \"status\": \"error\"\n        }"
+        code_language: python3
+        desc: 执行数据清洗和预处理
+        outputs:
+          cleaned_data:
+            children: null
+            type: object
+          cleaned_text:
+            children: null
+            type: string
+          error:
+            children: null
+            type: string
+          status:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 数据清洗和预处理
+        type: code
+        variables:
+        - value_selector:
+          - '2'
+          - text
+          variable: text
+        version: '1'
+      height: 90
+      id: '3'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: "import json\nimport pandas as pd\nimport numpy as np\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(input_data: dict)\
+          \ -> dict:\n    try:\n        # 检查输入数据\n        if 'cleaned_data' not in\
+          \ input_data:\n            return {\n                \"error\": \"输入数据格式不正确，缺少cleaned_data字段\"\
+          ,\n                \"status\": \"error\",\n                \"statistics\"\
+          : {},\n                \"sample_data\": []\n            }\n            \n\
+          \        # 获取清洗后的数据\n        data = input_data['cleaned_data']\n       \
+          \ \n        # 转换为DataFrame进行统计分析\n        df = pd.DataFrame(data)\n    \
+          \    \n        # 基础统计分析\n        stats = {\n            \"count\": len(df),\n\
+          \            \"numeric_columns\": [col for col in df.columns if pd.api.types.is_numeric_dtype(df[col])],\n\
+          \            \"descriptive_stats\": {},\n            \"correlation_matrix\"\
+          : {}\n        }\n        \n        # 计算数值列的描述性统计\n        for col in stats['numeric_columns']:\n\
+          \            stats['descriptive_stats'][col] = {\n                \"mean\"\
+          : float(df[col].mean()),\n                \"median\": float(df[col].median()),\n\
+          \                \"std\": float(df[col].std()),\n                \"min\"\
+          : float(df[col].min()),\n                \"max\": float(df[col].max()),\n\
+          \                \"25%\": float(df[col].quantile(0.25)),\n             \
+          \   \"50%\": float(df[col].quantile(0.5)),\n                \"75%\": float(df[col].quantile(0.75))\n\
+          \            }\n        \n        # 计算数值列的相关性矩阵\n        if len(stats['numeric_columns'])\
+          \ > 1:\n            corr_matrix = df[stats['numeric_columns']].corr()\n\
+          \            stats['correlation_matrix'] = corr_matrix.where(np.triu(np.ones(corr_matrix.shape),\
+          \ k=1).astype(bool))\n            stats['correlation_matrix'] = stats['correlation_matrix'].stack().reset_index()\n\
+          \            stats['correlation_matrix'].columns = ['Variable1', 'Variable2',\
+          \ 'Correlation']\n            stats['correlation_matrix'] = stats['correlation_matrix'].to_dict('records')\n\
+          \        \n        return {\n            \"statistics\": stats,\n      \
+          \      \"sample_data\": df.head(5).to_dict('records'),\n            \"status\"\
+          : \"success\",\n            \"error\": \"\"\n        }\n        \n    except\
+          \ Exception as e:\n        return {\n            \"error\": str(e),\n  \
+          \          \"status\": \"error\",\n            \"statistics\": {},\n   \
+          \         \"sample_data\": []\n        }"
+        code_language: python3
+        desc: 执行基础统计分析，包括描述性统计和相关性分析
+        outputs:
+          error:
+            children: null
+            type: string
+          sample_data:
+            children: null
+            type: array[object]
+          statistics:
+            children: null
+            type: object
+          status:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 基础统计分析
+        type: code
+        variables:
+        - value_selector:
+          - '3'
+          - cleaned_data
+          variable: input_data
+        version: '1'
+      height: 90
+      id: '4'
+      parentId: null
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: "import json\nimport pandas as pd\nimport plotly.express as px\n\ndef\
+          \ extract_json_from_markdown(markdown_text: str) -> str:\n    \"\"\"从markdown提取JSON内容\"\
+          \"\"\n    start = markdown_text.find('```json')\n    if start == -1:\n \
+          \       start = markdown_text.find('```')\n        if start == -1:\n   \
+          \         return markdown_text.strip()\n    \n    start = markdown_text.find('\\\
+          n', start) + 1\n    end = markdown_text.rfind('```')\n    return markdown_text[start:end].strip()\n\
+          \ndef main(input_data: dict) -> dict:\n    try:\n        # 检查输入数据\n    \
+          \    if 'statistics' not in input_data or 'sample_data' not in input_data:\n\
+          \            return {\n                \"error\": \"输入数据格式不正确，缺少必要字段\",\n\
+          \                \"status\": \"error\",\n                \"visualizations\"\
+          : {}\n            }\n            \n        # 获取统计数据和样本数据\n        stats\
+          \ = input_data['statistics']\n        sample_data = input_data['sample_data']\n\
+          \        \n        # 创建可视化图表\n        visualizations = {}\n        \n  \
+          \      # 1. 数值列分布直方图\n        if 'numeric_columns' in stats and stats['numeric_columns']:\n\
+          \            for col in stats['numeric_columns']:\n                df =\
+          \ pd.DataFrame(sample_data)\n                fig = px.histogram(df, x=col,\
+          \ title=f'{col}分布直方图')\n                visualizations[f'{col}_histogram']\
+          \ = fig.to_json()\n        \n        # 2. 数值列箱线图\n        if 'numeric_columns'\
+          \ in stats and len(stats['numeric_columns']) > 0:\n            df = pd.DataFrame(sample_data)\n\
+          \            fig = px.box(df, y=stats['numeric_columns'], title='数值列箱线图')\n\
+          \            visualizations['box_plot'] = fig.to_json()\n        \n    \
+          \    # 3. 相关性热力图\n        if 'correlation_matrix' in stats and stats['correlation_matrix']:\n\
+          \            corr_df = pd.DataFrame(stats['correlation_matrix'])\n     \
+          \       if not corr_df.empty:\n                pivot_df = corr_df.pivot(index='Variable1',\
+          \ columns='Variable2', values='Correlation')\n                fig = px.imshow(pivot_df,\
+          \ text_auto=True, title='变量相关性热力图')\n                visualizations['correlation_heatmap']\
+          \ = fig.to_json()\n        \n        # 4. 样本数据表格\n        df = pd.DataFrame(sample_data)\n\
+          \        visualizations['sample_table'] = df.to_html()\n        \n     \
+          \   return {\n            \"visualizations\": visualizations,\n        \
+          \    \"status\": \"success\",\n            \"error\": \"\"\n        }\n\
+          \        \n    except Exception as e:\n        return {\n            \"\
+          error\": str(e),\n            \"status\": \"error\",\n            \"visualizations\"\
+          : {}\n        }"
+        code_language: python3
+        desc: 生成交互式可视化报表，包括直方图、箱线图、热力图和数据表格
+        outputs:
+          error:
+            children: null
+            type: string
+          status:
+            children: null
+            type: string
+          visualizations:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 可视化报表生成
+        type: code
+        variables:
+        - value_selector:
+          - '4'
+          - statistics
+          variable: input_data
+        version: '1'
+      height: 90
+      id: '5'
+      parentId: null
+      position:
+        x: 1300
+        y: 100
+      positionAbsolute:
+        x: 1300
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成报表分析和解释
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位数据分析专家，负责对可视化报表进行专业解读和分析。请根据提供的可视化数据，生成详细的报表分析和解释。分析应包括数据趋势、关键发现、异常值识别以及业务建议。使用清晰、专业的语言，并确保分析结果易于理解。
+        - role: user
+          text: '请分析以下可视化报表数据：
+
+            {{#5.visualizations#}}
+
+
+            重点关注以下方面：
+
+            1. 数据分布特征
+
+            2. 关键趋势和模式
+
+            3. 异常值或异常情况
+
+            4. 业务影响和建议'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 报表分析与解释
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 96
+      id: '6'
+      parentId: null
+      position:
+        x: 1600
+        y: 100
+      positionAbsolute:
+        x: 1600
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: 输出最终报表和分析结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '5'
+          - visualizations
+          variable: visualizations
+        - value_selector:
+          - '6'
+          - text
+          variable: analysis_report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 结束
+        type: end
+        version: '1'
+      height: 90
+      id: '7'
+      parentId: null
+      position:
+        x: 1900
+        y: 100
+      positionAbsolute:
+        x: 1900
+        y: 100
+      type: custom
+      width: 242
+      zIndex: 0
+    type: custom

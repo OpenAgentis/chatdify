@@ -1,0 +1,48 @@
+ChatDify
+Copyright 2026 OpenAgentis
+
+This product includes software developed by the OpenAgentis contributors
+and is licensed under the Apache License, Version 2.0.
+
+-------------------------------------------------------------------------------
+Dify
+-------------------------------------------------------------------------------
+
+ChatDify generates workflow DSL for Dify (https://github.com/langgenius/dify)
+and can optionally use Dify's own node entity definitions for static
+validation. Dify source code is NOT redistributed as part of the ChatDify
+package. When static validation is enabled, ChatDify imports Dify from a
+source tree that the user obtains separately (via the `dify` git submodule,
+`chatdify dify fetch`, or `--dify-src`).
+
+Dify is licensed under the Dify Open Source License, a modified Apache
+License 2.0 with additional conditions. See
+https://github.com/langgenius/dify/blob/main/LICENSE for details.
+
+-------------------------------------------------------------------------------
+Knowledge base
+-------------------------------------------------------------------------------
+
+`chatdify/kg/` contains Dify node references and workflow templates. Some
+templates were adapted from publicly shared Dify workflows; credentials and
+organization-specific information have been removed. If you are the author
+of a template and would like it attributed differently or removed, please
+open an issue.
+
+-------------------------------------------------------------------------------
+Benchmark input files (test_cases/chatdify/data/)
+-------------------------------------------------------------------------------
+
+Unless listed below, the input files are synthetic and all names, companies,
+identifiers and numbers in them are fictional.
+
+- online_retail.csv, online_retail_sample_500.csv: derived from the "Online
+  Retail" dataset by Daqing Chen, UCI Machine Learning Repository
+  (https://doi.org/10.24432/C5BW33), licensed under CC BY 4.0. Dates were
+  shifted and rows sampled.
+- orders.csv, brands.csv: from the BikeStores sample database
+  (https://www.sqlservertutorial.net/getting-started/sql-server-sample-database/).
+- stock.xlsx: public daily quotes of the SSE Composite Index.
+- deepseek-r1.pdf: "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs
+  via Reinforcement Learning", DeepSeek-AI, arXiv:2501.12948. Copyright
+  remains with the authors; included only as a test document.

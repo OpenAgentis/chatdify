@@ -1,0 +1,6 @@
+node_error:
+- 'error_handle_mode 非法: 不能使用 continue，应使用 continue-on-error（合法值: terminated | continue-on-error | remove-abnormal-output）'
+- '变量引用错误: ''10000009start.item'' — iteration-start 节点不能被引用，应使用迭代节点 ID，如 ''10000009.item''（迭代内部）或 ''10000009.output''（迭代外部）'
+- '变量引用错误: ''10000005.item.zh_content'' — 不支持 iteration.item.xx 点号展开；迭代内只能用 {{#迭代节点ID.item#}} 整体 item，子字段需先用 code/llm 处理后再引用'
+- '变量引用错误: ''10000004.product'' — 迭代节点外部引用应使用 output，不是自定义字段名 product'
+- '迭代器变量验证失败: 输出变量错误 — output_selector 必须指向迭代子图内真实存在的输出字段'

@@ -1,0 +1,825 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: meeting
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.9@89e719fd718aaf97165b1833202e8db8a4e553cf7291291cc376e4b50245f1cd
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: if-else
+      id: 1744102481785-source-1744103478466-target
+      selected: false
+      source: '1744102481785'
+      sourceHandle: source
+      target: '1744103478466'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: document-extractor
+      id: 1744103478466-true-1744103267507-target
+      selected: false
+      source: '1744103478466'
+      sourceHandle: 'true'
+      target: '1744103267507'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1744103478466-afb2d2e5-ee2d-472f-98e4-569e8eee8ad1-1744103588410-target
+      selected: false
+      source: '1744103478466'
+      sourceHandle: afb2d2e5-ee2d-472f-98e4-569e8eee8ad1
+      target: '1744103588410'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: http-request
+        targetType: code
+      id: 1744103588410-source-1744103634801-target
+      selected: false
+      source: '1744103588410'
+      sourceHandle: source
+      target: '1744103634801'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: document-extractor
+        targetType: code
+      id: 1744103267507-source-1744103634801-target
+      selected: false
+      source: '1744103267507'
+      sourceHandle: source
+      target: '1744103634801'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1744103634801-source-17441028021120-target
+      source: '1744103634801'
+      sourceHandle: source
+      target: '17441028021120'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1744103634801-source-1744102698778-target
+      source: '1744103634801'
+      sourceHandle: source
+      target: '1744102698778'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1744103634801-source-17441027628630-target
+      source: '1744103634801'
+      sourceHandle: source
+      target: '17441027628630'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1744103634801-source-17441029309130-target
+      source: '1744103634801'
+      sourceHandle: source
+      target: '17441029309130'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: 17441028021120-source-1744107784971-target
+      source: '17441028021120'
+      sourceHandle: source
+      target: '1744107784971'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: 1744102698778-source-1744107784971-target
+      source: '1744102698778'
+      sourceHandle: source
+      target: '1744107784971'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: 17441027628630-source-1744107784971-target
+      source: '17441027628630'
+      sourceHandle: source
+      target: '1744107784971'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: 17441029309130-source-1744107784971-target
+      source: '17441029309130'
+      sourceHandle: source
+      target: '1744107784971'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: if-else
+      id: 1744107784971-source-1744108744957-target
+      source: '1744107784971'
+      sourceHandle: source
+      target: '1744108744957'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: end
+      id: 1744108744957-false-1744108757206-target
+      source: '1744108744957'
+      sourceHandle: 'false'
+      target: '1744108757206'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: 1744108744957-true-1744108009563-target
+      source: '1744108744957'
+      sourceHandle: 'true'
+      target: '1744108009563'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1744108009563-source-1744109017393-target
+      source: '1744108009563'
+      sourceHandle: source
+      target: '1744109017393'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: true
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: meeting_note_file
+          max_length: 48
+          options: []
+          required: false
+          type: file
+          variable: meeting_note_file
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - audio
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: meeting_audio
+          max_length: 48
+          options: []
+          required: false
+          type: file
+          variable: meeting_audio
+        - label: context_words
+          max_length: 256
+          options: []
+          required: false
+          type: text-input
+          variable: context_words
+        - label: num_speakers
+          max_length: 48
+          options: []
+          required: false
+          type: number
+          variable: num_speakers
+      height: 168
+      id: '1744102481785'
+      position:
+        x: -248.0705996548191
+        y: 62.02603290005928
+      positionAbsolute:
+        x: -248.0705996548191
+        y: 62.02603290005928
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 22de0333-b5ed-414b-ac59-ec6d7cbf5772
+          role: system
+          text: "你是一个会议助手，负责处理多人会议的ASR转录文本，文本带有发言人，时间戳，发言内容，你的任务是:\n\n\n1. 根据会议的具体内容，把会议划分为数个章节(尽量简洁)，提供每个章节的大致内容以供参考，力求详细和准确\n\
+            2. 回复格式为: \n    章节一 标题（时间区间）：大致内容\n    章节二 标题（时间区间）：大致内容\n    ...\n   \
+            \ 结果为一个markdown文本，不需要 ```markdown 包裹\n\n\n    因为不知道发言人的性别，指代时建议用发言人代号，而不是他/她\n\
+            对以上内容的处理，必须非常严格的遵照提供的文本，不允许私自删改内容，最好准确的事件地点时间。在完成任务时，文本因为ASR转录，会包含明显的错别字，请注意甄别。\n\
+            请按照回复格式进行回复"
+        - id: 8d634975-4cc7-46bf-a352-da11c3949acc
+          role: user
+          text: '会议内容:
+
+            {{#1744103634801.result#}}
+
+            '
+        selected: false
+        title: 段落总结
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1744102698778'
+      position:
+        x: 596.6433234561238
+        y: -27.19326510975688
+      positionAbsolute:
+        x: 596.6433234561238
+        y: -27.19326510975688
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 22de0333-b5ed-414b-ac59-ec6d7cbf5772
+          role: system
+          text: "你是一个会议助手，负责处理多人会议的ASR转录文本，文本带有发言人，时间戳，发言内容，你的任务是:\n\n\n1. 根据会议的具体内容，总结每个发言人的发言内容，具体的观点，具体的贡献，力求详细和准确。要根据说话人的讨论内容给出，而不是私自推断\n\
+            2. 回复格式为: \n    发言人 1：该发言人的发言内容，观点，贡献\n    发言人 2：该发言人的发言内容，观点，贡献\n   \
+            \ ...\n    \n    因为不知道发言人的性别，指代时建议用发言人代号，而不是他/她\n对以上内容的处理，必须非常严格的遵照提供的文本，不允许私自删改内容，最好准确的事件地点时间。在完成任务时，文本因为ASR转录，会包含明显的错别字，请注意甄别。\n\
+            请按照回复格式进行回复"
+        - id: 8d634975-4cc7-46bf-a352-da11c3949acc
+          role: user
+          text: '会议内容:
+
+            {{#1744103634801.result#}}
+
+            '
+        selected: false
+        title: 说话人总结
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '17441027628630'
+      position:
+        x: 615.0224971360764
+        y: 92.80673489024315
+      positionAbsolute:
+        x: 615.0224971360764
+        y: 92.80673489024315
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 22de0333-b5ed-414b-ac59-ec6d7cbf5772
+          role: system
+          text: '你是一个会议助手，负责处理多人会议的ASR转录文本，文本带有发言人，时间戳，发言内容，你的任务是:
+
+
+
+            1. 根据会议的具体内容，总结会议的标题，尽量简洁，不要有需要转义的特殊字符, 如\\ / 等
+
+            2. 直接回复会议的标题，不要有其他内容
+
+
+
+            标题格式:
+
+            会议：xxxxxxx'
+        - id: 8d634975-4cc7-46bf-a352-da11c3949acc
+          role: user
+          text: '会议内容:
+
+            {{#1744103634801.result#}}
+
+            '
+        selected: false
+        title: 产生标题
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '17441028021120'
+      position:
+        x: 615.0224971360764
+        y: -162.46462891969165
+      positionAbsolute:
+        x: 615.0224971360764
+        y: -162.46462891969165
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 22de0333-b5ed-414b-ac59-ec6d7cbf5772
+          role: system
+          text: "你是一个会议助手，负责公司重要的会议，你的工作不容许你随意编造，捏造内容，因为你服务的都是重要的人物，重要的会议。\n你会处理多的文本包括:\n\
+            1. ASR转录文本，文本带有发言人，时间戳，发言内容\n2. 文本还可能包含用户在会议期间与语音助手的对话，会议期间专门提取的任务文本作为context,\
+            \ 这些内容里可能会有用户非常明确交代的一些任务，你的任务是:\n    \n<任务> \n1. 仔细分析会议转录文本和语音助手的对话记录（如有)，严格参照会议纪要模板的格式，给出会议纪要，不要随意编造，捏造内容\n\
+            2. 如果用户在context中明确交代了一些任务，请以context为重要参考，放在会议纪要的会议结论钟\n请参考一下会议纪要格式：\n\n\
+            \n<会议纪要模板>\n### 会议纪要\n#### 会议主题：  体现会议类型及核心议题 +（时间）（例子：研发系统进度汇报（20250310））\n\
+            #### 会议时间:  精确到分钟（例：2025年3月13日14:30-16:15）  \n#### 会议地点:  根据提供信息填写，如果没有则填未知\n\
+            #### 主持人:   可以根据说话人内容，负责会议总体进程推进的人为主持人\n#### 记录人:   会议助手小微(无须修改，保持\"会议助手小微即可\"\
+            )\n#### 出席人员:  根据对话说话人总结于此\n#### 会议结论:\n\n\n    结构说明：按业务领域/议题分类，每类下分点明确已经达成的结论，要点；列出将进行的行动项目，以及相关责任人与要求\n\
+            \n\n    名称：业务领域/项目名称（如\"境内业务\"，\"科技助手研发\" 等, 需要是一个涵盖多点的主题）：\n        (需要列出:)\n\
+            \n\n        结论要点：根据原文得到的结论，要点（内容必须严格参照原文）\n\n\n        与\n\n\n       \
+            \ ​任务描述：具体行动项（需量化目标或策略方向，内容必须严格参照原文），负责人：XXX（根据原文对话判断，如果无法判断，则不填写）\n \
+            \   \n    (例：\n        \n    1. 客户管理：\n        (1)定价上首年费用可以低一点，但后续每年需保证一定的费用收取。定价策略需再讨论，由XX负责。\n\
+                    (2) 要把年度目标break down到每个KA客户，明确每个客户每年可以拿回多少收入，以收入作为最终目标。\n     \
+            \   (3) KA客户要有门槛，至少千万级才算是KA客户。\n        (4) 需在材料中体现客户预期收入和当前所处的阶段，并对客户分级管理，如某个客户虽预期收入高，但长期投入后无明显进展，则需进行降级，避免在低价值客户上投入。\n\
+                    以上由XX, xx负责。\n    2.  SFC：\n        (1) 需跟客户深度沟通，直接让客户使用demo，了解对方的真实痛点。由XX,XX负责。\n\
+                3.  Saas平台：\n        (1) xx系统跟xx差异大，先提供简单的入口，如PDF、网页等形式让对方更快地用我们的产品，由xx负责。\n\
+                )\n\n\n<注意>\n请回复你总结得到的会议纪要，除此之外不要再回复其他内容"
+        - id: 8d634975-4cc7-46bf-a352-da11c3949acc
+          role: user
+          text: '会议内容:
+
+            {{#1744103634801.result#}}
+
+            '
+        selected: false
+        title: 重点与TODO纪要
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '17441029309130'
+      position:
+        x: 615.0224971360764
+        y: 215.95543324524016
+      positionAbsolute:
+        x: 615.0224971360764
+        y: 215.95543324524016
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        is_array_file: false
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1744102481785'
+        - meeting_note_file
+      height: 92
+      id: '1744103267507'
+      position:
+        x: 76.21576224583316
+        y: 22.20076415511565
+      positionAbsolute:
+        x: 76.21576224583316
+        y: 22.20076415511565
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: exists
+            id: 653d1c77-8477-4156-ac10-7589ac49a1f2
+            value: ''
+            varType: file
+            variable_selector:
+            - '1744102481785'
+            - meeting_note_file
+          id: 'true'
+          logical_operator: and
+        - case_id: afb2d2e5-ee2d-472f-98e4-569e8eee8ad1
+          conditions:
+          - comparison_operator: exists
+            id: 1939e807-7a15-48a5-b053-337111f253de
+            value: ''
+            varType: file
+            variable_selector:
+            - '1744102481785'
+            - meeting_audio
+          id: afb2d2e5-ee2d-472f-98e4-569e8eee8ad1
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 条件分支
+        type: if-else
+      height: 174
+      id: '1744103478466'
+      position:
+        x: 84.76952467504441
+        y: -208.9329361091639
+      positionAbsolute:
+        x: 84.76952467504441
+        y: -208.9329361091639
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - file:
+            - '1744102481785'
+            - meeting_audio
+            key: file
+            type: file
+            value: '@meeting_221.wav'
+          - key: num_speakers
+            type: text
+            value: '{{#1744102481785.num_speakers#}}'
+          type: form-data
+        desc: ''
+        headers: Content-Type:multipart/form-data
+        method: POST
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 会议ASR处理
+        type: http-request
+        url: http://127.0.0.1:8000/tool/meeting/transcribe
+        variables: []
+      height: 136
+      id: '1744103588410'
+      position:
+        x: 84.76952467504441
+        y: 232.5446380076586
+      positionAbsolute:
+        x: 84.76952467504441
+        y: 232.5446380076586
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(direct_text: str, asr_text: str) -> dict:\n    if direct_text\
+          \ is not None:\n        return {\n            \"result\": direct_text\n\
+          \        }\n    else:\n        import json\n        data = json.loads(asr_text)\n\
+          \        return {'result': data.get('result')}\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 提取文本
+        type: code
+        variables:
+        - value_selector:
+          - '1744103267507'
+          - text
+          variable: direct_text
+        - value_selector:
+          - '1744103588410'
+          - body
+          variable: asr_text
+      height: 54
+      id: '1744103634801'
+      position:
+        x: 345.63214614098445
+        y: 31.145020085216444
+      positionAbsolute:
+        x: 345.63214614098445
+        y: 31.145020085216444
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: "{{ arg1 }}\r\n\r\n## 章节速览\r\n{{arg2}}\r\n\r\n## 说话人总结\r\n{{arg3}}\r\
+          \n\r\n## 纪要\r\n{{arg4}}"
+        title: 模板转换
+        type: template-transform
+        variables:
+        - value_selector:
+          - '17441028021120'
+          - text
+          variable: arg1
+        - value_selector:
+          - '1744102698778'
+          - text
+          variable: arg2
+        - value_selector:
+          - '17441027628630'
+          - text
+          variable: arg3
+        - value_selector:
+          - '17441029309130'
+          - text
+          variable: arg4
+      height: 54
+      id: '1744107784971'
+      position:
+        x: 932.5442110727647
+        y: -130.57611705949
+      positionAbsolute:
+        x: 932.5442110727647
+        y: -130.57611705949
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 28a2f824-59c7-4392-849b-4a9d9fe97f94
+          role: system
+          text: '你是个普通话纠错助手，专门负责纠正会议纪要的常常因为ASR会出现的一些近音词，同音词错误。
+
+            你的任务是：
+
+            1. 依照上下文，找出出错的中英文的人名，常用词，成语等，但是不要牵强附会，只有非常有把握的情况下才纠正
+
+            2. 如果提供了context words(热词)，可参考热词
+
+            3. 无需把英语转换为中文，口语转换为正式语
+
+            4. 回复纠正后的全文，除此之外不要再回复其他内容'
+        - id: 4ec1586c-82ee-41ad-9b04-fbe25c0ecb6f
+          role: user
+          text: '参考热词:
+
+            {{#1744102481785.context_words#}}
+
+
+            会议纪要内容：
+
+            {{#1744107784971.output#}}'
+        selected: false
+        title: 纠错
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1744108009563'
+      position:
+        x: 1213.9753080470387
+        y: -149.97191420635417
+      positionAbsolute:
+        x: 1213.9753080470387
+        y: -149.97191420635417
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: fbf142c1-ce1d-4c16-9e24-443a9236ee44
+            value: ''
+            varType: string
+            variable_selector:
+            - '1744102481785'
+            - context_words
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 条件分支 2
+        type: if-else
+      height: 126
+      id: '1744108744957'
+      position:
+        x: 923.3546242327884
+        y: -51.1838556766091
+      positionAbsolute:
+        x: 923.3546242327884
+        y: -51.1838556766091
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1744107784971'
+          - output
+          variable: output
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1744108757206'
+      position:
+        x: 923.3546242327884
+        y: 116.52610415295808
+      positionAbsolute:
+        x: 923.3546242327884
+        y: 116.52610415295808
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1744108009563'
+          - text
+          variable: text
+        selected: false
+        title: 结束 2
+        type: end
+      height: 90
+      id: '1744109017393'
+      position:
+        x: 1201.4005914708814
+        y: 4.724957920284638
+      positionAbsolute:
+        x: 1201.4005914708814
+        y: 4.724957920284638
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 376.9128696286002
+      y: 321.20858369428845
+      zoom: 0.8705505632961241

@@ -1,0 +1,191 @@
+app:
+  mode: workflow
+  name: api_recommendation_assistant
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - id: 10000001-source-10000002-target
+      source: '10000001'
+      target: '10000002'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: start
+        targetType: knowledge-retrieval
+      zIndex: 0
+    - id: 10000002-source-10000003-target
+      source: '10000002'
+      target: '10000003'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      zIndex: 0
+    - id: 10000003-source-10000004-target
+      source: '10000003'
+      target: '10000004'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      zIndex: 0
+    nodes:
+    - id: '10000001'
+      data:
+        title: Start
+        variables:
+        - type: paragraph
+          variable: query
+          label: 接口查询问题
+          required: true
+          max_length: 99999
+        - type: text-input
+          variable: params
+          label: 其他相关参数
+          required: false
+          max_length: 256
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        type: start
+        desc: 接收用户输入的接口查询问题和相关参数
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 167
+      width: 243
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+    - id: '10000002'
+      data:
+        title: 接口文档检索
+        query_variable_selector:
+        - '10000001'
+        - query
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        retrieval_mode: multiple
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: 从知识库中检索与用户问题相关的接口文档内容
+        isInIteration: false
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: BAAI/bge-reranker-v2-m3
+            provider: langgenius/siliconflow/siliconflow
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: BAAI/bge-m3
+              embedding_provider_name: langgenius/siliconflow/siliconflow
+              vector_weight: 0.7
+        selected: false
+        type: knowledge-retrieval
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 91
+      width: 243
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+    - id: '10000003'
+      data:
+        title: API接口推荐
+        model:
+          provider: langgenius/volcengine_maas/volcengine_maas
+          name: deepseek-v3-250324
+          mode: chat
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+        prompt_template:
+        - id: 4f198d1a-4dc6-4e17-b180-e01077e73e1d
+          role: system
+          text: "你是一个API接口推荐专家，需要根据知识库检索结果和用户需求，分析并推荐最适合的API接口。\n\n## 工作要求\n1. 仔细分析知识库检索结果中的API文档内容\n\
+            2. 根据用户查询问题匹配最合适的API接口\n3. 输出必须包含以下信息：\n   - 推荐的接口名称\n   - 详细的推荐理由\n \
+            \  - 接口参数说明\n\n## 输出格式\n{\n  \"recommended_api\": \"推荐的接口名称\",\n  \"reason\"\
+            : \"详细的推荐理由\",\n  \"parameters\": \"接口参数说明\"\n}\n\n注意：输出必须是严格的JSON格式，不要包含任何额外文本或解释。"
+        - id: 9ccbaf93-5d5e-46e8-8771-89c0d1ea226a
+          role: user
+          text: '用户查询问题：{{#10000001.query#}}
+
+
+            知识库检索结果：{{#10000002.result#}}'
+        context:
+          enabled: false
+          variable_selector: []
+        vision:
+          enabled: false
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: 分析知识检索结果并推荐最适合的API接口
+        selected: false
+        type: llm
+        variables: []
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 97
+      width: 243
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+    - id: '10000004'
+      data:
+        title: API推荐结果
+        outputs:
+        - value_selector:
+          - '10000003'
+          - text
+          variable: output
+        output_type: object
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: 输出最终推荐的API接口信息
+        selected: false
+        type: end
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 89
+      width: 243
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+    type: custom

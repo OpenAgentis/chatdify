@@ -1,0 +1,522 @@
+app:
+  description: 本工作流主要是通过抓取获取36氪热榜文章内容实现新闻获取，作者：wwwzhouhui
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 抓取获取36氪热榜文章内容
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.2
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: http-request
+      id: 1731575837911-source-1731575885694-target
+      source: '1731575837911'
+      sourceHandle: source
+      target: '1731575885694'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: llm
+      id: 1731575885694-source-1731575963411-target
+      source: '1731575885694'
+      sourceHandle: source
+      target: '1731575963411'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1731575963411-source-1731576019023-target
+      source: '1731575963411'
+      sourceHandle: source
+      target: '1731576019023'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 1731576019023-source-1731576069313-target
+      source: '1731576019023'
+      sourceHandle: source
+      target: '1731576069313'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '1731576069313'
+        sourceType: iteration-start
+        targetType: template-transform
+      id: 1731576069313start-source-1731576098857-target
+      source: 1731576069313start
+      sourceHandle: source
+      target: '1731576098857'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        iteration_id: '1731576069313'
+        sourceType: template-transform
+        targetType: http-request
+      id: 1731576098857-source-1731576128205-target
+      source: '1731576098857'
+      sourceHandle: source
+      target: '1731576128205'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        iteration_id: '1731576069313'
+        sourceType: http-request
+        targetType: llm
+      id: 1731576128205-source-1731576166736-target
+      source: '1731576128205'
+      sourceHandle: source
+      target: '1731576166736'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: template-transform
+      id: 1731576069313-source-1731576295463-target
+      source: '1731576069313'
+      sourceHandle: source
+      target: '1731576295463'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 1731576295463-source-1731576358614-target
+      source: '1731576295463'
+      sourceHandle: source
+      target: '1731576358614'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 54
+      id: '1731575837911'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: []
+          type: none
+        desc: ''
+        headers: ''
+        method: get
+        params: ''
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 获取36氪热榜
+        type: http-request
+        url: https://api.vvhan.com/api/hotlist/36Ke
+        variables: []
+      height: 110
+      id: '1731575885694'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-241226
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: b74dda26-e5e0-4c36-9260-3f27a7e4f152
+          role: system
+          text: "```xml\n<instruction>\n  <instructions>\n    1. 抓取了360氪新闻榜单 json\
+            \ ：{{#1731575885694.body#}}\n    2. 只生成榜单前面 1 条数据\n    3. 生成如下结构的内容：\n\
+            \      [{\n        \"title\": \"新闻标题\",\n        \"url\": \"新闻链接\"\n \
+            \     }]\n    4.输出不要添加```json 包裹\n  </instructions>\n  \n  <examples>\n\
+            \    <example>\n      <output>\n        [\n          {\"title\": \"8点1氪｜个人购房不超140平契税降至1%；特斯拉10万员工薪酬数据曝光；校园招聘严禁限定985和211高校\"\
+            ,\"url\":\"https://36kr.com/p/3035465134387461\"},\n            {\"title\"\
+            : \"避免内耗，吉利将整合极氪和领克两大品牌｜36氪独家\",\"url\":\"https://36kr.com/p/3034230633984003\"\
+            },\n {\"title\": \"Transformer打破三十年数学猜想，Meta研究者用AI给出反例，算法杀手攻克数学难题｜36氪独家\"\
+            ,\"url\":\"https://36kr.com/p/3034698843615238\"},\n        ]\n      </output>\n\
+            \    </example>\n <examples> "
+        selected: false
+        title: LLM 梳理成新闻数组
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1731575963411'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        author: ' 周辉'
+        desc: ''
+        height: 114
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-size:
+          16px;","text":"API接口返回的数据比较多，考虑到效率这里我们获取3条新闻","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1,"textFormat":0}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 462
+      height: 114
+      id: '1731576000111'
+      position:
+        x: 682
+        y: 409
+      positionAbsolute:
+        x: 682
+        y: 409
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 462
+    - data:
+        code: "import json\n\ndef main(arg1: str) -> dict:\n    try:\n        json_object\
+          \ = json.loads(arg1)\n        return {\n            \"result\": json_object\n\
+          \        }\n    except json.JSONDecodeError as e:\n        return {\n  \
+          \          \"result\": None,\n            \"error\": f\"Invalid JSON: {str(e)}\"\
+          \n        }"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: array[object]
+        selected: false
+        title: 转成 Array[object]
+        type: code
+        variables:
+        - value_selector:
+          - '1731575963411'
+          - text
+          variable: arg1
+      height: 54
+      id: '1731576019023'
+      position:
+        x: 992
+        y: 282
+      positionAbsolute:
+        x: 992
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        error_handle_mode: terminated
+        height: 201
+        is_parallel: false
+        iterator_selector:
+        - '1731576019023'
+        - result
+        output_selector:
+        - '1731576166736'
+        - text
+        output_type: array[string]
+        parallel_nums: 10
+        selected: false
+        start_node_id: 1731576069313start
+        title: 迭代获取新闻正文
+        type: iteration
+        width: 996
+      height: 201
+      id: '1731576069313'
+      position:
+        x: 1296
+        y: 282
+      positionAbsolute:
+        x: 1296
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 996
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1731576069313start
+      parentId: '1731576069313'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 1320
+        y: 350
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: true
+        iteration_id: '1731576069313'
+        selected: false
+        template: '{{ arg1.url }}'
+        title: 模板转换
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1731576069313'
+          - item
+          variable: arg1
+      height: 54
+      id: '1731576098857'
+      parentId: '1731576069313'
+      position:
+        x: 128
+        y: 68
+      positionAbsolute:
+        x: 1424
+        y: 350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: []
+          type: none
+        desc: ''
+        headers: ''
+        isInIteration: true
+        iteration_id: '1731576069313'
+        method: get
+        params: ''
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: HTTP 请求 2
+        type: http-request
+        url: https://r.jina.ai/{{#1731576098857.output#}}
+        variables: []
+      height: 113
+      id: '1731576128205'
+      parentId: '1731576069313'
+      position:
+        x: 432
+        y: 68
+      positionAbsolute:
+        x: 1728
+        y: 350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        isInIteration: true
+        iteration_id: '1731576069313'
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-241226
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - id: 1591cd24-9b12-442c-a8e2-49657ab64c1a
+          role: system
+          text: "```xml\n<instruction>\n  <instructions>\n    1. jina 抓取了36氪新闻网页内容：{{#1731576128205.body#}}\n\
+            \    2. 生成如下结构的内容：\n      新闻标题\n      ============================\n \
+            \     新闻日期\n      新闻内容\n  </instructions>\n  \n  <examples>\n    <example>\n\
+            \      <output>\n         避免内耗，吉利将整合极氪和领克两大品牌｜36氪独家\n         ============================\n\
+            \         2024-11-14 03:21\n         具体方案预计年底落地\n\n“进一步明晰各品牌定位，理顺股权关系，减少利益冲突和重复投资”，在吉利集团发布的《台州宣言》中，合并与重组成为集团调整的主旋律。\n\
+            \n**36氪独家获悉，吉利集团旗下领克汽车将并入极氪汽车，由极氪CEO安聪慧统筹管理。合并后，领克品牌将被保留，但团队与战略将与极氪实现融合。**\n\
+            \n其中，财务与采购团队将率先完成合并，产品、研发等部门的调整也将在今年年底至明年年初推进。\n\n领克和极氪，可以说是近年来吉利孵化乘用车品牌双子星。今年前三季度，领克卖出16.98万辆，极氪销量逼近15万，两个品牌销量占吉利集团总销量近30%。不仅是销量支柱，更是吉利新能源转型的重要角色。\n\
+            \n知情人士透露，领克与极氪产品的重叠，是促使高层下定决心整合的原因。\n      </output>\n    </example>\n\
+            \ <examples> \n"
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1731576166736'
+      parentId: '1731576069313'
+      position:
+        x: 736
+        y: 68
+      positionAbsolute:
+        x: 2032
+        y: 350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        desc: ''
+        selected: false
+        template: '{{ arg1 | join("\n==============\n") }}'
+        title: 模板转换 2
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1731576069313'
+          - output
+          variable: arg1
+      height: 54
+      id: '1731576295463'
+      position:
+        x: 2352
+        y: 282
+      positionAbsolute:
+        x: 2352
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1731576295463'
+          - output
+          variable: output
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1731576358614'
+      position:
+        x: 2656
+        y: 282
+      positionAbsolute:
+        x: 2656
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 94.13476703489869
+      y: 170.64889862784128
+      zoom: 0.7578583123025943

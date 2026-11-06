@@ -1,0 +1,25 @@
+node_usage:
+  节点类型: knowledge-retrieval
+  输入规范:
+      - 节点接受以下参数：
+          - query_variable_selector：查询变量选择器，必须是字符串类型，代表用户输入的问题。
+          - dataset_ids：知识库ID列表，需要在 Dify 知识库内预先创建。
+          - retrieval_mode：召回模式，仅支持 "multiple"（多路召回）。
+          - multiple_retrieval_config：多路召回配置，包含 top_k、score_threshold、reranking_mode、reranking_enable、reranking_model、weights 等参数。
+          - metadata_filtering_mode：元数据筛选模式，支持 "disabled"、"automatic"、"manual" 三种模式。
+          - metadata_model_config：元数据模型配置，当使用自动元数据筛选时需要配置。
+          - metadata_filtering_conditions：元数据筛选条件，当使用手动元数据筛选时需要配置。
+      - 查询变量最大长度为 200 字符。
+      - 查询变量必须是字符串类型，不能为空。
+  常见使用错误:
+      - Query variable is not string type：确保查询变量是字符串类型。
+      - Query is required：确保查询变量不为空。
+      - ModelNotExistError：确保配置的模型存在。
+      - ModelCredentialsNotInitializedError：确保模型凭据已正确初始化。
+      - ModelNotSupportedError：确保使用的模型被支持。
+      - ModelQuotaExceededError：确保模型提供商配额未超限。
+      - InvalidModelTypeError：确保使用的是大语言模型类型。
+      - metadata_model_config is required：当使用自动元数据筛选时，必须配置元数据模型。
+      - 知识库中无可用文档：确保知识库中有已完成索引且启用的文档。
+      - 重排序模型配置错误：当启用重排序时，确保重排序模型配置正确。
+      - 元数据筛选条件格式错误：确保元数据筛选条件格式正确。

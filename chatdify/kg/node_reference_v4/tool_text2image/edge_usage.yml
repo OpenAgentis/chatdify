@@ -1,0 +1,25 @@
+edge_usage:
+  节点类型: tool_text2image
+  使用规范:
+    - tool_text2image 是豆包文生图工具节点，使用 Seedream V4.5 的 ImageGenerations 工具
+    - 上游通常为 LLM 提示词节点，prompt 引用 "{{#llm.text#}}"
+    - 纯文生图场景保持 image、image_urls、width、height 为 null
+    - 本节点输出为图片 URL（text/images），不是 file 类型，因此不能直接连接启用 vision 的 LLM
+  下游连接模式:
+    模式一_仅展示图片:
+      链路: llm → tool_text2image → answer
+      说明: answer 中用 Markdown 引用 text 或经 code 提取的 image_url
+    模式二_多模态识别:
+      链路: llm → tool_text2image → http-request（GET 下载图片） → llm(vision) → answer
+      说明: |
+        http-request 仅作为「URL→file」的下载桥：GET 本节点产出的图片 URL，输出 files；
+        识别图片内容由其后的 llm(vision) 完成，vision.variable_selector 指向 http-request 的 files。
+        若 URL 需要从 images 数组中提取，可在 tool 与 http-request 之间加 code 节点。
+  应用场景:
+    适用场景:
+      - 根据用户描述生成 AI 绘画图片并直接展示
+      - 文生图后对生成图进行多模态内容识别与文字描述
+  常见使用错误:
+    - 文生图后直接连 vision LLM（variable_selector 指向 tool 的 images 或 files），运行时报 Invalid variable type
+    - 把下游 http-request 当作识图节点（识图须由 llm vision 完成，http-request 只负责下载）
+    - 纯文生图误传 image 或 image_urls，导致工具进入参考图生成逻辑

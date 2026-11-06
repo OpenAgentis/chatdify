@@ -1,0 +1,11 @@
+node_error:
+- 'case_id true/false 不正确, 必须和边信息中对应的 sourceHandle 值保持一致（生成边后再写 cases，且每个 case_id 必须有对应出边）'
+- '当前边信息中对应的 sourceHandle 值列表为: set() — 说明 if-else 节点没有任何出边，需先补全边再配置 cases'
+- 'comparison_operator 的值错误: varType string 不支持操作符 =，应使用 is / is not / contains / empty 等该类型支持的操作符'
+- value不能为空
+- varType不能为空
+- 'numberVarType不能为空：varType 为 number 时必须设置 numberVarType（variable 或 constant），否则前端无法判断比较值来源'
+- 'numberVarType的值错误：value 为变量引用 ''{{#10000001.total_rounds#}}'' 却写成 numberVarType: constant，会被当成常量字符串导致比较失效，应改为 variable'
+- 'numberVarType的值错误：numberVarType 为 variable 但 value 是字面量数字（如 ''3''），应改为 constant'
+- 'varType的值错误：varType 写成了 int/str 等 Python 类型名，应为 string/number/boolean/file/object/array[...]'
+- '变量引用错误: ''10000003.false'' — if-else 节点输出不能被引用，应引用分支下游节点的输出'

@@ -1,0 +1,337 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: generate_test_cases_from_requirements
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的需求文档
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .pdf
+          - .docx
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 需求文档
+          max_length: 48
+          required: true
+          type: file
+          variable: file
+        version: '1'
+      height: 118
+      id: '1'
+      parentId: null
+      position:
+        x: 363.142957965791
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 363.142957965791
+        y: 274.87198362549776
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 从上传的需求文档中提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1'
+        - file
+        version: '1'
+      height: 120
+      id: '2'
+      parentId: null
+      position:
+        x: 661.7296503826896
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 661.7296503826896
+        y: 274.87198362549776
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据需求文档生成测试大纲
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的测试大纲生成专家。根据提供的需求文档内容，提取所有功能点并生成结构化的测试大纲。要求：
+
+            1. 必须完整覆盖文档中的所有功能点
+
+            2. 每个功能点需要列出具体的验证场景和验证要点
+
+            3. 输出格式为XMind格式的结构化文本
+
+            4. 不得遗漏任何功能点
+
+            5. 不得包含需求简介、需求内容等非功能点信息'
+        - role: user
+          text: '请根据以下需求文档内容生成测试大纲：
+
+            {{#2.text#}}
+
+
+            要求：
+
+            1. 按XMind格式输出
+
+            2. 每个功能点必须包含验证场景和验证要点
+
+            3. 确保所有功能点都被覆盖'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 测试大纲生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 118
+      id: '3'
+      parentId: null
+      position:
+        x: 961.5606056628817
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 961.5606056628817
+        y: 274.87198362549776
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据测试大纲生成详细的测试用例
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的测试用例生成专家。根据提供的测试大纲内容，为每个功能点生成详细的测试用例。要求：
+
+
+            1. 必须完整覆盖测试大纲中的所有功能点和验证点
+
+            2. 每个测试用例必须包含名称、前置条件、步骤和预期结果
+
+            3. 输出格式为CSV格式，不包含引号
+
+            4. 确保用例之间逻辑清晰，步骤完整
+
+            5. 不得遗漏任何功能点'
+        - role: user
+          text: '请根据以下测试大纲生成详细的测试用例：
+
+
+            {{#3.text#}}
+
+
+            要求：
+
+            1. 按CSV格式输出
+
+            2. 每行一个测试用例
+
+            3. 列顺序为：用例名称,前置条件,用例步骤,预期结果
+
+            4. 不要包含任何引号'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 测试用例生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 118
+      id: '4'
+      parentId: null
+      position:
+        x: 1261.5606056628817
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 1261.5606056628817
+        y: 274.87198362549776
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 汇总并输出测试大纲和测试用例的最终结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '3'
+          - text
+          variable: test_outline
+        - value_selector:
+          - '4'
+          - text
+          variable: test_cases
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 测试结果输出
+        type: end
+        version: '1'
+      height: 160
+      id: '5'
+      parentId: null
+      position:
+        x: 1561.5606056628817
+        y: 274.87198362549776
+      positionAbsolute:
+        x: 1561.5606056628817
+        y: 274.87198362549776
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -274.9003503637548
+      y: 186.05732771421322
+      zoom: 0.757858283255199

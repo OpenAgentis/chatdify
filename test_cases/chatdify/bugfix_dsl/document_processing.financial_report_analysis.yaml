@@ -1,0 +1,556 @@
+app:
+  mode: workflow
+  name: financial_report_analysis
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: code
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: code
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: code
+      id: 10000004-source-10000005-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 10000005-source-10000006-target
+      source: '10000005'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 10000006-source-10000007-target
+      source: '10000006'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 10000007-source-10000008-target
+      source: '10000007'
+      sourceHandle: source
+      target: '10000008'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的PDF财务报表文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .pdf
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 财务报表文件
+          max_length: 5
+          required: true
+          type: file
+          variable: financial_report
+        version: '1'
+      height: 90
+      id: '10000001'
+      parentId: null
+      position:
+        x: 200
+        y: 100
+      positionAbsolute:
+        x: 200
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 解析PDF文件内容并提取文本数据
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '10000001'
+        - financial_report
+        version: '1'
+      height: 90
+      id: '10000002'
+      parentId: null
+      position:
+        x: 500
+        y: 100
+      positionAbsolute:
+        x: 500
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import re\nimport json\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef identify_financial_statements(text:\
+          \ str) -> dict:\n    \"\"\"识别财务报表类型\"\"\"\n    balance_sheet_keywords =\
+          \ ['资产', '负债', '所有者权益', '资产负债表']\n    income_statement_keywords = ['收入',\
+          \ '利润', '费用', '利润表']\n    cash_flow_keywords = ['现金', '流量', '现金流量表']\n \
+          \   \n    result = {\n        'balance_sheet': False,\n        'income_statement':\
+          \ False,\n        'cash_flow': False,\n        'content': text,\n      \
+          \  'error': None\n    }\n    \n    try:\n        for keyword in balance_sheet_keywords:\n\
+          \            if keyword in text:\n                result['balance_sheet']\
+          \ = True\n                break\n        \n        for keyword in income_statement_keywords:\n\
+          \            if keyword in text:\n                result['income_statement']\
+          \ = True\n                break\n        \n        for keyword in cash_flow_keywords:\n\
+          \            if keyword in text:\n                result['cash_flow'] =\
+          \ True\n                break\n    except Exception as e:\n        result['error']\
+          \ = str(e)\n    \n    return result\n\ndef main(text: str) -> dict:\n  \
+          \  try:\n        # 预处理输入\n        json_text = extract_json_from_markdown(text)\n\
+          \        \n        # 识别财务报表类型\n        result = identify_financial_statements(json_text)\n\
+          \        \n        return {\n            'result': result,\n           \
+          \ 'error': None\n        }\n    except Exception as e:\n        return {\n\
+          \            'result': {\n                'balance_sheet': False,\n    \
+          \            'income_statement': False,\n                'cash_flow': False,\n\
+          \                'content': text,\n                'error': str(e)\n   \
+          \         },\n            'error': str(e)\n        }"
+        code_language: python3
+        desc: 处理文本数据并识别资产负债表、利润表和现金流量表
+        outputs:
+          error:
+            children: null
+            type: string
+          result:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 财务报表识别
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: text
+        version: '1'
+      height: 90
+      id: '10000003'
+      parentId: null
+      position:
+        x: 800
+        y: 100
+      positionAbsolute:
+        x: 800
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\n\ndef extract_json_from_markdown(markdown_text: str) ->\
+          \ str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef calculate_financial_ratios(financial_data:\
+          \ dict) -> dict:\n    \"\"\"计算关键财务指标\"\"\"\n    try:\n        # 流动比率 = 流动资产\
+          \ / 流动负债\n        current_ratio = financial_data['current_assets'] / financial_data['current_liabilities']\n\
+          \        \n        # 资产负债率 = 总负债 / 总资产\n        debt_to_assets = financial_data['total_liabilities']\
+          \ / financial_data['total_assets']\n        \n        # 净利润率 = 净利润 / 营业收入\n\
+          \        net_profit_margin = financial_data['net_profit'] / financial_data['operating_revenue']\n\
+          \        \n        return {\n            'current_ratio': round(current_ratio,\
+          \ 4),\n            'debt_to_assets': round(debt_to_assets, 4),\n       \
+          \     'net_profit_margin': round(net_profit_margin, 4),\n            'raw_data':\
+          \ financial_data,\n            'error': None\n        }\n    except Exception\
+          \ as e:\n        return {\n            'current_ratio': None,\n        \
+          \    'debt_to_assets': None,\n            'net_profit_margin': None,\n \
+          \           'raw_data': financial_data,\n            'error': str(e)\n \
+          \       }\n\ndef main(input_data: dict) -> dict:\n    try:\n        # 预处理输入\n\
+          \        if 'result' not in input_data or 'content' not in input_data['result']:\n\
+          \            raise ValueError(\"输入数据格式不正确，缺少必要字段\")\n            \n    \
+          \    financial_data = json.loads(input_data['result']['content'])\n    \
+          \    \n        # 计算财务指标\n        ratios = calculate_financial_ratios(financial_data)\n\
+          \        \n        return {\n            'financial_ratios': ratios,\n \
+          \           'raw_data': financial_data,\n            'error': None\n   \
+          \     }\n    except Exception as e:\n        return {\n            'financial_ratios':\
+          \ {\n                'current_ratio': None,\n                'debt_to_assets':\
+          \ None,\n                'net_profit_margin': None,\n                'raw_data':\
+          \ input_data,\n                'error': str(e)\n            },\n       \
+          \     'raw_data': input_data,\n            'error': str(e)\n        }"
+        code_language: python3
+        desc: 计算关键财务指标（流动比率、资产负债率、净利润率等）
+        outputs:
+          error:
+            children: null
+            type: string
+          financial_ratios:
+            children: null
+            type: object
+          raw_data:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 财务指标计算
+        type: code
+        variables:
+        - value_selector:
+          - '10000003'
+          - result
+          variable: input_data
+        version: '1'
+      height: 90
+      id: '10000004'
+      parentId: null
+      position:
+        x: 1100
+        y: 100
+      positionAbsolute:
+        x: 1100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nfrom datetime import datetime, timedelta\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef calculate_yoy_mom(data:\
+          \ dict, current_period: str) -> dict:\n    \"\"\"计算同比和环比增长率\"\"\"\n    try:\n\
+          \        # 解析当前日期\n        current_date = datetime.strptime(current_period,\
+          \ '%Y-%m-%d')\n        \n        # 计算同比日期(去年同月)\n        yoy_date = (current_date\
+          \ - timedelta(days=365)).strftime('%Y-%m-%d')\n        \n        # 计算环比日期(上月)\n\
+          \        mom_date = (current_date - timedelta(days=30)).strftime('%Y-%m-%d')\n\
+          \        \n        # 获取各期数据\n        current_value = data.get(current_period,\
+          \ 0)\n        yoy_value = data.get(yoy_date, 0)\n        mom_value = data.get(mom_date,\
+          \ 0)\n        \n        # 计算增长率\n        yoy_growth = ((current_value -\
+          \ yoy_value) / yoy_value * 100) if yoy_value != 0 else 0\n        mom_growth\
+          \ = ((current_value - mom_value) / mom_value * 100) if mom_value != 0 else\
+          \ 0\n        \n        return {\n            'current_period': current_period,\n\
+          \            'current_value': current_value,\n            'yoy_period':\
+          \ yoy_date,\n            'yoy_value': yoy_value,\n            'yoy_growth':\
+          \ round(yoy_growth, 2),\n            'mom_period': mom_date,\n         \
+          \   'mom_value': mom_value,\n            'mom_growth': round(mom_growth,\
+          \ 2),\n            'error': None\n        }\n    except Exception as e:\n\
+          \        return {\n            'current_period': current_period,\n     \
+          \       'current_value': current_value,\n            'yoy_period': None,\n\
+          \            'yoy_value': None,\n            'yoy_growth': None,\n     \
+          \       'mom_period': None,\n            'mom_value': None,\n          \
+          \  'mom_growth': None,\n            'error': str(e)\n        }\n\ndef main(input_data:\
+          \ dict) -> dict:\n    try:\n        # 预处理输入\n        if 'financial_ratios'\
+          \ not in input_data or 'raw_data' not in input_data['financial_ratios']:\n\
+          \            raise ValueError(\"输入数据格式不正确，缺少财务指标数据\")\n            \n  \
+          \      financial_data = input_data['financial_ratios']['raw_data']\n   \
+          \     \n        # 获取当前日期(假设数据中最新日期为当前日期)\n        dates = sorted(financial_data.keys())\n\
+          \        if not dates:\n            raise ValueError(\"财务数据中没有有效的日期数据\"\
+          )\n        current_period = dates[-1]\n        \n        # 计算同比环比\n    \
+          \    analysis_result = {}\n        \n        # 对每个财务指标计算同比环比\n        for\
+          \ metric in ['operating_revenue', 'net_profit', 'total_assets']:\n     \
+          \       if metric in financial_data[current_period]:\n                metric_data\
+          \ = {date: financial_data[date][metric] for date in dates if metric in financial_data[date]}\n\
+          \                analysis_result[metric] = calculate_yoy_mom(metric_data,\
+          \ current_period)\n        \n        return {\n            'analysis_result':\
+          \ analysis_result,\n            'financial_ratios': input_data['financial_ratios'],\n\
+          \            'error': None\n        }\n    except Exception as e:\n    \
+          \    return {\n            'analysis_result': None,\n            'financial_ratios':\
+          \ input_data['financial_ratios'] if 'financial_ratios' in input_data else\
+          \ None,\n            'error': str(e)\n        }"
+        code_language: python3
+        desc: 计算财务数据的同比和环比增长率
+        outputs:
+          analysis_result:
+            children: null
+            type: object
+          error:
+            children: null
+            type: string
+          financial_ratios:
+            children: null
+            type: object
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 同比环比分析
+        type: code
+        variables:
+        - value_selector:
+          - '10000004'
+          - financial_ratios
+          variable: input_data
+        version: '1'
+      height: 90
+      id: '10000005'
+      parentId: null
+      position:
+        x: 1400
+        y: 100
+      positionAbsolute:
+        x: 1400
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成财务分析报告和可视化图表建议
+        model:
+          completion_params:
+            max_tokens: 2000
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位专业的财务分析师，负责根据提供的财务数据生成详细的分析报告和可视化图表建议。请按照以下要求进行分析：
+
+
+            1. 分析财务指标趋势：包括营业收入、净利润、总资产等关键指标的同比和环比变化
+
+            2. 评估财务健康状况：分析流动比率、资产负债率、净利润率等关键财务比率
+
+            3. 识别关键发现：指出数据中最重要的趋势和异常点
+
+            4. 提供可视化建议：推荐最适合展示这些数据的图表类型和格式
+
+
+            报告格式要求：
+
+            - 使用Markdown格式
+
+            - 包含清晰的标题和分段
+
+            - 重要数据点使用加粗强调
+
+            - 图表建议需包含图表类型和理由说明'
+        - role: user
+          text: '请基于以下财务数据生成分析报告和可视化建议：
+
+
+            财务指标数据：
+
+            {{#10000005.financial_ratios#}}
+
+
+            同比环比分析结果：
+
+            {{#10000005.analysis_result#}}'
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        title: 财务分析报告生成
+        type: llm
+        variables:
+        - value_selector:
+          - '10000005'
+          - financial_ratios
+          variable: financial_ratios
+        - value_selector:
+          - '10000005'
+          - analysis_result
+          variable: analysis_result
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '10000006'
+      parentId: null
+      position:
+        x: 1700
+        y: 100
+      positionAbsolute:
+        x: 1700
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nimport re\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef format_final_report(report_text:\
+          \ str) -> dict:\n    \"\"\"格式化最终报告输出\"\"\"\n    try:\n        # 预处理输入\n\
+          \        json_text = extract_json_from_markdown(report_text)\n        report_data\
+          \ = json.loads(json_text)\n        \n        # 提取关键信息\n        analysis_summary\
+          \ = report_data.get('analysis_summary', '')\n        financial_ratios =\
+          \ report_data.get('financial_ratios', {})\n        trend_analysis = report_data.get('trend_analysis',\
+          \ {})\n        visualization_suggestions = report_data.get('visualization_suggestions',\
+          \ [])\n        \n        # 构建格式化输出\n        formatted_output = {\n     \
+          \       'summary': analysis_summary,\n            'key_metrics': {\n   \
+          \             'current_ratio': financial_ratios.get('current_ratio', None),\n\
+          \                'debt_to_assets': financial_ratios.get('debt_to_assets',\
+          \ None),\n                'net_profit_margin': financial_ratios.get('net_profit_margin',\
+          \ None)\n            },\n            'trends': {\n                'yoy_growth':\
+          \ trend_analysis.get('yoy_growth', None),\n                'mom_growth':\
+          \ trend_analysis.get('mom_growth', None)\n            },\n            'visualizations':\
+          \ visualization_suggestions,\n            'raw_data': report_data,\n   \
+          \         'error': None\n        }\n        \n        return formatted_output\n\
+          \    except Exception as e:\n        return {\n            'summary': None,\n\
+          \            'key_metrics': None,\n            'trends': None,\n       \
+          \     'visualizations': None,\n            'raw_data': report_text,\n  \
+          \          'error': str(e)\n        }\n\ndef main(text: str) -> dict:\n\
+          \    \"\"\"主函数入口\"\"\"\n    return format_final_report(text)"
+        code_language: python3
+        desc: 格式化最终报告输出，提取关键信息并构建结构化响应
+        outputs:
+          error:
+            children: null
+            type: string
+          key_metrics:
+            children: null
+            type: object
+          raw_data:
+            children: null
+            type: object
+          summary:
+            children: null
+            type: string
+          trends:
+            children: null
+            type: object
+          visualizations:
+            children: null
+            type: array[object]
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 60
+        title: 格式化最终报告
+        type: code
+        variables:
+        - value_selector:
+          - '10000006'
+          - text
+          variable: text
+        version: '1'
+      height: 90
+      id: '10000007'
+      parentId: null
+      position:
+        x: 2000
+        y: 100
+      positionAbsolute:
+        x: 2000
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出完整的财务分析报告
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000007'
+          - summary
+          variable: summary
+        - value_selector:
+          - '10000007'
+          - key_metrics
+          variable: key_metrics
+        - value_selector:
+          - '10000007'
+          - trends
+          variable: trends
+        - value_selector:
+          - '10000007'
+          - visualizations
+          variable: visualizations
+        - value_selector:
+          - '10000007'
+          - raw_data
+          variable: raw_data
+        - value_selector:
+          - '10000007'
+          - error
+          variable: error
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 财务分析报告输出
+        type: end
+        version: '1'
+      height: 90
+      id: '10000008'
+      parentId: null
+      position:
+        x: 2300
+        y: 100
+      positionAbsolute:
+        x: 2300
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

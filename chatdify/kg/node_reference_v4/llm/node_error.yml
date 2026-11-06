@@ -1,0 +1,39 @@
+node_error:
+- '变量引用错误: ''10000004.item.desc'' - (节点ID: 10000004, 节点类型: ''iteration'') 的输出变量名必须为
+  item （迭代内部引用）或者 output（迭代外部引用）, 而不是 ''item.desc'' 。 变量引用错误: ''10000004.item.parameters''
+  - (节点ID: 10000004, 节点类型: ''iteration'') 的输出变量名必须为 item （迭代内部引用）或者 output（迭代外部引用）,
+  而不是 ''item.parameters'' 。 变量引用错误: ''10000004.item.formulas'' - (节点ID: 10000004,
+  节点类型: ''iteration'') 的输出变量名必须为 item （迭代内部引用）或者 output（迭代外部引用）, 而不是 ''item.formulas''
+  。 变量引用错误: ''10000004.item.step'' - (节点ID: 10000004, 节点类型: ''iteration'') 的输出变量名必须为
+  item （迭代内部引用）或者 output（迭代外部引用）, 而不是 ''item.step'' 。'
+- '输出变量错误: ''10000004.validated_metrics.gross_margin'' - 节点 ''10000004'' (类型: code)
+  的可用输出为: [''error'', ''score'', ''status'', ''validated_metrics'']，而不是: ''validated_metrics.gross_margin''
+  输出变量错误: ''10000004.validated_metrics.net_profit_margin'' - 节点 ''10000004'' (类型:
+  code) 的可用输出为: [''error'', ''score'', ''status'', ''validated_metrics'']，而不是: ''validated_metrics.net_profit_margin''
+  输出变量错误: ''10000004.validated_metrics.asset_liability_ratio'' - 节点 ''10000004'' (类型:
+  code) 的可用输出为: [''error'', ''score'', ''status'', ''validated_metrics'']，而不是: ''validated_metrics.asset_liability_ratio''
+  输出变量错误: ''10000004.validated_metrics.revenue_growth_rate'' - 节点 ''10000004'' (类型:
+  code) 的可用输出为: [''error'', ''score'', ''status'', ''validated_metrics'']，而不是: ''validated_metrics.revenue_growth_rate'''
+- '变量引用错误: ''10000008.true'' - (节点ID: 10000008, 节点类型: ''if-else'') 不能被作为变量引用。请仔细检查任务工作流上下文，
+  选择正确的变量引用。'
+- '输出变量错误: ''10000004.health_metrics.key_recommendations.diet_suggestions.exercise_advice''
+  - 节点 ''10000004'' (类型: parameter-extractor) 的可用输出为: [''diet_suggestions'', ''exercise_advice'',
+  ''health_metrics'', ''key_recommendations'']，而不是: ''health_metrics.key_recommendations.diet_suggestions.exercise_advice'''
+- '变量引用错误: ''10000004start.item'' - (节点ID: 10000004start, 节点类型: ''iteration-start'')
+  不能被作为变量引用。正确的变量引用建议使用: ''10000004.item''。'
+- '变量引用错误: ''1721690653676.output'' - 节点 ''1721690653676'' 不是当前节点的前置节点。请仔细检查任务工作流上下文，从可用前置节点列表中选择,
+  可用前置节点列表: 10000001 变量引用错误: ''1721707099211.output'' - 节点 ''1721707099211'' 不是当前节点的前置节点。请仔细检查任务工作流上下文，从可用前置节点列表中选择,
+  可用前置节点列表: 10000001'
+- '变量引用错误: ''10000002.work_experience'' - (节点ID: 10000002, 节点类型: ''agent'') 的输出变量名必须为
+  ''text, 而不是 ''work_experience'' 。 变量引用错误: ''10000002.education'' - (节点ID: 10000002,
+  节点类型: ''agent'') 的输出变量名必须为 ''text, 而不是 ''education'' 。 变量引用错误: ''10000002.career_interests''
+  - (节点ID: 10000002, 节点类型: ''agent'') 的输出变量名必须为 ''text, 而不是 ''career_interests'' 。'
+- '变量引用错误: ''10000003.text'' - (节点ID: 10000003, 节点类型: ''question-classifier'') 的输出变量名必须为
+  ''class_name, 而不是 ''text'' 。'
+- '输出变量错误: ''1.topic'' - 节点 ''1'' (类型: start) 的可用输出为: [''file'', ''guest_name'', ''host_name'',
+  ''language'', ''tone'']，而不是: ''topic'''
+- 'Vision变量选择器 ''10000004.item'' 指向的不是文件类型变量。LLM vision 只能引用 file/file-list/array[file]（通常是 start 节点图片变量）；不能引用 object/array[object]、code 输出或值为 object 的迭代 item（运行期报错 Invalid variable type: ObjectVariable）。'
+- '[validate_run_draft_workflow] 运行错误: Invalid variable type: ObjectVariable — 迭代器是 array[object]，item 是 object，LLM vision 引用了该 item；应让 vision 直接引用 start 的图片变量，iteration 只遍历模型名数组'
+- 'Variable #sys.query# not found'
+- 'Variable #10000005.item.title# not found'
+- 'Variable #10000004.item.step# not found'

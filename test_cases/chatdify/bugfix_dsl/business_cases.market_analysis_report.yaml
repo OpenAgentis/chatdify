@@ -1,0 +1,719 @@
+app:
+  mode: workflow
+  name: market_analysis_report
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: tool
+      id: 10000001-source-10000006-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: llm
+      id: 10000006-source-10000007-target
+      source: '10000006'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 10000001-source-10000009-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000009'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 10000009-1-10000010-target
+      source: '10000009'
+      sourceHandle: '1'
+      target: '10000010'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 10000009-2-10000011-target
+      source: '10000009'
+      sourceHandle: '2'
+      target: '10000011'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: knowledge-retrieval
+      id: 10000009-3-10000012-target
+      source: '10000009'
+      sourceHandle: '3'
+      target: '10000012'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 10000010-source-10000013-target
+      source: '10000010'
+      sourceHandle: source
+      target: '10000013'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 10000011-source-10000014-target
+      source: '10000011'
+      sourceHandle: source
+      target: '10000014'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 10000012-source-10000015-target
+      source: '10000012'
+      sourceHandle: source
+      target: '10000015'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000003-source-10000005-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000007-source-10000005-target
+      source: '10000007'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000013-source-10000005-target
+      source: '10000013'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000014-source-10000005-target
+      source: '10000014'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000015-source-10000005-target
+      source: '10000015'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的市场分析报告文件
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .pdf
+          - .docx
+          - .xlsx
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 市场分析报告
+          max_length: 48
+          required: true
+          type: file
+          variable: market_analysis_file
+        version: '1'
+      height: 90
+      id: '10000001'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 解析上传的市场分析报告文件，提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '10000001'
+        - market_analysis_file
+        version: '1'
+      height: 90
+      id: '10000002'
+      parentId: null
+      position:
+        x: 350
+        y: 100
+      positionAbsolute:
+        x: 350
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点将对文档提取器输出的文本内容进行市场趋势分析和竞争对手评估
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: "你是一位专业的市场分析师，擅长从商业文档中提取关键市场信息并进行深入分析。请根据提供的文档内容，执行以下任务：\n\n1. 市场趋势分析：\n\
+            \   - 识别当前市场的主要发展趋势\n   - 分析这些趋势背后的驱动因素\n   - 评估趋势对行业的影响程度\n\n2. 竞争对手评估：\n\
+            \   - 识别主要竞争对手及其市场份额\n   - 分析竞争对手的核心优势和劣势\n   - 评估竞争对手的战略动向\n\n3. 综合分析：\n\
+            \   - 将市场趋势与竞争对手表现关联分析\n   - 识别潜在的市场机会和威胁\n\n输出要求：\n- 使用清晰的结构化格式\n- 每个分析点需提供数据支持或文档引用\n\
+            - 避免主观臆断，基于文档事实进行分析"
+        - role: user
+          text: '请分析以下市场报告内容：
+
+
+            {{#10000002.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 市场分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '10000003'
+      parentId: null
+      position:
+        x: 600
+        y: 100
+      positionAbsolute:
+        x: 600
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 使用Tavily搜索工具根据关键词获取最新的市场数据
+        parameters: {}
+        provider_id: tavily
+        provider_name: tavily
+        provider_type: builtin
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        timeout: 30
+        title: Tavily市场数据搜索
+        tool_configurations:
+          exclude_domains: null
+          include_answer: 0
+          include_domains: null
+          include_images: 0
+          include_raw_content: 0
+          max_results: 10
+          search_depth: basic
+        tool_label: TavilySearch
+        tool_name: tavily_search
+        tool_parameters:
+          query:
+            type: variable
+            value:
+            - '10000001'
+            - market_analysis_file
+        type: tool
+        version: '1'
+      height: 90
+      id: '10000006'
+      parentId: null
+      position:
+        x: 500
+        y: 100
+      positionAbsolute:
+        x: 500
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点，对搜索获取的市场数据进行分析
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: "你是一位专业的市场分析师，擅长从市场数据中提取关键信息并进行深入分析。请根据提供的市场数据，执行以下任务：\n\n1. 市场趋势分析：\n\
+            \   - 识别当前市场的主要发展趋势\n   - 分析这些趋势背后的驱动因素\n   - 评估趋势对行业的影响程度\n\n2. 竞争对手评估：\n\
+            \   - 识别主要竞争对手及其市场份额\n   - 分析竞争对手的核心优势和劣势\n   - 评估竞争对手的战略动向\n\n3. 综合分析：\n\
+            \   - 将市场趋势与竞争对手表现关联分析\n   - 识别潜在的市场机会和威胁\n\n输出要求：\n- 使用清晰的结构化格式\n- 每个分析点需提供数据支持\n\
+            - 避免主观臆断，基于数据事实进行分析"
+        - role: user
+          text: '请分析以下市场数据：
+
+
+            {{#10000006.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 市场数据分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '10000007'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        classes:
+        - id: '1'
+          name: 市场趋势分析
+        - id: '2'
+          name: 竞争对手评估
+        - id: '3'
+          name: 综合分析
+        desc: 对用户查询进行分类，确定分析类型
+        instruction: 根据用户查询内容，将其分类为市场趋势分析、竞争对手评估或综合分析三类。市场趋势分析主要关注行业动态和发展方向；竞争对手评估关注企业竞争格局；综合分析需要同时考虑市场和竞争因素。
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '10000001'
+        - market_analysis_file
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 问题分类器
+        type: question-classifier
+        version: '1'
+      height: 90
+      id: '10000009'
+      parentId: null
+      position:
+        x: 300
+        y: 100
+      positionAbsolute:
+        x: 300
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        desc: 根据问题分类结果检索相关知识
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: ''
+            provider: ''
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: text-embedding-bge-m3
+              embedding_provider_name: openai_api_compatible
+              vector_weight: 0.7
+        query_variable_selector:
+        - '10000009'
+        - class_name
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 90
+      id: '10000010'
+      parentId: null
+      position:
+        x: 500
+        y: 200
+      positionAbsolute:
+        x: 500
+        y: 200
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        desc: 根据问题分类结果检索相关知识
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: ''
+            provider: ''
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: text-embedding-bge-m3
+              embedding_provider_name: openai_api_compatible
+              vector_weight: 0.7
+        query_variable_selector:
+        - '10000009'
+        - class_name
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 90
+      id: '10000011'
+      parentId: null
+      position:
+        x: 500
+        y: 300
+      positionAbsolute:
+        x: 500
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - 70c17aae-fb0b-4e4d-9ae0-24def4b85670
+        desc: 根据问题分类结果检索相关知识
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: ''
+            provider: ''
+          score_threshold: null
+          top_k: 6
+          weights:
+            keyword_setting:
+              keyword_weight: 0.3
+            vector_setting:
+              embedding_model_name: text-embedding-bge-m3
+              embedding_provider_name: openai_api_compatible
+              vector_weight: 0.7
+        query_variable_selector:
+        - '10000009'
+        - class_name
+        retrieval_mode: multiple
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 知识检索
+        type: knowledge-retrieval
+        version: '1'
+      height: 90
+      id: '10000012'
+      parentId: null
+      position:
+        x: 500
+        y: 400
+      positionAbsolute:
+        x: 500
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点，对检索到的知识进行分析处理
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: "你是一位专业的市场分析师，擅长从检索到的知识中提取关键信息并进行深入分析。请根据提供的知识内容，执行以下任务：\n\n1. 知识提炼：\n\
+            \   - 提取知识中的核心观点和关键数据\n   - 识别知识之间的关联性和逻辑关系\n\n2. 分析评估：\n   - 评估知识的可靠性和时效性\n\
+            \   - 分析知识对当前问题的适用性\n\n3. 综合应用：\n   - 将知识整合到现有分析框架中\n   - 提出基于知识的行动建议\n\
+            \n输出要求：\n- 使用清晰的结构化格式\n- 每个分析点需提供知识来源引用\n- 区分事实性内容和推断性内容"
+        - role: user
+          text: '请分析以下检索到的知识内容：
+
+
+            {{#10000010.result#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 知识分析处理
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '10000013'
+      parentId: null
+      position:
+        x: 700
+        y: 300
+      positionAbsolute:
+        x: 700
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点，对检索到的知识进行分析处理
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: "你是一位专业的市场分析师，擅长从检索到的知识中提取关键信息并进行深入分析。请根据提供的知识内容，执行以下任务：\n\n1. 知识提炼：\n\
+            \   - 提取知识中的核心观点和关键数据\n   - 识别知识之间的关联性和逻辑关系\n\n2. 分析评估：\n   - 评估知识的可靠性和时效性\n\
+            \   - 分析知识对当前问题的适用性\n\n3. 综合应用：\n   - 将知识整合到现有分析框架中\n   - 提出基于知识的行动建议\n\
+            \n输出要求：\n- 使用清晰的结构化格式\n- 每个分析点需提供知识来源引用\n- 区分事实性内容和推断性内容"
+        - role: user
+          text: '请分析以下检索到的知识内容：
+
+
+            {{#10000011.result#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 知识分析处理
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '10000014'
+      parentId: null
+      position:
+        x: 700
+        y: 300
+      positionAbsolute:
+        x: 700
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: LLM节点，对检索到的知识进行分析处理
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: "你是一位专业的市场分析师，擅长从检索到的知识中提取关键信息并进行深入分析。请根据提供的知识内容，执行以下任务：\n\n1. 知识提炼：\n\
+            \   - 提取知识中的核心观点和关键数据\n   - 识别知识之间的关联性和逻辑关系\n\n2. 分析评估：\n   - 评估知识的可靠性和时效性\n\
+            \   - 分析知识对当前问题的适用性\n\n3. 综合应用：\n   - 将知识整合到现有分析框架中\n   - 提出基于知识的行动建议\n\
+            \n输出要求：\n- 使用清晰的结构化格式\n- 每个分析点需提供知识来源引用\n- 区分事实性内容和推断性内容"
+        - role: user
+          text: '请分析以下检索到的知识内容：
+
+
+            {{#10000012.result#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 知识分析处理
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 98
+      id: '10000015'
+      parentId: null
+      position:
+        x: 700
+        y: 400
+      positionAbsolute:
+        x: 700
+        y: 400
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 结束节点，输出最终的市场分析报告
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000003'
+          - text
+          variable: market_trend_analysis
+        - value_selector:
+          - '10000007'
+          - text
+          variable: market_data_analysis
+        - value_selector:
+          - '10000013'
+          - text
+          variable: knowledge_analysis_1
+        - value_selector:
+          - '10000014'
+          - text
+          variable: knowledge_analysis_2
+        - value_selector:
+          - '10000015'
+          - text
+          variable: knowledge_analysis_3
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 市场分析报告输出
+        type: end
+        version: '1'
+      height: 90
+      id: '10000005'
+      parentId: null
+      position:
+        x: 900
+        y: 300
+      positionAbsolute:
+        x: 900
+        y: 300
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

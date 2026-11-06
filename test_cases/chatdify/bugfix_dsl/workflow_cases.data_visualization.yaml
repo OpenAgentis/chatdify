@@ -1,0 +1,267 @@
+app:
+  mode: workflow
+  name: data_visualization
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: code
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000004-source-10000005-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的数据文件（如Excel或CSV）作为输入
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 上传数据文件
+          max_length: 5
+          required: true
+          type: file
+          variable: input_file
+        version: '1'
+      height: 90
+      id: '10000001'
+      parentId: null
+      position:
+        x: 188.7248052101171
+        y: -533.8248412275507
+      positionAbsolute:
+        x: 188.7248052101171
+        y: -533.8248412275507
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 解析上传的文件内容，提取文本信息
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '10000001'
+        - input_file
+        version: '1'
+      height: 90
+      id: '10000002'
+      parentId: null
+      position:
+        x: 500
+        y: -533.8248412275507
+      positionAbsolute:
+        x: 500
+        y: -533.8248412275507
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nimport pandas as pd\nfrom io import StringIO\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef analyze_data_structure(data:\
+          \ dict) -> dict:\n    \"\"\"分析数据结构并推荐图表类型\"\"\"\n    try:\n        # 尝试将数据转换为DataFrame\n\
+          \        df = pd.read_json(StringIO(json.dumps(data)))\n        \n     \
+          \   # 分析数据类型\n        numeric_cols = df.select_dtypes(include=['number']).columns.tolist()\n\
+          \        categorical_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()\n\
+          \        \n        # 根据数据类型推荐图表\n        chart_recommendations = []\n  \
+          \      \n        if len(numeric_cols) >= 1 and len(categorical_cols) >=\
+          \ 1:\n            # 数值+分类数据\n            chart_recommendations.extend([\n\
+          \                'bar', 'box', 'violin', 'strip'\n            ])\n     \
+          \   \n        if len(numeric_cols) >= 2:\n            # 多个数值列\n        \
+          \    chart_recommendations.extend([\n                'scatter', 'line',\
+          \ 'heatmap', 'pairplot'\n            ])\n        \n        if len(categorical_cols)\
+          \ >= 1:\n            # 分类数据\n            chart_recommendations.extend([\n\
+          \                'pie', 'countplot', 'histogram'\n            ])\n     \
+          \   \n        if len(numeric_cols) == 1:\n            # 单数值列\n         \
+          \   chart_recommendations.extend([\n                'histogram', 'kde',\
+          \ 'boxplot'\n            ])\n        \n        return {\n            'data_structure':\
+          \ {\n                'numeric_columns': numeric_cols,\n                'categorical_columns':\
+          \ categorical_cols,\n                'row_count': len(df),\n           \
+          \     'column_count': len(df.columns)\n            },\n            'chart_recommendations':\
+          \ list(set(chart_recommendations))\n        }\n    \n    except Exception\
+          \ as e:\n        return {\n            'data_structure': None,\n       \
+          \     'chart_recommendations': [],\n            'error': str(e)\n      \
+          \  }\n\ndef main(text: str) -> dict:\n    try:\n        # 预处理输入\n      \
+          \  json_text = extract_json_from_markdown(text)\n        data = json.loads(json_text)\n\
+          \        \n        # 分析数据结构\n        analysis_result = analyze_data_structure(data)\n\
+          \        \n        return {\n            'analysis_result': analysis_result,\n\
+          \            'status': 'success'\n        }\n    \n    except Exception\
+          \ as e:\n        return {\n            'analysis_result': {\n          \
+          \      'data_structure': None,\n                'chart_recommendations':\
+          \ [],\n                'error': str(e)\n            },\n            'status':\
+          \ 'error'\n        }"
+        code_language: python3
+        desc: 分析输入数据的结构和类型，推荐合适的图表类型
+        outputs:
+          analysis_result:
+            children: null
+            type: object
+          status:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        timeout: 60
+        title: 数据分析与图表推荐
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: text
+        version: '1'
+      height: 90
+      id: '10000003'
+      parentId: null
+      position:
+        x: 800
+        y: -533.8248412275507
+      positionAbsolute:
+        x: 800
+        y: -533.8248412275507
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据数据分析结果生成可视化图表和说明
+        model:
+          completion_params:
+            max_tokens: 2000
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一位数据分析可视化专家，擅长根据数据分析结果生成清晰的可视化图表和解释说明。请根据提供的数据分析结果，生成最适合的可视化图表代码（如ECharts、Matplotlib等）以及详细的图表说明。
+
+
+            图表生成要求：
+
+            1. 根据数据分析结果选择最合适的可视化方式
+
+            2. 图表代码要完整可执行
+
+            3. 图表说明要清晰解释图表展示的数据关系和洞察
+
+            4. 使用Markdown格式输出'
+        - role: user
+          text: '请根据以下数据分析结果生成可视化图表和说明：
+
+
+            数据分析结果：
+
+            {{#10000003.analysis_result#}}'
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        timeout: 120
+        title: 可视化图表生成
+        type: llm
+        variables:
+        - value_selector:
+          - '10000003'
+          - analysis_result
+          variable: analysis_result
+        version: '1'
+        vision:
+          enabled: false
+      height: 90
+      id: '10000004'
+      parentId: null
+      position:
+        x: 1100
+        y: -533.8248412275507
+      positionAbsolute:
+        x: 1100
+        y: -533.8248412275507
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 展示最终的可视化结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000004'
+          - text
+          variable: visualization_result
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 可视化结果展示
+        type: end
+        version: '1'
+      height: 90
+      id: '10000005'
+      parentId: null
+      position:
+        x: 1400
+        y: -533.8248412275507
+      positionAbsolute:
+        x: 1400
+        y: -533.8248412275507
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

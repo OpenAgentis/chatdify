@@ -1,0 +1,156 @@
+nodes:
+- data:
+    desc: ''
+    is_team_authorization: true
+    output_schema: null
+    paramSchemas:
+    - auto_generate: null
+      default: null
+      form: llm
+      human_description:
+        en_US: Markdown text
+        ja_JP: Markdown text
+        pt_BR: Markdown text
+        zh_Hans: Markdown格式文本
+      label:
+        en_US: Markdown text
+        ja_JP: Markdown text
+        pt_BR: Markdown text
+        zh_Hans: Markdown格式文本
+      llm_description: ''
+      max: null
+      min: null
+      name: md_text
+      options: []
+      placeholder: null
+      precision: null
+      required: true
+      scope: null
+      template: null
+      type: string
+    - auto_generate: null
+      default: null
+      form: llm
+      human_description:
+        en_US: Optional custom output file name, and the filename suffix is not required.
+        ja_JP: Optional custom output file name, and the filename suffix is not required.
+        pt_BR: Optional custom output file name, and the filename suffix is not required.
+        zh_Hans: 可选的自定义输出文件名，后缀名无需指定
+      label:
+        en_US: Output Filename
+        ja_JP: Output Filename
+        pt_BR: Output Filename
+        zh_Hans: 输出文件名
+      llm_description: ''
+      max: null
+      min: null
+      name: output_filename
+      options: []
+      placeholder: null
+      precision: null
+      required: false
+      scope: null
+      template: null
+      type: string
+    params:
+      md_text: ''
+      output_filename: ''
+    provider_id: bowenliang123/md_exporter/md_exporter
+    provider_name: bowenliang123/md_exporter/md_exporter
+    provider_type: builtin
+    selected: false
+    title: Markdown 转 DOCX 文件
+    tool_configurations: {}
+    tool_description: 将 Markdown 转换为 DOCX 文件的工具
+    tool_label: Markdown 转 DOCX 文件
+    tool_name: md_to_docx
+    tool_parameters:
+      md_text:
+        type: mixed
+        value: /{{#1755593937557.text#}}
+      output_filename:
+        type: mixed
+        value: docx
+    type: tool
+    version: '2'
+  id: '1755600819550'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    is_team_authorization: true
+    output_schema: null
+    paramSchemas:
+    - auto_generate: null
+      default: null
+      form: llm
+      human_description:
+        en_US: Markdown text
+        ja_JP: Markdown text
+        pt_BR: Markdown text
+        zh_Hans: Markdown格式文本
+      label:
+        en_US: Markdown text
+        ja_JP: Markdown text
+        pt_BR: Markdown text
+        zh_Hans: Markdown格式文本
+      llm_description: ''
+      max: null
+      min: null
+      name: md_text
+      options: []
+      placeholder: null
+      precision: null
+      required: true
+      scope: null
+      template: null
+      type: string
+    - auto_generate: null
+      default: null
+      form: llm
+      human_description:
+        en_US: Optional custom output file name, and the filename suffix is not required.
+        ja_JP: Optional custom output file name, and the filename suffix is not required.
+        pt_BR: Optional custom output file name, and the filename suffix is not required.
+        zh_Hans: 可选的自定义输出文件名，后缀名无需指定
+      label:
+        en_US: Output Filename
+        ja_JP: Output Filename
+        pt_BR: Output Filename
+        zh_Hans: 输出文件名
+      llm_description: ''
+      max: null
+      min: null
+      name: output_filename
+      options: []
+      placeholder: null
+      precision: null
+      required: false
+      scope: null
+      template: null
+      type: string
+    params:
+      md_text: ''
+      output_filename: ''
+    provider_id: bowenliang123/md_exporter/md_exporter
+    provider_name: bowenliang123/md_exporter/md_exporter
+    provider_type: builtin
+    selected: false
+    title: Markdown 转 PDF 文件
+    tool_configurations: {}
+    tool_description: 将 Markdown 转换为 PDF 文件的工具
+    tool_label: Markdown 转 PDF 文件
+    tool_name: md_to_pdf
+    tool_parameters:
+      md_text:
+        type: mixed
+        value: '{{#1755645670559.md#}}'
+      output_filename:
+        type: mixed
+        value: /翻译结果文件名
+    type: tool
+    version: '2'
+  id: '1755646030358'
+  parentId: null
+  selected: false
+  type: custom

@@ -1,0 +1,30 @@
+node_usage:
+  节点类型: tool_text2image
+  输入规范:
+    - 节点用途：豆包文生图工具，用于AI绘画、文生图、根据提示词生成图片
+    - 工具名称（tool_name）：固定为"ImageGenerations"
+    - 提供者ID（provider_id）：固定为"leo-digital/doubao-seedream/doubao-seedream"
+    - 提供者名称（provider_name）：固定为"leo-digital/doubao-seedream/doubao-seedream"
+    - 提供者类型（provider_type）：固定为"builtin"
+    - 工具标签（tool_label）：固定为"ImageGenerations"
+    - version：固定为'2'
+    - 工具参数（tool_parameters）：固定为空对象
+    - 工具配置（tool_configurations）：
+      - prompt：文生图提示词，type为mixed，通常引用LLM输出，如"{{#llm.text#}}"
+      - sequential_image_generation：是否生成组图，默认false
+      - size：图像尺寸，默认"2K"
+      - image：参考图片文件，纯文生图保持null
+      - image_urls：参考图片URL，纯文生图保持null
+      - width：自定义宽度，默认null
+      - height：自定义高度，默认null
+      - watermark：是否添加水印，默认false
+    - 输出模式（output_schema）：按DSL保留images结构
+  输出格式:
+    - text：生成图片的 HTTP 链接文本；展示图片时引用该字段
+    - images：图片对象数组，元素含 url、size；供 code 节点提取 image_url
+    - files：工具文件列表；ImageGenerations 场景常为空，不可作为 LLM vision 输入
+  常见使用错误:
+    - 参数配置错误：
+      - prompt配置为空或变量引用格式不正确
+      - 纯文生图场景误传image或image_urls，导致工具进入参考图生成逻辑
+      - size设置为"customize"但未同时提供width和height

@@ -1,0 +1,269 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: call_center_dialogue_generator
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的外呼业务场景描述
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 业务场景输入
+        type: start
+        variables:
+        - label: 业务场景描述
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: business_scenario
+        version: '1'
+      height: 118
+      id: '10000001'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '10000001'
+          - business_scenario
+        desc: 根据业务场景生成外呼对话prompt
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: '你是一名专业的电话销售脚本设计师。根据给定的业务场景，生成适合外呼场景的对话prompt。prompt需要包含以下要素：
+
+            1. 清晰的业务场景描述
+
+            2. 坐席的开场白
+
+            3. 预期的客户反应类型
+
+            4. 关键销售话术要点
+
+            5. 常见异议处理方案
+
+
+            输出格式要求：
+
+            - 使用中文
+
+            - 结构清晰，分点列出
+
+            - 包含必要的对话细节'
+        - role: user
+          text: '请为以下业务场景生成外呼对话prompt：
+
+            {{#10000001.business_scenario#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 外呼对话Prompt生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 118
+      id: '10000002'
+      parentId: null
+      position:
+        x: 401.1486983549971
+        y: 117.29371844021344
+      positionAbsolute:
+        x: 401.1486983549971
+        y: 117.29371844021344
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '10000002'
+          - text
+        desc: 根据外呼场景prompt生成自然对话测试数据
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: "你是一名专业的电话销售对话生成专家。根据提供的外呼场景prompt，生成一段自然流畅的坐席与客户对话。对话需符合以下要求：\n\n\
+            1. 严格遵循prompt中的业务场景设定\n2. 包含完整的开场白、产品介绍、异议处理和结束语\n3. 对话轮次在8-12轮之间\n4.\
+            \ 使用自然口语表达，避免机械式话术\n5. 输出格式：\n   - 坐席：对话内容\n   - 客户：对话内容"
+        - role: user
+          text: '请根据以下外呼场景prompt生成测试对话：
+
+
+            {{#10000002.text#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 外呼对话生成
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          enabled: false
+      height: 134
+      id: '10000003'
+      parentId: null
+      position:
+        x: 708.0408884849792
+        y: 144.9257220754003
+      positionAbsolute:
+        x: 708.0408884849792
+        y: 144.9257220754003
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 展示最终生成的测试对话数据
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000003'
+          - text
+          variable: dialogue_text
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 测试对话输出
+        type: end
+        version: '1'
+      height: 118
+      id: '10000004'
+      parentId: null
+      position:
+        x: 997.702603290006
+        y: 157.62464709562556
+      positionAbsolute:
+        x: 997.702603290006
+        y: 157.62464709562556
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: 22.80629950171644
+      y: 275.16250882184505
+      zoom: 0.757858283255199

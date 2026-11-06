@@ -1,0 +1,327 @@
+app:
+  mode: workflow
+  name: image_process
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1-source-2-target
+      source: '1'
+      sourceHandle: source
+      target: '2'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 2-source-3-target
+      source: '2'
+      sourceHandle: source
+      target: '3'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 3-source-4-target
+      source: '3'
+      sourceHandle: source
+      target: '4'
+      targetHandle: target
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 4-source-5-target
+      source: '4'
+      sourceHandle: source
+      target: '5'
+      targetHandle: target
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的图像文件作为输入
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_types:
+          - image
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 图像文件
+          max_length: 48
+          required: true
+          type: file
+          variable: image
+        version: '1'
+      height: 90
+      id: '1'
+      parentId: null
+      position:
+        x: 59
+        y: 411
+      positionAbsolute:
+        x: 59
+        y: 411
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: Qwen/Qwen2.5-VL-32B-Instruct
+          provider: langgenius/siliconflow/siliconflow
+        prompt_template:
+        - role: system
+          text: '请分析输入的图片内容，详细描述图片中的视觉元素、场景和对象。输出格式为Markdown，包含以下部分：
+
+
+            1. 主要对象描述
+
+            2. 场景背景描述
+
+            3. 颜色和风格分析
+
+            4. 其他显著特征
+
+
+            请确保描述完整且准确，不要遗漏重要细节。'
+        - role: user
+          text: 请分析以下图片：{{#1.image#}}
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 图像识别
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1'
+            - image
+          enabled: true
+      height: 90
+      id: '2'
+      parentId: null
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nimport cv2\nimport numpy as np\n\ndef extract_json_from_markdown(markdown_text:\
+          \ str) -> str:\n    \"\"\"从markdown提取JSON内容\"\"\"\n    start = markdown_text.find('```json')\n\
+          \    if start == -1:\n        start = markdown_text.find('```')\n      \
+          \  if start == -1:\n            return markdown_text.strip()\n    \n   \
+          \ start = markdown_text.find('\\n', start) + 1\n    end = markdown_text.rfind('```')\n\
+          \    return markdown_text[start:end].strip()\n\ndef main(image_path: str,\
+          \ recognition_result: str) -> dict:\n    result = {\n        \"segmented_image_path\"\
+          : \"\",\n        \"original_image_size\": \"\",\n        \"segmentation_algorithm\"\
+          : \"\",\n        \"recognition_data\": {},\n        \"error\": \"\"\n  \
+          \  }\n    \n    try:\n        # 预处理输入\n        json_text = extract_json_from_markdown(recognition_result)\n\
+          \        recognition_data = json.loads(json_text)\n        \n        # 读取图像\n\
+          \        image = cv2.imread(image_path)\n        if image is None:\n   \
+          \         raise ValueError(\"无法读取图像文件\")\n        \n        # 执行图像分割算法（示例使用GrabCut）\n\
+          \        height, width = image.shape[:2]\n        mask = np.zeros(image.shape[:2],\
+          \ np.uint8)\n        bgd_model = np.zeros((1, 65), np.float64)\n       \
+          \ fgd_model = np.zeros((1, 65), np.float64)\n        \n        # 根据识别结果确定ROI区域（这里简化处理）\n\
+          \        rect = (int(width*0.1), int(height*0.1), int(width*0.8), int(height*0.8))\n\
+          \        \n        cv2.grabCut(image, mask, rect, bgd_model, fgd_model,\
+          \ 5, cv2.GC_INIT_WITH_RECT)\n        \n        # 创建分割结果\n        mask2 =\
+          \ np.where((mask==2)|(mask==0), 0, 1).astype('uint8')\n        segmented_image\
+          \ = image * mask2[:,:,np.newaxis]\n        \n        # 保存分割结果\n        output_path\
+          \ = \"segmented_\" + image_path.split('/')[-1]\n        cv2.imwrite(output_path,\
+          \ segmented_image)\n        \n        # 更新结果\n        result[\"segmented_image_path\"\
+          ] = output_path\n        result[\"original_image_size\"] = f\"{width}x{height}\"\
+          \n        result[\"segmentation_algorithm\"] = \"GrabCut\"\n        result[\"\
+          recognition_data\"] = recognition_data\n        \n    except Exception as\
+          \ e:\n        result[\"error\"] = str(e)\n        \n    return result"
+        code_language: python3
+        desc: 处理图像识别结果并执行图像分割算法
+        outputs:
+          error:
+            children: null
+            type: string
+          original_image_size:
+            children: null
+            type: string
+          recognition_data:
+            children: null
+            type: object
+          segmentation_algorithm:
+            children: null
+            type: string
+          segmented_image_path:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        timeout: 60
+        title: 图像分割处理
+        type: code
+        variables:
+        - value_selector:
+          - '1'
+          - image
+          variable: image_path
+        - value_selector:
+          - '2'
+          - text
+          variable: recognition_result
+        version: '1'
+      height: 90
+      id: '3'
+      parentId: null
+      position:
+        x: 709
+        y: 282
+      positionAbsolute:
+        x: 709
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 对分割后的图像区域进行详细分析
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: Qwen/Qwen2.5-VL-32B-Instruct
+          provider: langgenius/siliconflow/siliconflow
+        outputs:
+          text:
+            children: null
+            type: string
+        prompt_template:
+        - role: system
+          text: '你是一个专业的图像分析专家。请对提供的分割图像区域进行详细分析，包括以下内容：
+
+
+            1. 分割区域的主要特征描述
+
+            2. 与原始图像识别结果的关联分析
+
+            3. 分割算法的效果评估
+
+            4. 任何异常或需要注意的细节
+
+
+            请以Markdown格式输出分析结果，确保内容专业且结构清晰。'
+        - role: user
+          text: '请分析以下分割图像区域：
+
+
+            - 原始图像尺寸: {3.original_image_size}
+
+            - 分割算法: {3.segmentation_algorithm}
+
+            - 分割图像路径: {3.segmented_image_path}
+
+            - 原始识别结果: {3.recognition_data}
+
+
+            请提供详细的分析报告。'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 分割区域分析
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '3'
+            - segmented_image_path
+          enabled: true
+      height: 90
+      id: '4'
+      parentId: null
+      position:
+        x: 1034
+        y: 282
+      positionAbsolute:
+        x: 1034
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 汇总并输出图像处理和识别结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '3'
+          - segmented_image_path
+          variable: segmented_image_path
+        - value_selector:
+          - '3'
+          - original_image_size
+          variable: original_image_size
+        - value_selector:
+          - '3'
+          - segmentation_algorithm
+          variable: segmentation_algorithm
+        - value_selector:
+          - '3'
+          - recognition_data
+          variable: recognition_data
+        - value_selector:
+          - '4'
+          - text
+          variable: analysis_report
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        title: 结果汇总
+        type: end
+        version: '1'
+      height: 90
+      id: '5'
+      parentId: null
+      position:
+        x: 1309
+        y: 282
+      positionAbsolute:
+        x: 1309
+        y: 282
+      type: custom
+      width: 244
+      zIndex: 0
+    type: custom

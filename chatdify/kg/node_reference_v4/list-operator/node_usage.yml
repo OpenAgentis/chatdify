@@ -1,0 +1,54 @@
+node_usage:
+  节点类型: list-operator
+  输入规范:
+    - 输入变量（variable）：必填，必须是有效的变量选择器，指向数组类型变量
+    - 支持的数据类型：
+      - Array[string]：字符串数组
+      - Array[number]：数字数组  
+      - Array[file]：文件数组
+    - 过滤条件（filter_by）：可选配置
+      - enabled：布尔值，是否启用过滤功能
+      - conditions：过滤条件列表，支持多个条件
+        - 字符串类型支持：contains、start with、end with、is、in、empty、not contains、is not、not in、not empty
+        - 数字类型支持：等于、不等于、大于、小于、大于等于、小于等于
+        - 文件类型支持按属性过滤：type、size、name、url、extension、mime_type、transfer_method
+    - 排序（order_by）：可选配置
+      - enabled：布尔值，是否启用排序功能
+      - value：排序方式，"asc"（升序）或"desc"（降序）
+      - key：文件类型时的排序字段
+    - 限制（limit）：可选配置
+      - enabled：布尔值，是否启用限制功能
+      - size：取前N项，范围1-20
+    - 提取配置（extract_by）：可选配置，用于切片操作
+  输出格式:
+    - result：过滤/排序/限流后的数组（如Array[file]），下游批量处理时引用此字段
+    - first_record：数组首元素（单文件场景）
+    - last_record：数组末元素（单文件场景）
+    - 无item输出；item仅由iteration节点在迭代内部提供，勿与list-operator混淆
+  常见使用错误:
+    - 变量引用错误：
+      - 变量选择器未找到对应变量
+      - 引用的变量不是数组类型（ArrayFileSegment、ArrayNumberSegment、ArrayStringSegment）
+      - 变量值为空或null
+    - 过滤条件错误：
+      - 无效的过滤条件类型（InvalidConditionError）
+      - 过滤值类型不匹配（InvalidFilterValueError）
+      - 字符串过滤时传入非字符串值
+      - 数字过滤时传入无法转换为数字的值
+    - 排序配置错误：
+      - 无效的排序键值（InvalidKeyError）
+      - 文件排序时使用不支持的属性字段
+      - 排序方式不是"asc"或"desc"
+    - 数据类型不匹配：
+      - 对字符串数组使用数字过滤条件
+      - 对数字数组使用字符串过滤条件
+      - 对文件数组使用不适用的过滤条件
+    - 配置格式错误：
+      - 过滤条件配置格式不正确
+      - 排序配置缺少必要字段
+      - 限制数量超出1-20范围
+    - 运行时错误：
+      - 模板变量转换失败
+      - 过滤函数执行异常
+      - 排序操作失败
+      - 切片操作越界

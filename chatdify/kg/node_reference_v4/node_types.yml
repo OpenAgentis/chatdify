@@ -1,0 +1,41 @@
+# 节点类型配置文件
+# 优先级：此配置文件 > 目录扫描
+node_types:
+  # 基础节点
+  - start
+  - end
+  - llm
+  - answer
+  
+  # 逻辑控制节点
+  - if-else
+  - iteration
+  - iteration-start
+  - loop
+  - loop-start
+  
+  # 数据处理节点
+  - code
+  - variable-aggregator
+  - parameter-extractor
+  - document-extractor
+  - question-classifier
+  - assigner
+  
+  # 外部集成节点
+  - http-request
+  - knowledge-retrieval
+ 
+  # 工具节点
+  - tool_jina_reader
+  - tool_tavily_search
+  - tool_markdown_convertor
+  - tool_text2image
+  - tool_tts
+
+# 配置元信息
+metadata:
+  version: "1.0"
+  description: "节点类型配置文件"
+  last_updated: "2026-05-30"
+  fallback_to_directory: true  # 当配置文件不存在时，是否降级到目录扫描

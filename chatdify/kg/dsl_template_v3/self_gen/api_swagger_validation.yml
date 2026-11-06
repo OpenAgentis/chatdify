@@ -1,0 +1,385 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: api_swagger_validation
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/openai_api_compatible:0.0.16@77274df8fe2632cac66bfd153fcc75aa5e96abbe92b5c611b8984ad9f4cd4457
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: code
+      id: 10000002-source-10000003-target
+      source: '10000002'
+      sourceHandle: source
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 10000003-source-10000004-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 10000004-source-10000005-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: end
+      id: 10000005-source-10000006-target
+      source: '10000005'
+      sourceHandle: source
+      target: '10000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户上传的Swagger/OpenAPI规范文档
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 上传Swagger文件
+        type: start
+        variables:
+        - allowed_file_extensions:
+          - .json
+          - .yaml
+          - .yml
+          allowed_file_types:
+          - custom
+          allowed_file_upload_methods:
+          - local_file
+          label: Swagger文件
+          max_length: 48
+          required: true
+          type: file
+          variable: swagger_file
+        version: '1'
+      height: 133
+      id: '10000001'
+      parentId: null
+      position:
+        x: 100
+        y: 100
+      positionAbsolute:
+        x: 100
+        y: 100
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 解析Swagger文件并提取文本内容
+        is_array_file: false
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: Swagger文档提取器
+        type: document-extractor
+        variable_selector:
+        - '10000001'
+        - swagger_file
+        version: '1'
+      height: 119
+      id: '10000002'
+      parentId: null
+      position:
+        x: 400
+        y: 100
+      positionAbsolute:
+        x: 400
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        code: "import json\nimport yaml\n\ndef main(swagger_text: str) -> dict:\n\
+          \    \"\"\"\n    解析Swagger文档并提取API信息\n    \n    参数:\n        swagger_text:\
+          \ Swagger文档的原始文本内容\n        \n    返回:\n        包含API端点、参数、响应等信息的结构化数据\n\
+          \    \"\"\"\n    \n    def extract_json_from_markdown(markdown_text: str)\
+          \ -> str:\n        \"\"\"从markdown提取JSON内容\"\"\"\n        start = markdown_text.find('```json')\n\
+          \        if start == -1:\n            start = markdown_text.find('```')\n\
+          \            if start == -1:\n                return markdown_text.strip()\n\
+          \        \n        start = markdown_text.find('\\n', start) + 1\n      \
+          \  end = markdown_text.rfind('```')\n        return markdown_text[start:end].strip()\n\
+          \    \n    try:\n        # 预处理输入，去除可能的markdown标记\n        clean_text = extract_json_from_markdown(swagger_text)\n\
+          \        \n        # 尝试解析为JSON或YAML\n        try:\n            if clean_text.strip().startswith('{'):\n\
+          \                swagger_data = json.loads(clean_text)\n            else:\n\
+          \                swagger_data = yaml.safe_load(clean_text)\n        except\
+          \ Exception as e:\n            return {\n                \"error\": f\"\
+          解析Swagger文档失败: {str(e)}\",\n                \"apis\": []\n            }\n\
+          \        \n        # 提取API信息\n        apis = []\n        \n        # 处理Swagger\
+          \ 2.0或OpenAPI 3.0格式\n        if 'swagger' in swagger_data or 'openapi' in\
+          \ swagger_data:\n            paths = swagger_data.get('paths', {})\n   \
+          \         \n            for path, methods in paths.items():\n          \
+          \      for method, details in methods.items():\n                    if method.lower()\
+          \ in ['get', 'post', 'put', 'delete', 'patch']:\n                      \
+          \  api_info = {\n                            \"path\": path,\n         \
+          \                   \"method\": method.upper(),\n                      \
+          \      \"summary\": details.get('summary', ''),\n                      \
+          \      \"description\": details.get('description', ''),\n              \
+          \              \"parameters\": details.get('parameters', []),\n        \
+          \                    \"responses\": details.get('responses', {})\n     \
+          \                   }\n                        apis.append(api_info)\n \
+          \       \n        return {\n            \"apis\": apis,\n            \"\
+          error\": None\n        }\n        \n    except Exception as e:\n       \
+          \ return {\n            \"error\": f\"处理Swagger文档时发生错误: {str(e)}\",\n  \
+          \          \"apis\": []\n        }"
+        code_language: python3
+        desc: 解析Swagger文档并提取API信息
+        outputs:
+          apis:
+            children: null
+            type: array[object]
+          error:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: true
+        timeout: 60
+        title: Swagger解析器
+        type: code
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: swagger_text
+        version: '1'
+      height: 81
+      id: '10000003'
+      parentId: null
+      position:
+        x: 700
+        y: 100
+      positionAbsolute:
+        x: 700
+        y: 100
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 评估API质量并生成评分
+        model:
+          completion_params: {}
+          mode: chat
+          name: deepseek-v3
+          provider: langgenius/openai_api_compatible/openai_api_compatible
+        prompt_template:
+        - role: system
+          text: '你是一位专业的API质量评估专家。请根据提供的API规范，从以下维度进行全面评估并给出评分（满分100分）：
+
+            1. 接口设计合理性（20分）
+
+            2. 参数定义完整性（20分）
+
+            3. 响应结构规范性（20分）
+
+            4. 错误处理机制（20分）
+
+            5. 文档描述清晰度（20分）
+
+
+            请以表格形式输出评估结果，包含评分项、得分和简要评价。最后给出总分。'
+        - role: user
+          text: '请评估以下API规范的质量：
+
+            {{#10000003.apis#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: API质量评估
+        type: llm
+        variables:
+        - value_selector:
+          - '10000003'
+          - apis
+          variable: apis
+        version: '1'
+        vision:
+          enabled: false
+      height: 117
+      id: '10000004'
+      parentId: null
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 格式化API评估结果为表格形式
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        template: 'API质量评估结果
+
+
+          | 评分项 | 得分 | 评价 |
+
+          |--------|------|------|
+
+          {% for item in evaluation_results %}| {{ item.criteria }} | {{ item.score
+          }} | {{ item.comment }} |
+
+          {% endfor %}
+
+
+          **总分**: {{ total_score }}/100'
+        title: 评估结果格式化
+        type: template-transform
+        variables:
+        - value_selector:
+          - '10000004'
+          - text
+          variable: evaluation_results
+        - value_selector:
+          - '10000004'
+          - text
+          variable: total_score
+        version: '1'
+      height: 81
+      id: '10000005'
+      parentId: null
+      position:
+        x: 1300
+        y: 100
+      positionAbsolute:
+        x: 1300
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    - data:
+        desc: 输出最终API质量评估结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000005'
+          - output
+          variable: evaluation_results
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 评估结果输出
+        type: end
+        version: '1'
+      height: 117
+      id: '10000006'
+      parentId: null
+      position:
+        x: 1600
+        y: 100
+      positionAbsolute:
+        x: 1600
+        y: 100
+      type: custom
+      width: 244
+      zIndex: 0
+    viewport:
+      x: -265
+      y: 259.5
+      zoom: 1

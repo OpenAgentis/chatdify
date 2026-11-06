@@ -1,0 +1,186 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 图像理解
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.0.25@2b6f549753c8fe1b8d0bda620eb0611b549d6d809da691baf0692ee75f6c507f
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1748934356377-source-1748934371945-target
+      source: '1748934356377'
+      sourceHandle: source
+      target: '1748934371945'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1748934371945-source-1748934520371-target
+      source: '1748934371945'
+      sourceHandle: source
+      target: '1748934520371'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - image
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 输入图片
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: image
+      height: 90
+      id: '1748934356377'
+      position:
+        x: 79
+        y: 282
+      positionAbsolute:
+        x: 79
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: chat
+          name: qwen-vl-max-latest
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: 70b73634-74cf-4ac2-acc3-020ac4d7c15d
+          role: system
+          text: 请输出这个图片的内容是什么, 并做一个分类
+        - id: 26ab68ac-5900-4db5-ae17-2a6765c12f44
+          role: user
+          text: '{{#1748934356377.image#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1748934356377'
+            - image
+          enabled: true
+      height: 90
+      id: '1748934371945'
+      position:
+        x: 382
+        y: 282
+      positionAbsolute:
+        x: 382
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1748934371945'
+          - text
+          variable: text
+        selected: false
+        title: 结束
+        type: end
+      height: 90
+      id: '1748934520371'
+      position:
+        x: 687
+        y: 282
+      positionAbsolute:
+        x: 687
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -17
+      y: 27
+      zoom: 1

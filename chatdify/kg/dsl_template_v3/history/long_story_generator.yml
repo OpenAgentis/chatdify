@@ -1,0 +1,421 @@
+app:
+  description: ''
+  icon: 📄
+  icon_background: '#EFF1F5'
+  mode: advanced-chat
+  name: 'Long Story Generator (Iteration) '
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: package
+  value:
+    plugin_unique_identifier: langgenius/openai_api_compatible:0.0.16@77274df8fe2632cac66bfd153fcc75aa5e96abbe92b5c611b8984ad9f4cd4457
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1716783101349-source-1716783205923-target
+      source: '1716783101349'
+      sourceHandle: source
+      target: '1716783205923'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1716783205923-source-1716783405935-target
+      source: '1716783205923'
+      sourceHandle: source
+      target: '1716783405935'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: answer
+      id: 1716786321875-source-1716786344896-target
+      source: '1716786321875'
+      sourceHandle: source
+      target: '1716786344896'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: iteration
+      id: 1716783405935-source-1752569774166-target
+      source: '1716783405935'
+      sourceHandle: source
+      target: '1752569774166'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1752569774166'
+        sourceType: iteration-start
+        targetType: llm
+      id: 1752569774166start-source-1752569779987-target
+      source: 1752569774166start
+      sourceHandle: source
+      target: '1752569779987'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInLoop: false
+        sourceType: iteration
+        targetType: code
+      id: 1752569774166-source-1716786321875-target
+      source: '1752569774166'
+      sourceHandle: source
+      target: '1716786321875'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: Title
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: article_title
+        - label: Outline
+          max_length: 33024
+          options: []
+          required: true
+          type: paragraph
+          variable: article_outline
+      height: 115
+      id: '1716783101349'
+      position:
+        x: 30
+        y: 310
+      positionAbsolute:
+        x: 30
+        y: 310
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: chat
+          name: deepseek-v3
+          provider: langgenius/openai_api_compatible/openai_api_compatible
+        prompt_template:
+        - id: 872364eb-6859-4011-b830-e9d547b2a2b4
+          role: system
+          text: "<instruction>\nYou are to write a long article based on a provided\
+            \ title and outline. Follow these steps to complete the task:\n1. Use\
+            \ the article_title as the title of the article.\n2. Organize the article\
+            \ based on the article_outline provided. Each section in the outline should\
+            \ correspond to a section in the article.\n3. Ensure that the article\
+            \ is well-developed, with each section containing detailed information,\
+            \ explanations, examples, and any other relevant content to fully cover\
+            \ the topic.\n4. Ensure smooth transitions between sections to maintain\
+            \ a coherent flow.\n5. The output should be free from any XML tags. Provide\
+            \ only JSON array with the following keys and values: \"section\" (the\
+            \ title of each section of the article), \"bullets\" (an outline for each\
+            \ section of the article). \n<example>\n<input>\n<article_title> The Impact\
+            \ of Climate Change on Coastal Cities </article_title>\n<article_outline>\
+            \ \n  1. Introduction\n  2. Rising Sea Levels\n  3. Increased Storm Frequency\n\
+            \  4. Conclusion\n</article_outline>\n</input>\n<output>\n [\n    {\n\
+            \      \"section\": \"Introduction\",\n      \"bullets\": \"1. Overview\
+            \ of climate change effects on coastal cities 2. Importance of understanding\
+            \ these impacts\"\n    },\n    {\n      \"section\": \"Rising Sea Levels\"\
+            ,\n      \"bullets\": \"1. Causes of rising sea levels 2. Effects on coastal\
+            \ infrastructure and communities3. Examples of affected cities\"\n   \
+            \ },\n   {\n      \"section\": \"Increased Storm Frequency\",\n      \"\
+            bullets\": \"1. Link between climate change and storm frequency 2. Impact\
+            \ of more frequent and severe storms on coastal areas 3. Case studies\
+            \ of recent storms\"\n    }, \n   {\n      \"section\": \"Conclusion\"\
+            ,\n      \"bullets\": \"1. Summary of key points 2. The urgency of addressing\
+            \ climate change 2. Call to action for policymakers and communities\"\n\
+            \    }\n  ]\n</output>\n</example>\n</instruction>\n<input>\n<article_title>\
+            \ {{#1716783101349.article_title#}} </article_title>\n\n<article_outline>\
+            \ {{#1716783101349.article_outline#}} </article_outline>\n</input>\n<output>\n\
+            \  "
+        selected: false
+        title: Generate Subtitles and Outlines
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 89
+      id: '1716783205923'
+      position:
+        x: 334
+        y: 310
+      positionAbsolute:
+        x: 334
+        y: 310
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "def main(arg1: str) -> dict:\n    import json\n    data = json.loads(arg1)\n\
+          \    \n    # Create an array of objects\n    result = [{'section': item[\"\
+          section\"], 'bullets': item[\"bullets\"]} for item in data]\n    \n    return\
+          \ {\n        'result': result\n    }"
+        code_language: python3
+        desc: 'Extract section titles. '
+        outputs:
+          result:
+            children: null
+            type: array[object]
+        selected: false
+        title: Extract Subtitles and Outlines
+        type: code
+        variables:
+        - value_selector:
+          - '1716783205923'
+          - text
+          variable: arg1
+      height: 81
+      id: '1716783405935'
+      position:
+        x: 638
+        y: 310
+      positionAbsolute:
+        x: 638
+        y: 310
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(articleSections: list):\n    data = articleSections\n  \
+          \  return {\n        \"result\": \"\\n\".join(data)\n    }\n"
+        code_language: python3
+        desc: 'Transform Array from Iteration to String. '
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: Code
+        type: code
+        variables:
+        - value_selector:
+          - '1752569774166'
+          - output
+          variable: articleSections
+      height: 97
+      id: '1716786321875'
+      position:
+        x: 1420
+        y: 310
+      positionAbsolute:
+        x: 1420
+        y: 310
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1716786321875.result#}}'
+        desc: ''
+        selected: false
+        title: Answer
+        type: answer
+        variables: []
+      height: 105
+      id: '1716786344896'
+      position:
+        x: 1724
+        y: 310
+      positionAbsolute:
+        x: 1724
+        y: 310
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        error_handle_mode: terminated
+        height: 177
+        is_parallel: false
+        iterator_selector:
+        - '1716783405935'
+        - result
+        output_selector:
+        - '1752569779987'
+        - text
+        output_type: array[string]
+        parallel_nums: 10
+        selected: false
+        start_node_id: 1752569774166start
+        title: 迭代
+        type: iteration
+        width: 388
+      height: 177
+      id: '1752569774166'
+      position:
+        x: 942
+        y: 310
+      positionAbsolute:
+        x: 942
+        y: 310
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 388
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1752569774166start
+      parentId: '1752569774166'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 966
+        y: 378
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1752569774166'
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3
+          provider: langgenius/openai_api_compatible/openai_api_compatible
+        prompt_template:
+        - id: 10339073-e5fb-4f2c-8cd2-3797d874639d
+          role: system
+          text: "You are an expert document writer. Your job is to write long form\
+            \ cohesive content. \n"
+        - id: f089258a-b912-4322-a71a-480c8a8f2d5d
+          role: user
+          text: "You are writing a document called {{#1716783101349.article_title#}}.\
+            \ Write a section based on the following information: {{#1752569774166.item#}}.\
+            \ \n\n\n<Full outline>\nTake the full outline as a reference when generating\
+            \ full article. \n{{#1716783205923.text#}}"
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 89
+      id: '1752569779987'
+      parentId: '1752569774166'
+      position:
+        x: 128
+        y: 68
+      positionAbsolute:
+        x: 1070
+        y: 378
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    viewport:
+      x: -1147.6203616380976
+      y: 67.16460937496731
+      zoom: 0.9236838362069868

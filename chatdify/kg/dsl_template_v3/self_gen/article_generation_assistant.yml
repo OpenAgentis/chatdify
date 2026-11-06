@@ -1,0 +1,405 @@
+app:
+  mode: workflow
+  name: article_generation_assistant
+  version: 0.1.5
+workflow:
+  graph:
+    edges:
+    - id: 10000001-source-10000002-target
+      source: '10000001'
+      target: '10000002'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      zIndex: 0
+    - id: 10000002-source-10000003-target
+      source: '10000002'
+      target: '10000003'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      zIndex: 0
+    - id: 10000003-source-10000004-target
+      source: '10000003'
+      target: '10000004'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      zIndex: 0
+    - id: 10000004start-source-10000005-target
+      source: 10000004start
+      target: '10000005'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: true
+        iteration_id: '10000004'
+        sourceType: iteration-start
+        targetType: llm
+      zIndex: 1002
+    - id: 10000004-source-10000006-target
+      source: '10000004'
+      target: '10000006'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: code
+      zIndex: 0
+    - id: 10000006-source-10000007-target
+      source: '10000006'
+      target: '10000007'
+      sourceHandle: source
+      targetHandle: target
+      data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      zIndex: 0
+    nodes:
+    - id: '10000001'
+      data:
+        title: 开始
+        variables:
+        - type: text-input
+          variable: article_title
+          label: 文章标题
+          required: true
+          max_length: 256
+        - type: paragraph
+          variable: article_outline
+          label: 文章大纲
+          required: true
+          max_length: 99999
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        type: start
+        desc: 接收用户输入的题目和大纲信息
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 115
+      width: 244
+      position:
+        x: 30
+        y: 310
+      positionAbsolute:
+        x: 30
+        y: 310
+    - id: '10000002'
+      data:
+        title: Generate Subtitles and Outlines
+        model:
+          provider: langgenius/volcengine_maas/volcengine_maas
+          name: deepseek-v3-250324
+          mode: chat
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+        prompt_template:
+        - role: system
+          text: 你是一位专业的文章结构规划师。根据提供的文章题目和大纲，生成详细的章节子标题和各章节大纲。输出必须为JSON数组格式，每个元素包含section(章节标题)和bullets(章节大纲)字段。确保章节划分合理，大纲内容完整且符合逻辑。
+        - role: user
+          text: '请为以下文章生成章节结构：
+
+            文章题目：{{#10000001.article_title#}}
+
+            文章大纲：{{#10000001.article_outline#}}
+
+
+            输出要求：
+
+            1. 以JSON数组格式输出
+
+            2. 每个章节包含section(标题)和bullets(大纲)字段
+
+            3. 大纲内容应详细且逻辑清晰'
+        context:
+          enabled: false
+          variable_selector: []
+        vision:
+          enabled: false
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        type: llm
+        desc: 根据题目和大纲生成各章节子标题和大纲
+        variables: []
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 89
+      width: 244
+      position:
+        x: 334
+        y: 310
+      positionAbsolute:
+        x: 334
+        y: 310
+    - id: '10000003'
+      data:
+        title: Extract Sections
+        variables:
+        - value_selector:
+          - '10000002'
+          - text
+          variable: input_text
+        code_language: python3
+        code: "def main(input_text: str) -> dict:\n    import json\n    \n    def\
+          \ extract_json_from_markdown(markdown_text: str) -> str:\n        \"\"\"\
+          从markdown提取JSON内容\"\"\"\n        start = markdown_text.find('```json')\n\
+          \        if start == -1:\n            start = markdown_text.find('```')\n\
+          \            if start == -1:\n                return markdown_text.strip()\n\
+          \        \n        start = markdown_text.find('\\n', start) + 1\n      \
+          \  end = markdown_text.rfind('```')\n        return markdown_text[start:end].strip()\n\
+          \    \n    # 预处理输入\n    json_text = extract_json_from_markdown(input_text)\n\
+          \    try:\n        data = json.loads(json_text)\n        \n        # 验证数据格式\n\
+          \        if not isinstance(data, list):\n            raise ValueError(\"\
+          输入数据不是数组格式\")\n            \n        # 转换数据格式\n        result = []\n   \
+          \     for item in data:\n            if not isinstance(item, dict):\n  \
+          \              continue\n                \n            section = item.get(\"\
+          section\", \"\")\n            bullets = item.get(\"bullets\", \"\")\n  \
+          \          \n            if section or bullets:\n                result.append({\n\
+          \                    \"section\": section,\n                    \"bullets\"\
+          : bullets\n                })\n        \n        return {\n            \"\
+          result\": result,\n            \"error\": \"\"\n        }\n    \n    except\
+          \ json.JSONDecodeError as e:\n        return {\n            \"error\": f\"\
+          JSON解析失败: {str(e)}\",\n            \"result\": []\n        }\n    except\
+          \ Exception as e:\n        return {\n            \"error\": f\"处理失败: {str(e)}\"\
+          ,\n            \"result\": []\n        }"
+        outputs:
+          error:
+            children: null
+            type: string
+          result:
+            children: null
+            type: array[object]
+        timeout: 60
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: 解析JSON格式的章节信息并转换为可迭代数组格式
+        selected: false
+        type: code
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 81
+      width: 244
+      position:
+        x: 638
+        y: 310
+      positionAbsolute:
+        x: 638
+        y: 310
+    - id: '10000004'
+      data:
+        title: Generate Chapter Contents
+        iterator_selector:
+        - '10000003'
+        - result
+        output_selector:
+        - '10000005'
+        - text
+        is_parallel: true
+        parallel_nums: 5
+        error_handle_mode: terminated
+        version: '1'
+        retry_config:
+          max_retries: 3
+          retry_interval: 10
+          retry_enabled: true
+        desc: 迭代生成各章节内容
+        height: 177
+        output_type: array[string]
+        selected: false
+        start_node_id: 10000004start
+        type: iteration
+        width: 388
+      parentId: null
+      type: custom
+      zIndex: 1
+      height: 177
+      width: 388
+      position:
+        x: 942
+        y: 310
+      positionAbsolute:
+        x: 942
+        y: 310
+    - id: 10000004start
+      data:
+        title: ''
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: ''
+        isInIteration: true
+        selected: false
+        type: iteration-start
+      parentId: '10000004'
+      type: custom-iteration-start
+      zIndex: 1002
+      height: 48
+      width: 44
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 966
+        y: 378
+    - id: '10000005'
+      data:
+        title: Generate Chapter Content
+        model:
+          provider: langgenius/volcengine_maas/volcengine_maas
+          name: deepseek-v3-250324
+          mode: chat
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+        prompt_template:
+        - role: system
+          text: 你是一位专业的文章撰写专家。根据提供的章节标题和大纲，生成详细、完整的章节内容。内容需要符合大纲要求，结构清晰，逻辑连贯。
+        - role: user
+          text: '请为以下章节撰写详细内容：
+
+
+            章节标题：{{#10000004.item#}}
+
+
+            章节大纲：{{#10000004.item#}}
+
+
+            文章题目：{{#10000001.article_title#}}
+
+
+            全文大纲：{{#10000002.text#}}
+
+
+            要求：
+
+            1. 内容完整详细，符合大纲要求
+
+            2. 结构清晰，段落分明
+
+            3. 语言流畅，专业性强'
+        context:
+          enabled: false
+          variable_selector: []
+        vision:
+          enabled: false
+        version: '1'
+        retry_config:
+          max_retries: 3
+          retry_interval: 10
+          retry_enabled: true
+        type: llm
+        desc: 根据章节标题和大纲生成详细的章节内容
+        variables: []
+        isInIteration: true
+        iteration_id: '10000004'
+      parentId: '10000004'
+      type: custom
+      zIndex: 1002
+      height: 89
+      width: 244
+      position:
+        x: 128
+        y: 136
+      positionAbsolute:
+        x: 1070
+        y: 446
+    - id: '10000006'
+      data:
+        title: Combine Chapters
+        variables:
+        - value_selector:
+          - '10000004'
+          - output
+          variable: chapters
+        code_language: python3
+        code: "def main(chapters: list) -> dict:\n    \"\"\"\n    拼接所有章节内容为完整文章\n\
+          \    \n    参数:\n        chapters: 章节内容数组，每个元素为一个章节的字符串内容\n    \n    返回:\n\
+          \        包含完整文章内容的字典\n    \"\"\"\n    try:\n        # 检查输入是否为列表\n      \
+          \  if not isinstance(chapters, list):\n            raise ValueError(\"输入必须为章节内容数组\"\
+          )\n            \n        # 拼接所有章节内容，用两个换行符分隔\n        full_article = \"\\\
+          n\\n\".join(chapters)\n        \n        # 返回结果\n        return {\n    \
+          \        \"result\": full_article,\n            \"error\": \"\"\n      \
+          \  }\n    except Exception as e:\n        return {\n            \"error\"\
+          : f\"拼接章节内容失败: {str(e)}\",\n            \"result\": \"\"\n        }"
+        outputs:
+          error:
+            children: null
+            type: string
+          result:
+            children: null
+            type: string
+        timeout: 60
+        version: '1'
+        retry_config:
+          max_retries: 3
+          retry_interval: 10
+          retry_enabled: true
+        desc: 将迭代生成的各章节内容拼接为完整文章
+        selected: false
+        type: code
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 97
+      width: 244
+      position:
+        x: 1420
+        y: 310
+      positionAbsolute:
+        x: 1420
+        y: 310
+    - id: '10000007'
+      data:
+        title: 文章输出
+        outputs:
+        - value_selector:
+          - '10000006'
+          - result
+          variable: final_article
+        output_type: object
+        version: '1'
+        retry_config:
+          max_retries: 0
+          retry_interval: 0
+          retry_enabled: false
+        desc: 输出最终文章内容
+        selected: false
+        type: end
+      parentId: null
+      type: custom
+      zIndex: 0
+      height: 105
+      width: 244
+      position:
+        x: 1716
+        y: 310
+      positionAbsolute:
+        x: 1716
+        y: 310
+    type: custom

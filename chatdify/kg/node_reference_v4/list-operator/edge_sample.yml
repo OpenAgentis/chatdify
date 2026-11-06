@@ -1,0 +1,25 @@
+edges:
+- - data:
+      isInIteration: false
+      sourceType: if-else
+      targetType: list-operator
+    id: 1729476517307-97757c07-3c0f-4058-87eb-191fbaf80592-1729478231227-target
+    selected: false
+    source: '1729476517307'
+    sourceHandle: 97757c07-3c0f-4058-87eb-191fbaf80592
+    target: '1729478231227'
+    targetHandle: target
+    type: custom
+    zIndex: 0
+  - data:
+      isInIteration: false
+      sourceType: list-operator
+      targetType: template-transform
+    id: 1729478231227-source-1729478682201-target
+    selected: false
+    source: '1729478231227'
+    sourceHandle: source
+    target: '1729478682201'
+    targetHandle: target
+    type: custom
+    zIndex: 0

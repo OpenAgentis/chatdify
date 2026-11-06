@@ -1,0 +1,25 @@
+node_usage:
+  节点类型: document-extractor
+  输入规范:
+      - 支持数据类型: 
+        - File: 单独一个文件
+        - Array[File]: 多个文件数组
+      - 变量要求: 输入变量必须是FileSegment或ArrayFileSegment类型
+      - 文件格式限制: 只支持文档类型文件，不支持图片、音频、视频等媒体文件
+      - 变量选择器: 必须正确配置variable_selector，指向有效的文件变量
+      - 输出对应关系:
+        - 输入File → 输出string
+        - 输入Array[File] → 输出array[string]
+      - 输出文本格式（重要）:
+        - CSV、Excel（xlsx/xls）、Word 表格等结构化内容，提取结果为 Markdown 表格文本，而非原始 CSV/TSV 字节流
+        - 典型格式包含表头行、分隔行（| --- | --- |）与数据行（| 列1 | 列2 |）
+        - 下游 code 节点不得将 text 直接交给 pd.read_csv(StringIO(text)) 当作标准 CSV 解析
+        - 下游应使用 Markdown 表格解析（推荐 pytablereader）或按 | 分列的手工解析逻辑
+  常见使用错误:
+      - 变量类型错误: 输入变量不是正确的文件段类型, "Variable ['变量ID', 'text'] is not an ArrayFileSegment"
+      - 文件格式不支持: 尝试处理不支持的文件格式（如图片文件），"Unsupported Extension Type:.jpg" 
+      - 变量选择器为空: 未配置或配置为空的变量选择器, "变量选择器variable_selector不能为空" 
+      - 变量不存在: 引用了不存在的变量或变量路径错误
+      - 文件变量配置错误: 将非文件类型变量传入文档提取器节点
+      - 数组处理错误: 处理文件数组时类型不匹配或配置错误
+      - 变量引用错误: 引用了错误的变量ID或变量路径

@@ -1,0 +1,33 @@
+node_usage:
+  节点类型: tool_tavily_search
+  输入规范:
+    - 工具名称（tool_name）：固定为"tavily_search"
+    - 提供者ID（provider_id）：固定为"langgenius/tavily/tavily"
+    - 提供者名称（provider_name）：固定为"langgenius/tavily/tavily"
+    - 提供者类型（provider_type）：固定为"builtin"
+    - 工具标签（tool_label）：固定为"TavilySearch"
+    - 工具参数（tool_parameters）：
+      - query：搜索查询参数，必填
+        - type：参数类型，支持"mixed"、"variable"、"constant"
+        - value：查询内容，mixed类型支持变量模板语法
+    - 重试配置（retry_config）：
+      - max_retries：最大重试次数，默认3
+      - retry_enabled：是否启用重试，默认true
+      - retry_interval：重试间隔，默认1000
+    - 工具配置（tool_configurations）：
+      - auto_parameters：是否自动参数化，默认false
+      - chunks_per_source：每个源的块数，默认3
+      - include_answer：是否包含答案，默认false
+      - include_favicon：是否包含favicon，默认false
+      - include_image_descriptions：是否包含图片描述，默认false
+      - include_images：是否包含图片，默认false
+      - include_raw_content：是否包含原始内容，默认false
+      - max_results：最大结果数，默认5
+  常见使用错误:
+    - 参数配置错误：
+      - query参数缺失或为空
+      - query参数的type不是有效值（mixed、variable、constant）
+    - 变量引用错误：
+      - 变量模板语法错误，如{{#节点ID.变量名#}}格式不正确
+      - 引用的节点ID不存在或不是前置节点
+      - 引用的变量名在前置节点中不存在

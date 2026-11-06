@@ -1,0 +1,58 @@
+nodes:
+- data:
+    desc: ''
+    is_team_authorization: true
+    output_schema: null
+    params:
+      model: ''
+      text: ''
+      voice#langgenius/siliconflow/siliconflow#FunAudioLLM/CosyVoice2-0.5B: ''
+    provider_id: audio
+    provider_name: audio
+    provider_type: builtin
+    selected: false
+    title: Text To Speech
+    tool_configurations:
+      model:
+        type: constant
+        value: langgenius/siliconflow/siliconflow#FunAudioLLM/CosyVoice2-0.5B
+      voice#langgenius/siliconflow/siliconflow#FunAudioLLM/CosyVoice2-0.5B:
+        type: constant
+        value: FunAudioLLM/CosyVoice2-0.5B:anna
+    tool_description: 将文本转换为音频文件。
+    tool_label: Text To Speech
+    tool_name: tts
+    tool_parameters:
+      text:
+        type: mixed
+        value: '{{#1736599495897.text#}}'
+    type: tool
+    version: '2'
+  id: '1756775107118'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    provider_id: audio
+    provider_name: audio
+    provider_type: builtin
+    selected: false
+    title: Text To Speech
+    tool_configurations:
+      model:
+        type: constant
+        value: langgenius/siliconflow/siliconflow#FunAudioLLM/CosyVoice2-0.5B
+      voice#langgenius/siliconflow/siliconflow#FunAudioLLM/CosyVoice2-0.5B:
+        type: constant
+        value: FunAudioLLM/CosyVoice2-0.5B:charles
+    tool_label: Text To Speech
+    tool_name: tts
+    tool_parameters:
+      text:
+        type: mixed
+        value: '{{#1732605368639.text#}}'
+    type: tool
+    version: '2'
+  id: '1732605537253'
+  selected: false
+  type: custom

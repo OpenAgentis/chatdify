@@ -1,0 +1,18 @@
+node_error:
+- '变量引用错误: ''10000004.content'' - 节点 ''10000004'' 不是当前节点的前置节点。请仔细检查任务工作流上下文，从可用前置节点列表中选择,
+  可用前置节点列表: 10000006, 10000005, 10000003, 10000002, 10000001'
+- '变量引用错误: ''10000006.content'' - (节点ID: 10000006, 节点类型: ''if-else'') 不能被作为变量引用。请仔细检查任务工作流上下文，
+  选择正确的变量引用。'
+- '创建节点失败, 节点ID 10000004: 处理节点配置失败: 4 validation errors for ParameterExtractorNodeData
+  parameters.1.type Input should be ''string'', ''number'', ''bool'', ''select'',
+  ''array[string]'', ''array[number]'' or ''array[object]'' [type=literal_error, input_value=''object'',
+  input_type=str] For further information visit https://errors.pydantic.dev/2.10/v/literal_error
+  parameters.2.type Input should be ''string'', ''number'', ''bool'', ''select'',
+  ''array[string]'', ''array[number]'' or ''array[object]'' [type=literal_error, input_value=''object'',
+  input_type=str] For further information visit https://errors.pydantic.dev/2.10/v/literal_error
+  parameters.4.type Input should be ''string'', ''number'', ''bool'', ''select'',
+  ''array[string]'', ''array[number]'' or ''array[object]'' [type=literal_error, input_value=''object'',
+  input_type=str] For further information visit https://errors.pydantic.dev/2.10/v/literal_error
+  parameters.5.type Input should be ''string'', ''number'', ''bool'', ''select'',
+  ''array[string]'', ''array[number]'' or ''array[object]'' [type=literal_error, input_value=''object'',
+  input_type=str] For further information visit https://errors.pydantic.dev/2.10/v/literal_error'

@@ -1,0 +1,1244 @@
+text_generation_tasks:
+  article_rewriting:
+    prompt: |-
+      生成一个文章仿写工作流，根据用户输入的网页链接抓取原文文字内容，并按指定风格仿写成一篇新文章。
+      要求：
+      1. 用户输入：
+         - 待仿写的文章链接（比如默认：https://www.163.com/dy/article/KSLFU75A0511AQHO.html）
+         - 期望的仿写风格（专业 / 口语化 / 营销 / 学术 四选一）
+      2. 自动抓取并清洗网页的正文文本（只关心文字内容，不处理网页中的图片）
+      3. 从原文提取 3-8 个关键词
+      4. 按指定风格仿写正文，保持原文的核心观点和段落结构，但句式和措辞需明显改写，避免与原文雷同
+      5. 最终输出：关键词列表、仿写后的 Markdown 文章正文（不包含任何图片）、本次使用的风格
+  automated_tutorial_generation:
+    prompt: |-
+      生成一个自动化教程生成工作流，根据用户输入的教程名称，自动生成完整的教程内容。
+      要求：
+      1. 生成教程大纲(仅限5章节以内)
+      2. 为每个章节生成详细内容，内容包含示例代码和专家级分析
+      3. 最后输出markdown格式文件
+  business_plan_generator:
+    prompt: |-
+      生成一个商业计划书工作流，根据用户输入的产品或服务信息自动生成完整的商业计划书。
+      要求：
+      1. 生成执行摘要
+      2. 编写公司描述
+      3. 市场分析
+      4. 产品/服务说明
+      5. 营销和销售策略
+      6. 财务规划
+      7. 输出为Word文档格式
+  clickbait_title_generation:
+    prompt: |-
+      生成一个标题党创作工作流，根据用户输入的主题和其他描述，创作多个具有吸引力的标题。
+      要求：
+      1. 使用夸张、悬念、强迫式等标题创作技巧
+      2. 控制标题字数在20字以内
+      3. 每次生成5个标题，用换行符分隔
+      4. 无需额外解释说明
+  couplet_generator:
+    prompt: |-
+      生成一个春联创作工作流，根据用户输入的主题和字数要求，自动生成符合传统格律的春联。
+      要求：
+      1. 用户输入主题和上下联字数
+      2. 生成符合春节喜庆氛围的春联
+      3. 确保上下联字数相等、结构对称
+      4. 注意平仄韵律和对仗工整
+      5. 提供横批和可选的一字总结
+      6. 输出为JSON格式，包含上联、下联、横批和一字总结
+      7. 最终以传统春联样式展示结果
+  story_generator:
+    prompt: |-
+      生成一个短篇故事创作工作流，根据用户在开始时一次性输入的故事类型、关键元素和发展方向，自动生成完整故事。
+      要求：
+      1. 用户在开始（start 节点）时一次性输入以下参数：
+         - 故事类型（下拉选项，如奇幻/科幻/悬疑/历史/言情）
+         - 关键故事元素（如主角特征、世界观设定，多行文本）
+         - 期望的故事发展方向（下拉选项，如开放式结局/反转结局/喜剧结局/悲剧结局）
+         - 章节数量（数字，1-10）
+      2. 工作流自动生成故事封面，故事大纲，再按大纲分章节生成正文，章节之间保持情节连贯
+      3. 最终输出完整故事文本和故事封面
+  long_article_generator:
+    prompt: |-
+      生成一个长篇文章的工作流，根据用户提供的标题和大纲，逐步生成详细的文章内容。
+      要求：
+      1. 用户输入文章标题和大纲
+      2. 根据大纲生成每个部分的详细内容
+      3. 确保内容连贯性和完整性
+      4. 最终输出完整的文章
+  marketing_copy:
+    prompt: |
+      生成一个营销文案工作流，根据用户指定的产品信息和平台（小红书，微博，抖音，视频号，快手）生成符合要求的营销文案。
+      要求：
+      1. 营销文案要求复合平台特性
+      2. 生成多个文案版本
+  ppt_generation:
+    prompt: |
+      生成一个产品介绍PPT工作流，产品名称由用户输入。
+      要求：
+      1. 自动搜集产品信息
+      2. 生成PPT大纲
+      3. 为每页PPT生成内容
+      4. 输出markdown格式
+  research_summary:
+    input_file: deepseek-r1.pdf
+    prompt: |
+      生成一个研究总结工作流，将复杂的研究内容转化为易于理解的摘要。
+      要求：
+      1. 提取核心研究问题
+      2. 简化方法论描述
+      3. 突出关键发现
+      4. 生成适合不同受众的版本
+  email_reply_assistant:
+    prompt: |-
+      生成一个客服邮件智能回复工作流，根据用户提供的客户来信内容，先对邮件意图进行分类，再生成对应类别的回复邮件。
+      要求：
+      1. 用户输入：
+         - 客户来信原文（多行长文本，必填）
+         - 客户称呼（短文本，可选，默认"客户您好"）
+      2. 把邮件意图分类为以下 4 类之一：
+         - 投诉 / 不满
+         - 咨询 / 询问产品
+         - 合作 / 商务
+         - 订单 / 物流问题
+      3. 不同意图走不同分支，分别按对应场景的语气生成回复（例如投诉类需共情致歉、合作类需正式礼貌、咨询类需详细解答、订单类需明确处理方案）
+      4. 最终输出三个字段：
+         - 识别到的意图分类
+         - 邮件标题（不超过 30 字）
+         - 完整的回复邮件正文（含称呼与落款）
+  technical_documentation:
+    input_file: api_document.docx
+    prompt: |-
+      生成一个技术文档编写工作流，根据用户提供的API接口描述自动生成完整的开发者文档。
+      要求：
+      1. 解析API接口描述文档，文档输入为docx格式
+      2. 生成请求/响应示例
+      3. 编写参数说明表格
+      4. 包含错误代码说明
+      5. 输出为markdown格式
+  video_script:
+    prompt: |
+      生成一个视频脚本工作流，根据主题生成短视频脚本（不需要生成视频，只需要生成视频脚本）。
+      要求：
+      1. 生成视频大纲
+      2. 编写分镜脚本
+      3. 设计画面说明
+      4. 配音文案生成
+  youtube_content_creation:
+    input_file: subtitles.txt
+    prompt: |-
+      生成一个YouTube内容创作工作流，根据用户上传的字幕文件（TXT格式）自动生成视频相关内容。
+      要求：
+      1. 生成5个吸引人的视频标题
+      2. 生成中英文双语视频简介（150字以内）
+      3. 提取5个关键时间点并生成中英文双语时间轴
+      4. 生成10个符合视频内容的标签
+      5. 输出格式包含标题、视频简介、时间轴和标签
+  translation_quality_evaluation:
+    prompt: |
+      生成一个翻译工作流。
+      核心功能是通过大模型将用户内容翻译成目标语言。
+      用户有两个输入：一个是用户的原始内容，另一个是目标语言。
+      有两个大模型：一个翻译大模型（负责翻译），一个质检大模型（负责对翻译质量打分）。
+
+      工作流需要循环执行以下两个过程：
+      1. 翻译大模型根据用户原始内容、目标语言以及上一轮质检反馈（如有）生成译文。
+      2. 质检大模型对当前译文进行质量评分，并给出评分理由和修改建议。
+
+      质检大模型的评分细则：
+      从下面四个维度评分：
+      1. 准确性（Accuracy）：译文是否正确传达了原文的含义，是否存在歪曲或错译等情况。
+      2. 流畅性（Fluency）：译文在目标语言层面的语法、表达是否通顺自然，是否符合目标语言使用习惯。
+      3. 完整性（Completeness）：译文中是否缺少原文的重要信息，是否有明显的增译或删减。
+      4. 风格与用词（Style & Word Choice）：译文的用词、措辞及整体风格是否符合原文意图，是否与语境、专业领域或目标读者相匹配。
+      在对以上每个维度进行 1-5 分的打分后，请给出一个“综合评分”并说明理由。综合评分是这4个维度分数总和。
+      
+      循环执行“翻译大模型生成译文 -> 质检大模型评分反馈”这两个过程，直到当前译文的综合评分达到18分及以上。
+  weekly_report_summary:
+    input_file: team_weekly_reports.docx
+    prompt: |-
+      生成一个工作流：根据用户输入的团队周报内容（周报的格式可能是直接的文字描述或者上传doc/docx/PPT格式的文件），使用大模型对周报内容进行归纳总结，并按照下述要求输出季度或年度工作总结。
+      1.将产品功能迭代、性能与质量提升、团队协作与知识沉淀作为3个一级分类，分别生成一级分类下的子项
+      2.归纳重点：1）产品功能迭代及性能与质量提升的分类下，根据内容出现的频率，对频率最高的3至4项内容进行归纳总结；2）团队协作与知识沉淀的分类下，重点总结技术分享、文档建设及流程改进的内容
+      注意事项:
+      1.如果输入内容中包含量化的数据，需要保留原始量化数据；
+      2.同类型的内容，要求做整合，比如都是技术分享，就归纳成1条。
+      3.每个子项用一句话归纳，做了什么，遇到了什么问题，取得了什么效果等。
+      输出格式：方便ppt汇报，包含3个一级分类及其子项.
+
+  personalized_quiz_generator:
+    prompt: |-
+      生成一个个性化测验题生成工作流，根据用户指定的知识点、学段和难度生成结构化题目。
+      要求：
+      1. 用户在开始（start 节点）一次性输入以下参数：
+         - 知识点（短文本，例如"光合作用 / 一元二次方程 / Python 列表推导式"，必填）
+         - 学段（下拉选项：小学 / 初中 / 高中 / 大学 / 职业培训）
+         - 难度等级（下拉选项：基础 / 进阶 / 挑战）
+         - 题目数量（数字，1-10，默认 5）
+      2. 自动生成对应数量的"四选一单选题"，每题包含：题干、选项 A/B/C/D、正确答案、解析（不超过 80 字）
+      3. 全部题目须围绕给定知识点，且难度梯度与"难度等级"对应（基础以记忆识别为主，挑战包含跨知识点综合应用）
+      4. 错项需要具有干扰性（常见错误概念 / 计算误差 / 易混淆定义），不能凑数
+      5. 最终输出一个严格 JSON 数组，元素结构：
+         {"q": "题干", "options": {"A": "...", "B": "...", "C": "...", "D": "..."}, "answer": "B", "explanation": "..."}
+      6. JSON 之外不要输出任何额外文字
+  dnd_npc_generator:
+    prompt: |-
+      生成一个 D&D NPC（非玩家角色）卡牌生成工作流，根据用户提供的种子设定输出可用于桌面跑团的完整角色档案。
+      要求：
+      1. 用户在开始（start 节点）一次性输入以下参数：
+         - 种族（下拉：人类 / 精灵 / 矮人 / 半身人 / 提夫林 / 龙裔，可扩展）
+         - 职业（下拉：战士 / 法师 / 游荡者 / 牧师 / 吟游诗人 / 德鲁伊）
+         - 性格关键词（短文本，例如"狡黠、贪财、念旧"）
+         - 阵营（下拉：守序善良 / 中立善良 / 混乱善良 / 守序中立 / 绝对中立 / 混乱中立 / 守序邪恶 / 中立邪恶 / 混乱邪恶）
+         - 等级（数字 1-20）
+      2. 生成内容必须包括以下字段：
+         - 姓名（贴合种族文化的命名风格）
+         - 外貌特征（不超过 60 字，包含 1-2 个标志性细节）
+         - 背景故事（100-150 字，含一个秘密 / 内心冲突）
+         - 六项基础属性 STR / DEX / CON / INT / WIS / CHA（数值 8-18，与职业匹配）
+         - 标志性技能或法术 3 条
+         - 装备清单 3-5 件
+         - 标志性口头禅 1 句
+         - 与玩家初次见面时的态度（友好 / 中立 / 警惕 / 敌对）
+      3. 最终输出一份 Markdown 格式的角色卡，包含上述全部字段
+
+information_extraction_and_understanding:
+  academic_paper_analysis:
+    input_file: deepseek-r1.pdf
+    prompt: |
+      生成一个学术论文分析工作流，支持上传论文文档，并进行多维度分析。
+      要求：
+      1. 提取论文关键信息（标题、作者、摘要等）
+      2. 分析研究方法论
+      3. 评估论文的创新性和局限性
+      4. 生成结构化总结报告
+  doc_qa_system:
+    input_file: deepseek-r1.pdf
+    prompt: |
+      生成一个文档智能问答工作流，支持用户上传 PDF、Word 等格式的文档，并基于文档全文回答用户提出的问题。
+      要求：
+      1. 用户输入：一份待查阅的文档，以及一个关于该文档的问题（场景默认是关于 "deepseek-r1" 的技术问题）
+      2. 自动解析上传的文档，提取其中的文字内容
+      3. 结合文档全文与用户问题生成答案
+      4. 最终输出：针对该问题的回答正文
+  knowledge_retrieval_workflow:
+    prompt: |-
+      生成一个知识库检索工作流，实现私有化知识库检索功能。
+      要求：
+      1. 使用知识检索组件+知识库
+      2. 支持多轮对话
+      3. 支持知识库内容检索
+      4. 输出检索结果并生成回答
+  meeting_minutes_process:
+    input_file: meeting_note.txt
+    prompt: |
+      生成会议纪要处理的工作流，输入会议文本， 总结输入内容得到章节、会议总结，行动项等信息。
+      要求：
+      1. 提取关键议题
+      2. 生成会议总结
+      3. 生成会议行动项
+  medical_record_extraction:
+    input_file: illnese.docx
+    prompt: |-
+      生成一个门诊病例结构化提取与风险提示工作流，对用户上传的中文门诊病例文档进行字段化抽取，并给出初步风险提示。
+      要求：
+      1. 用户输入一个门诊病例文件（支持 .docx / .pdf / .txt）
+      2. 自动从病例原文中抽取以下结构化字段，缺失字段统一置为空字符串，不允许编造原文之外的内容：
+         - 患者姓名
+         - 性别
+         - 年龄（仅数字）
+         - 就诊日期（YYYY-MM-DD 格式）
+         - 主诉
+         - 现病史
+         - 既往史
+         - 生命体征（体温/脉搏/呼吸/血压等原文表述）
+         - 体格检查关键阳性体征
+         - 初步诊断
+         - 处置 / 用药建议
+      3. 基于抽取出的字段生成一段风险提示，包含：
+         - 风险等级：低 / 中 / 高
+         - 危险信号清单：如高热、意识改变、呼吸困难等；若没有则返回空数组
+         - 复诊或转诊建议
+      4. 最终输出两部分：完整的结构化病例字段对象、风险提示对象
+  survey_open_ended_analyzer:
+    input_file: survey_responses.csv
+    prompt: |-
+      生成一个用户调研开放题分析工作流，对用户上传的调研开放题答案进行批量主题聚类、情感分析与关键洞察提取。
+      输入数据为 CSV，每行一条用户反馈，字段：
+      - response_id：反馈 ID
+      - submitted_at：提交时间
+      - user_role：用户身份（如"个人用户""企业用户""开发者""学生"）
+      - rating：评分（0-10，可用于 NPS 计算）
+      - response_text：开放题答案文本
+      要求：
+      1. 数据预处理：剔除 response_text 为空的行；按 NPS 标准将用户分为 promoters(≥9) / passives(7-8) / detractors(≤6) 三类，输出每类人数与占比，以及整体 NPS = %promoters - %detractors
+      2. 主题聚类：
+         - 先由大模型对每条 response_text 打上 1-3 个主题标签（如"性能""价格""客服""功能""稳定性""UI/UX""集成"）
+         - 再做聚合统计：每个主题的出现次数、按 NPS 类别的分布、按 user_role 的分布
+      3. 情感分析：对每条文本判定情感极性（positive / neutral / negative）
+      4. 关键洞察提取：
+         - top_complaints：3 条 detractors 中出现频次最高的"具体问题"（不超过 30 字 / 条，需附 2-3 条原文引用作为佐证）
+         - top_praises：3 条 promoters 高频提及的"具体优点"（同样附原文引用）
+         - emerging_risks：在 detractors 中识别"虽提及人数少、但影响严重的潜在风险"（如数据丢失 / 账单错误 / 安全问题）2-3 条
+      5. 给出针对产品 / 客服 / 商务 三个团队的 actionable_recommendations，每团队 2-3 条具体行动建议
+      6. 最终输出严格 JSON：{nps_summary, theme_distribution, sentiment_distribution, top_complaints, top_praises, emerging_risks, actionable_recommendations}
+  multilingual_consistency_check:
+    input_file:
+      - trilingual_baseline_cn.md
+      - trilingual_en.md
+    prompt: |-
+      生成一个双语翻译一致性检查工作流，对中文、英文两份 Markdown 文档进行交叉比对，找出译文中的翻译错误、漏翻译、语法问题以及不专业的表达。
+      要求：
+      1. 用户上传 2 份 Markdown 文档（中文基准版、英文译文，文件扩展名为 .md），由工作流根据每份文件的内容自动识别其语言
+      2. 以中文版为基准，逐段对照英文译文，标记以下三类问题：
+         - 漏翻译：基准里有、译文里没有的段落或要点
+         - 语法 / 拼写错误：明显的语法或拼写问题
+         - 不专业表达：与上下文语气或正式程度不符的措辞（例如技术文档里出现明显口语化表述）
+      3. 如果英文译文与中文基准实质一致（即没有翻译差异），则原文照搬输出
+      4. 最终输出：
+         - 英文译文的修正版（保留原 Markdown 标题与章节结构）
+         - 一份问题汇总报告，列出每条问题的所在章节、问题类型（漏翻 / 语法 / 措辞）以及修改前后对比
+  legal_document_review:
+    input_file: contract_sample.docx
+    prompt: |-
+      生成一个法律文档分析工作流，专注于合同、协议等法律文书的审查与分析。
+      要求：
+      1. 识别文档中的关键条款（如保密条款、违约责任、终止条件等）并高亮显示
+      2. 对潜在法律风险进行标记（<RISK_REVIEW>标签），特别是模糊表述或不利条款
+      3. 比较文档中的条款与标准法律条款的差异
+      4. 提供修改建议时，需说明法律依据（<LEGAL_BASIS>标签）
+      5. 输出结构化摘要，包括各方权利义务、时间节点和关键约束条件
+  contract_key_info_extraction:
+    input_file: contract_sample.docx
+    prompt: |-
+      生成一个合同关键信息提取工作流，从上传的合同文档中提取重要条款信息。
+      要求：
+      1. 输入合同文档文件
+      2. 识别合同中的关键条款（如签约方、金额、有效期等）
+      3. 将提取的信息按结构化格式输出
+  
+  financial_report_extractor:
+    input_file: financial_report.xlsx
+    prompt: |-
+      生成一个财务报表结构化抽取工作流。用户上传一份 Excel 格式（.xlsx）的财务报表（典型字段为"项目"+ 多个年度列），工作流需要把表格内容解析为严格的 JSON Schema。
+      要求：
+      1. 输入文件类型为 .xlsx
+      2. 按以下 4 类对每个科目自动归类（仅做归类，不做数值计算）：
+         - revenue（收入类，如营业收入）
+         - cost_expense（成本费用类，如营业成本、研发费用、销售与管理费用、所得税）
+         - profit（利润类，如毛利润、营业利润、净利润）
+         - ratio（比率类，如毛利率、净利率，数值范围 0~1）
+      3. 输出一个严格 JSON 对象，结构如下：
+         {
+           "currency_unit": "万元",
+           "years": ["2021", "2022", "2023"],
+           "items": [
+             {"name": "营业收入", "category": "revenue", "values": {"2021": 1000, "2022": 1200, "2023": 1380}},
+             ...
+           ]
+         }
+
+  financial_report_interpretation:
+    input_file: financial_report.xlsx
+    prompt: |-
+      生成一个财务报表"管理层摘要"工作流。用户上传一份 Excel 格式（.xlsx）的财务报表，工作流的目标是把数字翻译成"非财务背景的高管也能在 30 秒内读懂"的自然语言摘要，重点在于"理解与表达"。
+      要求：
+      1. 输入文件类型为 .xlsx
+      2. 完成下列"理解类"任务：
+         - 用一段不超过 80 字的中文，概括本份报表的整体经营情况
+         - 列出 3 条本期亮点（highlights），每条不超过 30 字，例如"营业收入连续三年保持 ≥15% 增长"
+         - 列出 3 条潜在风险或需要关注的点（risks），每条不超过 30 字
+         - 给出 1 段面向非财务读者的通俗解读（plain_explanation），不超过 120 字，避免使用专业术语
+      3. 最终输出为 Markdown 文本，包含四个二级标题：## 总体概述、## 经营亮点、## 风险提示、## 通俗解读
+
+  event_schedule_extraction:
+    input_file: community_events.md
+    prompt: |-
+      生成一个活动通知日程抽取工作流，从用户上传的活动通知文档中抽取结构化日程，并检查时间与场地冲突。
+      要求：
+      1. 用户输入一份活动通知文档（Markdown / TXT / DOCX）
+      2. 为每个活动抽取以下字段：
+         - title：活动名称
+         - start / end：开始与结束时间（ISO 8601，如"2026-06-06T09:30:00"）；只给出时长的，用开始时间加时长推算结束时间；完全没有结束时间的填 null
+         - location：地点；有备用地点（如雨天改址）的放到 backup_location
+         - status：scheduled / rescheduled / cancelled
+         - fee、registration_required：费用与是否需要报名，文中未提及的填 null
+      3. 相对日期（如"本通知发布后的第二个周五"）要以文档中的发布日期为基准换算成具体日期
+      4. 周期性活动（如"每周三"）按文中给出的日期展开为多条记录，同一活动共用同一个 series_id
+      5. 改期的活动只保留新时间，并在 note 中注明原定时间；已取消的活动保留记录但 status 为 cancelled，不参与冲突检测
+      6. 冲突检测：找出同一地点时间有重叠的活动对，给出两个活动名称、重叠时间段
+      7. 最终输出两个字段：
+         - 按开始时间升序排列的日程 JSON 数组
+         - 冲突清单 JSON（无冲突时为空数组）
+  resume_parser:
+    input_file: mock_resume.docx
+    prompt: |
+      创建一个简历分析工作流，自动解析上传的简历文档并提取关键信息。
+      要求：
+      1. 支持识别姓名、联系方式、教育背景、工作经历等字段
+      2. 可输出结构化JSON数据
+      3. 支持中英文简历解析
+  document_summarization:
+    input_file: deepseek-r1.pdf
+    prompt: |-
+      通过工作流实现文档内容的自动摘要生成。
+      要求：
+      1. 接收上传的文档文件
+      2. 提取文档中的关键信息
+      3. 生成简洁的摘要，保留核心内容
+      4. 输出摘要结果
+      5. 如果是较长的文档，可以分段处理后再汇总摘要
+  clinical_trial_protocol_extraction:
+    input_file: clinical_trial.docx
+    prompt: |-
+      生成一个临床试验方案结构化抽取工作流，对用户上传的临床试验方案文档进行字段化抽取。
+      要求：
+      1. 用户输入一个临床试验方案文件（支持 .docx / .pdf）
+      2. 自动从方案原文中抽取以下结构化字段，缺失字段统一置为空字符串或空数组，不允许编造原文之外的内容：
+         - 方案编号（protocol_number）
+         - 申办方（sponsor）
+         - 试验分期（phase，例如 "III"）
+         - 适应症（indication）
+         - 试验设计（design，一段简短描述）
+         - 入选标准列表（inclusion_criteria，字符串数组，每条保留原文条目编号）
+         - 排除标准列表（exclusion_criteria，字符串数组，每条保留原文条目编号）
+         - 主要终点（primary_endpoints，字符串数组）
+         - 次要终点（secondary_endpoints，字符串数组）
+         - 样本量（sample_size，数字）
+         - 中心数量（site_count，数字）
+         - 随访周期（follow_up_visits，字符串数组，每条形如"V4 - 治疗第 24 周（主要终点）"）
+      3. 在抽取完成后，基于入排标准列表给出一段不超过 80 字的"受试者画像"自然语言描述（subject_profile_summary）
+      4. 最终输出一个严格 JSON 对象，包含上述字段与 subject_profile_summary
+      5. JSON 之外不要输出任何额外文字
+  news_event_timeline:
+    input_file: news_articles.md
+    prompt: |-
+      生成一个新闻事件时间线抽取工作流，从用户上传的多篇新闻汇总文档中识别同一主题事件，输出按时间排序的事件时间线。
+      要求：
+      1. 用户输入一份 Markdown 格式的新闻汇总文档（多篇短新闻拼接而成）
+      2. 自动识别这些新闻所围绕的"核心事件"（event_topic，不超过 30 字）
+      3. 从每篇新闻中抽取以下字段：
+         - source：新闻来源（如"星海日报""财经观察网"）
+         - publish_time：发布时间（ISO 8601 格式，如"2026-05-10T08:42:00"）
+         - event：该篇新闻对应的具体事件节点（不超过 40 字）
+         - key_entities：涉及的关键实体（公司 / 人物 / 地点 / 机构）数组
+         - related_data：涉及的关键数据指标（如"市值突破 1000 亿"），数组形式，无则为空
+      4. 按 publish_time 升序排序生成时间线（timeline 数组）
+      5. 在时间线基础上额外输出 3 条"事件关键节点"摘要（key_moments，每条不超过 30 字），描述事件的因果链
+      6. 最终输出一个严格 JSON 对象：{"event_topic": "...", "timeline": [...], "key_moments": [...]}
+  regulatory_document_diff:
+    input_file:
+      - regulation_v1.md
+      - regulation_v2.md
+    prompt: |-
+      生成一个法规版本差异分析工作流，对用户上传的两份法规 / 政策文档进行版本比对，输出新增 / 删除 / 修改的条款明细。
+      要求：
+      1. 用户上传两个 Markdown 文件：分别为同一份法规的旧版（regulation_v1.md）与新版（regulation_v2.md）
+      2. 按章节 + 条款编号进行匹配，识别以下三类变更：
+         - added（新增）：旧版没有、新版独有的条款
+         - removed（删除）：旧版有、新版没有的条款
+         - modified（修改）：条款编号或主题相同但内容有实质变化的条款
+      3. 对于 modified 条款，必须输出 old_text / new_text / change_summary（不超过 50 字，说明改了什么），不允许只贴文本
+      4. 同时基于差异列表生成一段不超过 150 字的中文"主要变化摘要"（overall_summary），重点说明对企业 / 个人有何实际影响
+      5. 最终输出一个严格 JSON 对象：
+         {
+           "overall_summary": "...",
+           "diff": {
+             "added":    [{"clause": "第十一条", "text": "..."}],
+             "removed":  [{"clause": "...",    "text": "..."}],
+             "modified": [{"clause": "第九条", "old_text": "...", "new_text": "...", "change_summary": "..."}]
+           }
+         }
+  recipe_information_extractor:
+    input_file: recipe.md
+    prompt: |-
+      生成一个菜谱结构化抽取与营养换算工作流，根据用户上传的菜谱文档输出标准化的食谱 JSON。
+      要求：
+      1. 用户输入一份菜谱文档（Markdown / 纯文本，扩展名 .md / .txt）
+      2. 自动从菜谱中抽取以下字段：
+         - dish_name：菜名
+         - cuisine：菜系（如"川菜""粤菜""日式"）
+         - difficulty：难度（容易 / 适中 / 困难）
+         - prep_minutes：备料时间（数字，单位分钟）
+         - cook_minutes：烹饪时间（数字，单位分钟）
+         - servings：分量（数字，几人份）
+         - ingredients：食材数组，每项包含 name / amount / unit / role（主料 / 配料 / 调料）
+         - steps：步骤数组，每项为不超过 80 字的中文短句，按原文顺序
+         - nutrition：营养字段对象 {kcal, protein_g, fat_g, carb_g, sodium_mg}，缺失值用 null
+         - tips：小贴士数组，0-5 条
+      3. 在结构化抽取的基础上，按"原配方分量 ÷ servings × 目标人数"等比换算出"4 人份"的食材清单（scaled_ingredients_4），保留单位与原字段一致
+      4. 最终输出一个严格 JSON 对象，包含上述全部字段；JSON 之外不要输出任何额外文字
+
+multimodal_understanding:
+  user_intent_response:
+    input_file: mock_chat.png
+    prompt: |-
+      生成一个医患问诊对话截图结构化工作流。用户上传一张医患问诊聊天记录截图（图片，含多轮"患者"与"医生"的对话气泡或带角色标记的文本），工作流需要把对话内容转成可用于电子病历归档的 SOAP 纪要，并对本次问诊质量做评估。
+      要求：
+      1. 用户输入一张问诊对话截图（JPG / JPEG / PNG / WEBP）。对话格式可能形如"患者（张女士）：…"、"医生（李医生）：…"，也可能是聊天气泡，需要由多模态大模型同时完成 OCR 与发言角色分离
+      2. 输出 dialogue：按时间顺序的对话数组，每项 {turn, role, speaker_name, text}；role 取值仅限 "patient" 或 "doctor"；不可丢失原文内容、不可改写患者用词
+      3. 抽取 patient_profile：{name, gender, age}，从对话中能识别的字段填入，识别不到的字段填空字符串
+      4. 按 SOAP 框架生成结构化问诊纪要 soap：
+         - S (subjective)：患者主诉与现病史，含 chief_complaint（一句话主诉）、symptom_onset（症状起始时间，例如"昨天下午"）、symptoms（症状数组，每项 {name, severity, duration}）、exposure_history（接触史 / 流行病学史，无则空数组）
+         - O (objective)：客观检查与体征，含 vital_signs（数组，每项 {name, value, unit, abnormal}，如体温 37.8 °C / 低热）、physical_findings（医生在对话中提到的体格检查发现，可为空）
+         - A (assessment)：医生给出的初步诊断 + 诊断依据（含原文引用片段）
+         - P (plan)：处置计划，含 lifestyle（生活作息建议，数组）、medications（用药建议数组，每项 {drug_class_or_name, indication, caution}）、follow_up（复诊或转诊建议）
+      5. 计算 consultation_quality：基于问诊完整性的 0-100 评分，并以 checklist 形式列出至少 6 项检查点（如"是否询问体温""是否询问接触史""是否给出明确诊断""是否提供用药指导""是否给出复诊条件""是否提示禁忌或注意事项"），每项 {item, passed, evidence}
+      6. 给出 risk_alerts：如果对话中出现红旗症状（高热 ≥ 39°C、呼吸困难、意识改变、胸痛、咯血等）或医生处置存在明显疏漏（如未问关键接触史、未给红旗症状预警），需要在此字段中给出告警；无风险则为空数组
+      7. 最终输出严格 JSON：{patient_profile, dialogue, soap, consultation_quality, risk_alerts}，JSON 之外不输出任何额外文字
+  invoice_comparison_expert:
+    input_file: train_ticket.jpg
+    prompt: |-
+      生成一个发票比对工作流，通过多模态模型实现火车票OCR信息提取，并比对两个模型的提取结果。
+      要求：
+      1. 支持上传火车票图片
+      2. 使用两个模型分别提取关键字段（发票号码、开票日期、出发时间、始发站、终点站、车次、票价、身份证号、姓名、电子客票号、购买方名称、统一社会信用代码）
+      3. 比对两个模型的提取结果，高亮显示差异
+      4. 输出JSON格式的比对报告
+  invoice_extraction_tool:
+    input_file: invoice.jpg
+    prompt: |-
+      本工作流通过多模态发票模型实现多种增值税发票的OCR提取和判断。
+      核心功能：
+      1. 支持上传发票图片(JPG/JPEG/PNG等格式)
+      2. 自动识别发票类型(包括增值税电子发票、电子发票(普通发票)、增值税普通发票-卷票、火车票、新版火车票-铁路电子客票、定额发票、出租车发票等7种类型)
+      3. 根据发票类型调用对应的提取模型
+      4. 提取发票关键字段并以JSON格式返回
+      5. 支持发票图片和提取结果的聚合输出
+  error_screenshot_diagnostics:
+    input_file: error_screenshot.png
+    prompt: |-
+      生成一个报错截图诊断工作流，对用户上传的程序报错截图（含命令行 / IDE / 浏览器控制台 / 移动端崩溃日志等）进行视觉解析与根因分析。
+      要求：
+      1. 用户输入一张截图图片（JPG / JPEG / PNG / WEBP），内容为程序错误信息（如 Python traceback、JavaScript console error、Java stacktrace、shell error 等）
+      2. 使用多模态大模型完成以下结构化抽取：
+         - language：错误来源的编程语言或运行时（如 Python / Node.js / Java / Go / Shell / Browser）
+         - command：触发报错的命令行（若可见，否则填空）
+         - error_type：错误的具体类型（如 ValueError / TypeError / NullPointerException / ReferenceError）
+         - error_message：错误消息的完整原文（一行字符串）
+         - stack_frames：调用栈数组，按从上到下顺序排列，每项包含 file / line / function / code_snippet
+         - chained_exceptions：派生 / 嵌套异常数组（如果存在 "During handling of the above exception" 这种情况）
+      3. 在结构化结果基础上由大模型完成"诊断三段论"：
+         - root_cause：根因分析（不超过 120 字，必须基于错误信息与调用栈，不可凭空猜测）
+         - probable_triggers：3 条最可能的触发条件（如"训练数据中含有非数值字符串"）
+         - fix_suggestions：3-5 条可执行的修复建议，每条须给出可复制的代码片段或命令
+      4. 给出一段 minimal_repro：最少代码量复现此错误的 Python / 对应语言代码示例，便于在 issue 中粘贴
+      5. 最终输出严格 JSON：{language, command, error_type, error_message, stack_frames, chained_exceptions, root_cause, probable_triggers, fix_suggestions, minimal_repro}
+  image_person_detection:
+    input_file: hospital.png
+    prompt: |-
+      生成一个图像人物检测工作流，对用户上传的图片进行人物识别，给出人数与每个人物的边界框（bounding box）。
+      要求：
+      1. 输入为一张图片（JPG / JPEG / PNG / WEBP），场景任意（如医院、教室、街景等）
+      2. 由多模态大模型完成"人物检测"，并输出以下结构化字段：
+         - person_count：图中可见的人物总数（整数，需明确判断标准：身体可见部分 ≥ 1/3 才计入；仅露出手 / 脚等局部肢体不计入）
+         - persons：数组，每项包含：
+            * id：从 1 开始的整数
+            * role_hint：根据着装 / 位置 / 道具推测的角色标签（如"医生""护士""患者""家属""教师""学生""路人"等），不能确定时填 "unknown"
+            * confidence：检测置信度（0~1 浮点）
+            * bbox：[x_min, y_min, x_max, y_max]，使用归一化到 [0, 1] 的浮点坐标，左上角为 (0, 0)、右下角为 (1, 1)；要求 x_max > x_min、y_max > y_min 且全部位于 [0, 1] 区间
+            * attributes：可见属性对象，包含 age_range（child / young / middle / senior / unknown）、gender（male / female / unknown）、posture（standing / sitting / lying / walking / unknown）
+      3. 不要把图片中的人形海报、雕塑、玩偶、水印文字等误识别为真人；如果图中出现明显的水印（如"光厂""图虫"等汉字水印），需要在 watermark_detected 字段中标出
+      4. 最后给出 scene_summary：不超过 60 字的中文一句话场景描述
+      5. 最终输出严格 JSON：{image_size, person_count, persons, invalid_persons, watermark_detected, scene_summary}，JSON 之外不输出任何额外文字
+  spreadsheet_screenshot_validator:
+    input_file: sample_image.png
+    prompt: |-
+      我们财务每周都会收到一些财报截图（项目名 + 几个年度列那种格式），老板想知道这些数到底对不对。帮我做一个稽核工作流：
+      1. 我把截图扔进去，不需要我再手动敲数字进 Excel
+      2. 工作流自动帮我把表格里的数读出来，并按下面这些常识做核对：
+         - 营业收入 - 营业成本，是不是等于毛利润？
+         - 毛利率写的比例，是不是真的就是毛利润除以营业收入？
+         - 营业利润 = 毛利润减掉研发、销售管理这些费用，对不对得上？
+         - 所得税 = 营业利润 × 表中写的税率（如果表里写了"税率20%"，就按 20% 算），是否一致？
+         - 净利润 = 营业利润 - 所得税，是否一致？
+         - 净利率 = 净利润 / 营业收入，是否对得上表里的净利率？
+      3. 我能容忍小数点误差（比如百分之一以内的差，就当作没问题），但凡是明显错的，要明确告诉我
+      4. 报告里要让我能直接看到这几件事：
+         - 这份报表整体过没过？
+         - 有哪几个数对不上？分别在哪一行、差了多少？
+         - 你猜可能的原因是什么（比如图片不清楚识别错了、还是原表本身录错了、又或者我的公式假设不适合这种行业）？
+      5. 把你识别出来的原始表格也一并返回给我（带上单位，比如"万元"那种），方便我自己复核
+  image_to_markdown_converter:
+    input_file: ride_invoice.png
+    prompt: |-
+      生成一个图片内容提取并转换为Markdown格式的工作流。
+      要求：
+      1. 支持上传图片文件（JPG/JPEG/PNG/GIF/WEBP/SVG）
+      2. 使用多模态模型识别图片中的文字内容
+      3. 将内容格式化为结构良好的Markdown文档
+      4. 对特殊内容（如表格、公式、目录）使用特定标签标记
+      5. 保持文档的逻辑结构和可读性
+  multi_engine_ocr:
+    input_file: ride_invoice.png
+    prompt: |-
+      生成一个多引擎OCR工作流，通过多个OCR模型并行处理上传的图片文件，提取文本内容并进行结果比对和融合。
+      要求：
+      1. 支持上传图片文件（JPG/JPEG/PNG/GIF/WEBP/SVG）
+      2. 使用多个OCR模型（如qwen-vl-max、qwen2.5-vl-72b-instruct、qwen-vl-plus）同时处理图片
+      3. 提取图片中的文本内容并转换为markdown格式
+      4. 比对不同模型的识别结果，采用多数一致原则确定最终文本
+      5. 输出结构化的markdown格式文本
+      6. 注意：重点关注工作流和结果正确性，不用考虑具体模型名对不对（因为模型名会被系统用默认值代替，后续人工调整）。
+  medical_loan_fraud_detection:
+    input_file: hospital.png
+    prompt: |-
+      生成一个医疗贷款欺诈检测工作流，通过分析上传的医疗相关图片进行多维度风险评估。
+      要求：
+      1. 支持上传医疗相关图片（JPG/JPEG/PNG/GIF/WEBP/SVG格式）
+      2. 进行三个维度的并行检测：
+         a) 医院场景检测（识别医疗设备、病床等特征）
+         b) 中介人员检测（识别职业装、房产资料等特征）
+         c) 重大疾病检测（识别肿瘤、器官衰竭等医学迹象）
+      3. 综合三个检测结果进行欺诈风险评估（高风险/中风险/低风险）
+      4. 输出结构化风险评估报告（包含各项检测结果和综合判断依据）
+  chart_to_data_extractor:
+    input_file: chart_sample.png
+    prompt: |-
+      生成一个图表反推数据工作流，对用户上传的图表图片进行视觉解析，重建图表背后的数据表。
+      要求：
+      1. 用户输入一张图表图片（支持 JPG / JPEG / PNG / GIF / WEBP），主流图表类型包括柱状图 / 折线图 / 饼图
+      2. 使用多模态大模型识别以下内容：
+         - chart_type：图表类型（bar / line / pie / scatter / mixed）
+         - title：图表标题
+         - x_axis：横轴含义与单位
+         - y_axis：纵轴含义与单位
+         - series：数据系列数组，每项包含 name（系列名 / 图例文字）与 points（数据点数组）
+         - 每个 point 形如 {"x": "Q1", "y": 120}；饼图则用 {"label": "...", "value": 30}
+      3. 数值识别允许有 ±5% 的误差，但必须给出可信度（confidence 字段，0-1 浮点）
+      4. 输出格式：
+         - 一个严格 JSON 对象，包含上述字段
+         - 一份等价的 CSV 文本（csv_text 字段），列名与数据系列一致
+      5. 同时输出一段不超过 60 字的"图表洞察"（insight）描述数据的主要趋势或对比
+  floorplan_room_recognition:
+    input_file: floorplan.png
+    prompt: |-
+      生成一个户型图识别工作流，对用户上传的房屋平面图进行多模态分析，输出房间清单与户型评估。
+      要求：
+      1. 用户输入一张户型图图片（JPG / JPEG / PNG / WEBP / SVG）
+      2. 使用多模态大模型抽取以下信息：
+         - total_area：总建筑面积（数字，单位 m²，可估算）
+         - room_count：房间总数（数字）
+         - rooms：房间数组，每项包含 name（如"客厅""主卧""厨房""卫生间"）、area（数字 m²）、location_hint（南/北/东/西/中部）
+         - layout_type：户型类别（如"一室一厅""两室两厅"）
+         - orientation：整体朝向（如"南北通透""坐北朝南"），若图中未明确则填 "未知"
+      3. 基于上述信息生成 3 条户型评估意见（pros）与 2 条潜在问题（cons），每条不超过 30 字
+      4. 最终输出一个严格 JSON 对象，包含 total_area / room_count / rooms / layout_type / orientation / pros / cons
+
+multimodal_generation:
+  text_to_speech_conversion:
+    prompt: |
+      生成一个文本转语音的工作流，将用户输入的文本转换为语音输出。
+      要求：
+      1. 支持多种语音模型选择
+      2. 可配置语音风格和语言
+      3. 输出为音频文件
+  ai_image_generation_agent:
+    prompt: |-
+      生成一个AI绘画智能体工作流，能够根据用户输入生成和优化AI绘画提示词，并调用豆包文生图工具生成图像。
+      要求：
+      1. 支持将用户简单描述转化为详细AI绘画提示词
+      2. 调用文生图工具生成图像
+      3. 输出生成的图像
+      4. 包含安全内容过滤机制
+  audio_script:
+    prompt: |
+      音频生成工作流，根据主题生成音频脚本和音频。
+      要求：
+      1. 生成音频大纲
+      2. 生成音频脚本
+      3. 生成音频（wav格式）
+  painting_robot:
+    prompt: |-
+      本工作流是一个基于豆包文生图的绘画机器人，具有多模态识别和语音播报功能。主要功能包括：
+      1. 调用文生图生成图片
+      2. 使用多模态大模型识别生成的图片内容
+      3. 通过语音合成将图片内容转换为中文语音播报
+      工作流特点：
+      - 提示词生成遵循文生图模型要求，包含艺术风格、视觉效果等细节
+      - 支持多种绘画场景如角色表情集、全角度角色视图、复古风格等
+      - 输出包含生成的图片、识别结果和语音播报
+  poem_cover_voice:
+    prompt: |-
+      生成一个诗句封面和语音播报的工作流。
+      核心功能：
+      1. 根据用户指定的诗人风格生成唐诗宋词
+      2. 将生成的诗句转换为封面图片
+      3. 将诗句转换为语音播报
+      4. 最终输出包含诗句、封面图片和语音播报的完整内容
+
+      具体流程：
+      1. 用户输入诗人名字
+      2. 大模型根据诗人风格生成诗句
+      3. 调用文生图API将诗句转换为封面图片
+      4. 调用语音合成API将诗句转换为语音
+      5. 整合所有内容输出
+  text_to_card:
+    prompt: |-
+      生成一个将文本转换为卡片的工作流。
+      核心功能是通过大模型将用户输入的文本内容转换为视觉卡片。
+      用户有两个输入：一个是作者名字，另一个是文本内容。
+      工作流包括以下步骤：
+      1. 使用模板将文本内容格式化为卡片样式
+      2. 将格式化后的内容发送到文生图工具
+      3. 输出图片
+  zen_philosophy_generator:
+    prompt: |-
+      生成一个禅意哲理生成器工作流，用户输入一个主题，系统生成一个不超过20字的有哲理的解释。
+      要求：
+      1. 解释需有禅意且不落俗套
+      2. 输出结果需转换为SVG图片格式
+      3. 最终呈现为可分享的图片形式
+  book_cover_designer:
+    prompt: |-
+      生成一个图书封面设计工作流，根据用户输入的书籍信息并行生成 3 张候选封面图与排版说明。
+      要求：
+      1. 用户在开始节点一次性输入：
+         - 书名（短文本）
+         - 副标题（短文本，可选）
+         - 作者（短文本）
+         - 类型（下拉：科幻 / 奇幻 / 悬疑 / 言情 / 商业财经 / 自我成长 / 儿童绘本）
+         - 风格关键词（短文本，例如"赛博朋克 / 极简北欧 / 水墨写意"）
+      2. 由大模型生成 3 个不同视觉方向的封面提示词，分别强调：
+         - 直白叙事型（直接表达书籍主题）
+         - 抽象象征型（用符号 / 意象代替具体场景）
+         - 极简留白型（大面积负空间 + 标志性元素）
+      3. 并行调用文生图工具，根据三组提示词分别生成一张封面图（共 3 张）
+      4. 对每张封面附带一段不超过 60 字的中文排版建议，说明标题位置、字体重量、颜色取向、副标题摆放等
+      5. 最终输出3个封面图片和相应的排版建议
+
+code_and_programming:
+  claude3_code_translation:
+    prompt: |-
+      生成一个代码翻译工作流，将源代码从一种编程语言翻译到另一种编程语言。
+      要求：
+      1. 支持多种编程语言互译（如Python、Java等）
+      2. 分两阶段生成代码：
+         a) 使用大模型分析代码结构，包括import、类/函数签名等，并转成目标语言的描述
+         b) 大模型生成具体实现代码
+      3. 严格遵循目标语言的语法规范
+  python_coding_assistant:
+    prompt: |-
+      生成一个Python编程助手工作流，专注于Python开发及相关库、框架的使用。
+      要求：
+      1. 提供Python核心库、流行框架（如Django、Flask、FastAPI）、数据科学库（如NumPy、Pandas）和测试框架（如pytest）的专家建议
+      2. 在建议时分解为离散步骤，推荐每个阶段后进行小测试
+      3. 提供代码示例时进行详细代码审查（<CODE_REVIEW>标签）和变更计划（<PLANNING>标签）
+      4. 特别注意变量命名和字符串字面量的一致性
+      5. 对潜在安全风险进行额外审查（<SECURITY_REVIEW>标签）
+      6. 考虑解决方案的部署、管理、监控和维护等操作方面
+  api_document_to_code:
+    input_file: api_document.docx
+    prompt: |-
+      本工作流主要功能是根据用户提供的API文档（本地文件或URL链接），结合大语言模型生成指定编程语言的接口调用代码。
+      要求：
+      1. 支持上传API文档（PDF/Word/TXT等格式）或输入API文档URL
+      2. 支持选择编程语言（curl/python/java/golang/nodejs）
+      3. 自动解析API文档内容
+      4. 生成符合文档规范的接口调用代码
+      5. 对必需参数缺失情况进行提示
+      6. 解释输入输出参数含义
+  math_problem_solver:
+    prompt: |-
+      生成一个数学问题求解工作流，帮助学生解答数学问题并学习解题方法。
+      要求：
+      1. 支持多种数学题型（如代数、几何、微积分等）
+      2. 提供分步骤解题过程和详细解释
+      3. 支持公式和图表展示
+      4. 记录学生的学习进度和常见错误
+      5. 支持多轮交互和问题追问
+  form_feedback_survey:
+    prompt: |-
+      生成一个用户反馈调查表的工作流，收集用户对产品或服务的满意度评价。
+      要求：
+      1. 提供评分选项（1-5分）
+      2. 包含开放式意见反馈文本框
+      3. 验证必填字段
+      4. 提交后显示感谢信息并存储反馈数据
+  form_login_demo:
+    prompt: |-
+      生成一个表单登录的工作流，用户通过填写用户名和密码进行登录验证。
+      要求：
+      1. 提供用户名 and 密码输入表单
+      2. 验证登录信息
+      3. 根据验证结果返回不同响应
+  model_pk:
+    prompt: |-
+      生成一个模型 PK 工作流：将用户的同一个问题同时分发给以下 3 个大模型并行作答，再把 3 个模型的回答以对比表格的形式展示。
+      参与 PK 的模型清单可考虑：
+      - deepseek-v4-flash
+      - qwen3-max
+      - deepseek-v3.2
+      要求：
+      1. 用户在开始节点输入一个 question（多行长文本，可包含中文、英文、代码片段）
+      2. 工作流必须使用并行结构（多 LLM 节点同时执行），3 个模型独立调用同一份 question，不要串行
+      3. 每个模型调用需要单独输出以下三个字段：
+         - model_name：固定字符串，对应上方模型清单
+         - answer：该模型返回的完整回答
+      4. 由 LLM 节点对 3 个回答做"裁判员"评测，从以下 4 个维度对每个模型 1-10 打分：
+         - 准确性（accuracy）
+         - 完整性（completeness）
+         - 表达清晰度（clarity）
+         - 实用性（usefulness）
+         并给出 1-2 句中文点评，作为 review
+      5. 最终输出两部分：
+         a) results：长度为 3的对象数组，每项 {model_name, answer, scores: {accuracy, completeness, clarity, usefulness}, review}
+         b) summary_table：Markdown 格式的对比表格（列：模型名 / 准确性 / 完整性 / 清晰度 / 实用性 / 总分），并在表格下方用 1 句话给出"本轮 PK 推荐答案来源" winner_model
+      6. 注意：重点关注工作流和结果正确性，不用考虑具体模型名对不对（因为模型名会被系统用默认值代替，后续人工调整）。
+  sql_query_generator:
+    prompt: |-
+      生成一个 NL2SQL 工作流，根据用户输入的数据库 schema 与自然语言问题输出可执行的 SQL 查询。
+      要求：
+      1. 用户在开始节点输入：
+         - schema_text：多行文本，描述若干表的 CREATE TABLE 语句或简化版 schema（含字段类型、主键、外键）
+         - question：中文自然语言查询问题
+         - dialect：下拉（MySQL / PostgreSQL / SQLite / ClickHouse）
+      2. 工作流先由大模型对 schema 做实体识别，输出 schema_summary（每张表的中文用途与关键字段说明）
+      3. 再由大模型生成 SQL，需满足：
+         - 仅使用 schema 中存在的字段，不得使用不存在的列
+         - 严格遵循所选 dialect 的语法（例如 MySQL 用 LIMIT n、PostgreSQL 用 LIMIT n OFFSET m）
+         - 在查询包含 JOIN / 子查询 / 窗口函数 / 聚合时，必须给出执行计划要点（plan_hint，不超过 100 字）
+      4. 同时生成 explanation：用中文逐句解释 SQL 含义，便于非技术读者理解
+      5. 输出一段示例预期结果（mock_result）的 markdown 表格，约 3-5 行，帮助 reviewer 校验逻辑
+      6. 最终输出严格 JSON：{schema_summary, sql, plan_hint, explanation, mock_result}
+  code_review_assistant:
+    input_file: code_review_patch.txt
+    prompt: |-
+      生成一个 AI Code Review 工作流，对用户上传的代码 patch / diff 文件进行多维度审查。
+      要求：
+      1. 用户输入一个代码 patch 文件（支持 .txt 格式）
+      2. 工作流按以下 4 个维度分别由大模型独立审查：
+         - 风格（style）：命名、注释、类型注解、文档字符串、PEP8 等
+         - 性能（performance）：N+1 查询、循环嵌套、内存分配、不必要的拷贝等
+         - 安全（security）：SQL 注入、命令注入、敏感信息泄露、未校验输入、不安全的反序列化
+         - 设计（design）：单一职责、可测试性、错误处理、并发安全
+      3. 每个维度输出 issue 数组，每条 issue 包含：file_path、hunk_or_line（diff 中的位置）、severity（info / warn / critical）、description、suggestion（建议的改写代码片段，必须可直接复制）
+      4. 综合 4 个维度的结论，给出 overall_decision：可以合并 / 修改后再合并 / 拒绝合并；以及不超过 120 字的 summary
+      5. 最终输出严格 JSON：{style, performance, security, design, overall_decision, summary}
+  regex_builder:
+    prompt: |-
+      生成一个正则表达式生成与测试工作流，根据用户的描述输出可执行的 regex 与测试结果。
+      要求：
+      1. 用户在开始节点输入：
+         - description：希望匹配的字符串规则（多行文本，例如"中国大陆手机号 / 含端口的 IPv4 / 形如 #1234 的 issue 编号"）
+         - dialect：下拉（PCRE / Python / JavaScript / Java）
+         - 测试用例：用户可选填一组 should_match 与 should_not_match 字符串（多行文本，可空，工作流也需自动补充示例）
+      2. 工作流由大模型生成对应的 regex 与人类可读的"逐字符解释"（explanation，每个分组的作用）
+      3. 使用代码节点对 should_match 全部测试用例执行 re.fullmatch，对 should_not_match 全部测试用例执行 re.search 并断言 None
+      4. 输出测试报告：每条用例的输入字符串、是否符合预期、实际结果；以及通过率（pass_rate）
+      5. 如果通过率 < 100%，需要由大模型再尝试改写 regex 一次，并重新跑测试；最多 3 轮
+      6. 最终输出严格 JSON：{regex, dialect, explanation, attempts, final_pass_rate}
+
+research_and_application:
+  deep_research_report:
+    prompt: |
+      生成一个deep research工作流。
+      核心功能：根据用户输入主题内容，通过搜索引擎检索相关内容，对检索内容进行分析整理，
+      最后生成完整的研究报告。要求报告结构完整，包含数据支撑。
+  hot_news:
+    prompt: |
+      生成一个百度热搜新闻抓取工作流，根据用户指定的数量返回当前的实时热搜，并附带每条新闻的详情摘要。
+      要求：
+      1. 用户输入希望获取的热搜数量（如 10、20、50，范围 1-50）
+      2. 抓取百度热搜实时榜单页面（https://top.baidu.com/board?tab=realtime）的内容
+      3. 从榜单中解析出热搜列表（标题、热搜指数、简介、详情链接），并按用户指定的数量截取
+      4. 最终输出一个结构化的热搜新闻列表（JSON 数组）
+  industry_research:
+    prompt: |
+      生成一个行业研究工作流，输入行业名称，自动生成行业研究报告。
+      要求：
+      1. 行业概况分析
+      2. 市场规模数据
+      3. 竞争格局分析
+      4. 发展趋势预测
+  tech_selection_research:
+    prompt: |-
+      生成一个技术选型调研工作流，输入一个具体的技术场景和若干候选技术方案，自动检索资料并产出一份选型对比与推荐报告。
+      要求：
+      1. 用户输入：技术场景描述（如"为日活百万的实时聊天系统选择消息队列"）、2-4 个候选方案（如 Kafka / RabbitMQ / Pulsar）、关注的核心诉求（如吞吐、运维成本、生态成熟度）
+      2. 围绕候选方案检索公开资料，收集各方案的特性、性能表现、典型适用场景、社区活跃度与已知坑点
+      3. 按用户关注的核心诉求建立统一对比维度，逐项打分并形成对比表格
+      4. 结合具体场景给出推荐方案与理由，并指出选错的风险与迁移成本
+      5. 输出一份结构化选型报告，包含场景回顾、对比表格、推荐结论与落地建议
+  market_trend_analysis:
+    prompt: |-
+      生成一个市场趋势分析工作流，输入行业关键词和时间范围，自动生成市场趋势分析报告。
+      要求：
+      1. 收集指定时间范围内的市场数据
+      2. 分析关键趋势指标
+      3. 识别主要驱动因素
+      4. 生成可视化图表建议
+      5. 提供战略行动建议
+  product_feature_comparison:
+    prompt: |-
+      生成一个产品特性对比工作流，输入目标产品及其竞品名称，自动生成详细的功能对比报告。
+      要求：
+      1. 从官方文档和评测中提取产品功能列表
+      2. 对比核心功能、性能指标和用户体验
+      3. 生成可视化对比表格
+      4. 提供购买决策建议
+  web_content_summarizer:
+    prompt: |-
+      生成一个网页内容摘要工作流，根据用户提供的URL，自动抓取网页内容并生成摘要。（比如默认：https://www.163.com/dy/article/KSLFU75A0511AQHO.html）
+      要求：
+      1. 提取网页正文内容
+      2. 使用大模型生成摘要
+      3. 将URL和摘要整合成表格输出
+  travel_destination_research:
+    prompt: |-
+      生成一个旅行目的地深度调研工作流，根据用户输入的目的地与出行偏好，自动检索资料并产出一份可直接参考的目的地调研报告。
+      要求：
+      1. 用户输入：目的地（如"日本京都"）、出行时间或季节、出行天数、预算档位、同行人群（如亲子 / 情侣 / 独自），以及兴趣偏好（如人文古迹 / 自然风光 / 美食）
+      2. 检索该目的地的最佳出行季节、必看景点、特色美食、当地交通与住宿区域、签证与安全注意事项等公开信息
+      3. 结合预算与出行天数，给出分天的行程概览建议，并标注各景点的推荐停留时长与门票/花费区间
+      4. 根据同行人群和兴趣偏好，对景点和活动做个性化取舍，避免堆砌
+      5. 给出总体预算估算（交通、住宿、餐饮、门票分项）与避坑提示
+      6. 输出一份图文友好的 Markdown 调研报告，包含目的地概览、最佳出行建议、行程概览、预算估算与注意事项
+  company_due_diligence:
+    prompt: |-
+      生成一个企业背景尽职调查工作流，输入一家公司名称，自动检索公开信息并产出一份背景调查简报，可用于求职、商务合作或投资前的初步判断。
+      要求：
+      1. 用户输入：公司名称，以及调查目的（如求职 / 供应商合作 / 投资），可选输入所属行业以缩小同名歧义
+      2. 检索公司的基本工商信息、主营业务、发展历程与重大事件、融资或经营状况、近期新闻与口碑舆情
+      3. 围绕调查目的提炼关注点：求职侧重发展稳定性与雇主口碑，合作侧重经营资质与履约能力，投资侧重商业模式与成长性
+      4. 对检索到的信息做交叉核验，标注信息来源时间，对存在矛盾或无法证实的内容明确标记为"待核实"，不得编造
+      5. 给出综合评估，包含亮点、潜在风险与红旗信号，并按调查目的给出可执行的下一步建议
+      6. 输出一份结构化背景调查简报，包含公司概览、关键信息梳理、风险提示与结论建议
+  startup_idea_validator:
+    prompt: |-
+      生成一个创业 idea 早期验证工作流，对用户输入的创业想法进行市场调研、竞品扫描与 SWOT 分析，输出可投资性评分。
+      要求：
+      1. 用户在开始节点输入：
+         - idea：一段不超过 300 字的创业想法描述
+         - target_market：目标市场（如"中国二三线城市 / 东南亚 / 美国 SMB"）
+         - team_strength：创始团队优势（短文本，可选）
+      2. 工作流按以下 4 个并行模块产出内容：
+         - market_research：目标市场规模、增速、用户痛点、政策风险（结合搜索结果）
+         - competitor_scan：3-5 家相似公司，包含融资金额、商业模式、差异点
+         - swot_analysis：S / W / O / T 四项，每项 3 条要点
+         - business_model：建议的盈利模式与首年关键指标（MAU、客单价、毛利率）
+      3. 综合上述四块由大模型输出：
+         - investability_score：0-100 分（必须给出打分依据，不能凑数）
+         - top_risks：Top 3 主要风险
+         - next_steps：建议的下一步动作（如"做 50 人用户访谈""做 MVP""避免该方向"）
+      4. 最终输出严格 JSON：{market_research, competitor_scan, swot_analysis, business_model, investability_score, top_risks, next_steps}
+  policy_impact_assessment:
+    prompt: |-
+      生成一个政策影响评估工作流，对用户输入的政策原文与指定行业进行多维度影响评估，输出结构化报告。
+      要求：
+      1. 用户在开始节点输入：
+         - policy_text：政策文本（多行文本，可贴入政策原文或链接）
+         - industry：受影响的行业（下拉：新能源汽车 / 互联网平台 / 医药健康 / 房地产 / 教育培训 / 金融科技 / 制造业 / 跨境电商）
+         - time_horizon：评估时间窗（下拉：短期 / 中期 / 长期）
+      2. 工作流先由大模型从政策文本中抽取：
+         - policy_summary：政策核心要点（3-5 条，每条不超过 30 字）
+         - policy_target：政策意图（不超过 80 字）
+         - effective_date：生效时间，若无则填"未明确"
+      3. 再由大模型从 4 个维度评估对所选行业的影响：
+         - cost_impact：成本端影响（含具体环节，如原材料 / 合规 / 物流）
+         - demand_impact：需求端影响
+         - competition_impact：竞争格局影响（包括是否提高准入门槛）
+         - innovation_impact：技术创新与商业模式影响
+         每个维度需要给出 direction（利好 / 利空 / 中性）+ severity（1-5）+ rationale
+      4. 综合给出 overall_impact_score（-5 到 +5 整数，负数代表利空），并输出 winners / losers 名单（公司或细分赛道）
+      5. 提供 3 条 actionable_strategies（可执行的战略建议，不超过 80 字 / 条）
+      6. 最终输出严格 JSON，包含所有上述字段
+
+data_analysis_and_processing:
+  financial_report_analysis_api:
+    prompt: |-
+      生成一个财务报告分析工作流，输入公司名称或股票代码，自动获取最新财务报告并生成分析报告。
+      要求：
+      1. 搜索该公司的财报数据
+      2. 计算关键财务比率（如流动比率、资产负债率等）
+      3. 进行同比和环比分析
+      4. 识别财务风险点
+      5. 生成可视化图表建议
+  customer_segmentation_analysis:
+    input_file: online_retail_sample_500.csv
+    prompt: |-
+      生成一个客户细分分析工作流，通过上传客户交易明细文件，进行RFM模型分析并生成客户分群报告。
+      输入数据为 Online Retail 风格的 CSV，每行为一条订单明细，关键字段：
+      - InvoiceNo：发票号；以 'C' 开头表示退货
+      - InvoiceDate：交易时间，格式为 'YYYY-MM-DD HH:MM:SS'
+      - CustomerID：客户ID，可能为空（需要剔除）
+      - Quantity：数量（退货为负数）
+      - UnitPrice：单价
+      - StockCode / Description / Country：商品与国家信息
+      要求：
+      1. 支持 CSV/Excel 格式的客户交易数据
+      2. 数据预处理：剔除 CustomerID 为空的行；剔除以 'C' 开头的退货发票；行金额 = Quantity × UnitPrice
+      3. 以 max(InvoiceDate) 为基准日，按 CustomerID 聚合计算 RFM 三个指标：
+         - Recency = 基准日 - 最近一次购买日（天）
+         - Frequency = 不同 InvoiceNo 的数量
+         - Monetary = 该客户所有行金额之和
+      4. 使用 K-Means 聚类算法（K=4）进行客户分群，聚类前对 R/F/M 做标准化
+      5. 生成客户分群可视化图表（如 R-F、F-M 二维散点或三维气泡图）,图表用echart格式
+      6. 输出每个分群的 R/F/M 中心值、客户数、典型业务标签（如重要价值/重要保持/一般发展/流失）以及对应的营销建议
+      7. 在answer节点输出Markdown格式的客户分群报告，包括客户分群可视化图表，每个分群的 R/F/M 中心值、客户数、典型业务标签以及对应的营销建议
+  excel_chat_analysis:
+    input_file: stock.xlsx
+    prompt: |
+      生成一个Excel文件交互式分析工作流，支持上传Excel文件，支持用户进行多轮对话，通过自然语言提问对文件内容进行分析。（比如：请根据文件内容绘制K线图）
+      要求：
+      1. 支持Excel文件上传
+      2. 支持数值和文本分析
+      3. 支持图表绘制功能(echart格式)
+      4. 自动识别问题类型并分类处理(纯文本或者数值分析、图表绘制、无关请求)
+      5. answer节点输出分析结果或可视化图表(Markdown格式)
+  excel_extraction_and_echarts_display:
+    input_file: stock.xlsx
+    prompt: 本工作流主要用于处理Excel表格数据，提取特定字段（如'上证指数日线行情'、'open'、'high'、'low'、'close'、'volume'等），并将提取的数据转换为JSON格式。随后，使用ECharts生成近5日上证指数的可视化图表，包括开盘价、最高价、最低价、收盘价和成交量的趋势图。
+  research_data_analysis:
+    input_file: research_data.csv
+    prompt: |
+      生成一个研究数据分析工作流，支持上传研究数据文件，进行统计分析和可视化。
+      要求：
+      1. 支持常见研究数据格式
+      2. 执行描述性统计分析
+      3. 输出一个分析报告html页面，包含分析结果和可视化图表
+  stock_data_analysis:
+    prompt: |-
+      生成一个股票数据分析工作流，通过API获取股票数据，进行技术分析并生成分析报告。
+      要求：
+      1. 输入股票代码（如：300228）,开始和结束日期（如：20260301 和 20260307）
+      1. 支持获取历史K线数据
+      2. 计算技术指标
+      3. 生成趋势分析
+      4. 输出可视化图表页面(html格式，图表用echarts格式)
+  csv_to_json_converter:
+    input_file: brands.csv
+    prompt: |
+      生成一个CSV转JSON的工作流，能够将上传的CSV文件自动转换为标准JSON格式。
+      要求：
+      1. 输入为CSV格式文件
+      2. 自动识别CSV表头作为JSON键名
+      3. 输出结构化的JSON数据，保持原始数据完整性
+  json_repair:
+    prompt: |
+      生成一个JSON修复工作流，能够自动修复格式错误的JSON字符串。
+      要求：
+      1. 输入为可能格式错误的JSON字符串
+      2. 自动检测并修复JSON格式问题
+      3. 输出修复后的标准JSON格式字符串
+  xml_to_json_converter:
+    input_file: data.xml
+    prompt: |
+      生成一个XML转JSON的工作流，能够将上传的XML文件自动转换为标准JSON格式.
+      要求：
+      1. 输入为XML格式文件
+      2. 自动解析XML标签结构并转换为嵌套JSON对象
+      3. 输出保留原始XML层级关系的JSON数据
+  data_quality_inspection:
+    input_file: orders.csv
+    prompt: |-
+      生成一个数据质量检查工作流，对用户上传的 CSV 数据文件进行多维度质量校验，并生成结构化的质量报告。
+      要求：
+      1. 用户输入一个 CSV 数据文件
+      2. 对 CSV 内容执行以下 5 项检查：
+         - 总行数与总列数统计
+         - 每列的缺失值（空字符串或空值）数量及占比
+         - 完全重复行的数量
+         - 每列数据类型推断（整数 / 小数 / 日期 / 字符串），并统计该列中不符合主导类型的异常值数量
+         - 主键候选列识别（唯一值占比 >= 99% 的列）
+      3. 把检查结果整理成一份结构化的 JSON 指标对象，字段包括：总行数、总列数、缺失值汇总、完全重复行数、各列类型推断、主键候选列列表
+      4. 基于上述结构化指标，再生成一份Markdown 格式的质量报告，包含：
+         - 数据质量评分（0-100 分）
+         - 风险等级（低 / 中 / 高）
+         - 主要问题清单与修复建议
+      5. 最终输出两个字段：结构化的质量指标 JSON、Markdown 格式的质量报告
+  data_visualization_flow:
+    input_file: financial_report.xlsx
+    prompt: |-
+      通过工作流实现数据可视化展示。
+      要求：
+      1. 接收上传的数据文件（如Excel或CSV）
+      2. 解析数据内容，识别数据类型和结构
+      3. 根据数据类型自动选择合适的图表类型（如折线图、柱状图、饼图等）
+      4. 生成可视化图表(echart格式)
+      5. 在answer节点中输出Markdown格式的可视化分析报告，包括图表展示和图表的简要说明和分析
+  time_series_forecasting:
+    input_file: sales_timeseries.csv
+    prompt: |-
+      生成一个时序数据预测工作流，对用户上传的日级时序数据进行未来 7 天预测，并给出置信区间。
+      输入数据为 CSV，列结构：
+      - date：日期，格式 YYYY-MM-DD
+      - sales：当日销售额（数字）
+      要求：
+      1. 使用代码节点完成以下计算：
+         - 计算整体趋势（最近 30 天 vs 最早 30 天的均值差与年化增长率估算）
+         - 识别周内季节性（按 weekday 分组的平均值偏移）
+         - 使用滚动均值 + 线性趋势 + 周季节项的简单组合模型（不依赖 statsmodels / prophet）输出未来 7 天预测点 forecast_points
+         - 对每个预测点输出 95% 置信区间（基于历史残差的 1.96 × σ）
+      2. 输出一段不超过 80 字的中文"预测要点"（forecast_summary），说明趋势方向、未来 7 天总销售估计、不确定性区间
+      3. 提供 ECharts 折线图配置（option JSON），包含历史 + 预测两条线 + 阴影区间
+      4. 最终输出三个字段：forecast_points 数组、forecast_summary 文本、echarts_option 对象
+  geo_clustering_analysis:
+    input_file: store_locations.csv
+    prompt: |-
+      生成一个地理位置聚类分析工作流，对用户上传的含经纬度的门店分布数据使用 DBSCAN 聚类，输出聚类报告。
+      输入数据为 CSV，字段：
+      - store_id：门店编号
+      - city_hint：城市标签（仅作参考，可能为 Unknown）
+      - latitude：纬度
+      - longitude：经度
+      - open_year：开业年份
+      要求：
+      1. 使用代码节点完成 DBSCAN 聚类（建议参数 eps=0.5（度）/ min_samples=5；不可调用 sklearn 之外的第三方库，可用 numpy + 标准库手写）
+      2. 对每个聚类输出：
+         - cluster_id：从 0 开始编号；-1 表示噪声点
+         - store_count：该聚类的门店数
+         - center_lat / center_lng：聚类中心（均值）
+         - dominant_city：聚类内出现次数最多的 city_hint
+         - earliest_open_year / latest_open_year：聚类内开业年份的极值
+      3. 单独列出噪声点（noise）的 store_id 数组
+      4. 提供一份 Markdown 报告 cluster_report，包含：
+         - 总聚类数与噪声点占比
+         - 各聚类的业务洞察（按 dominant_city 给出建议）
+      5. 最终输出三个字段：clusters 数组、noise 数组、cluster_report Markdown 文本
+  ab_test_analyzer:
+    input_file: ab_test_results.csv
+    prompt: |-
+      生成一个 A/B 测试结果分析工作流，对用户上传的实验明细数据进行假设检验，输出统计学结论与业务建议。
+      输入数据为 CSV，字段：
+      - user_id：用户 ID
+      - group：实验组别（A 为对照，B 为实验）
+      - converted：是否转化（0 / 1）
+      - revenue：用户支付金额（未转化为 0）
+      要求：
+      1. 使用代码节点完成以下统计计算（不依赖 scipy 也要能跑，可手算）：
+         - 两组样本量、转化率、ARPU（人均收入）
+         - 转化率差异的绝对值与相对提升（lift）
+         - 对转化率差异做双尾比例 z 检验，输出 z_value 与 p_value
+         - 对 ARPU 差异做双尾 Welch's t 检验，输出 t_value 与 p_value
+         - 给出转化率差值的 95% 置信区间（下/上界）
+      2. 由大模型把统计结果翻译成业务结论（business_conclusion，不超过 120 字），明确指出：
+         - 是否在 α=0.05 显著
+         - 实际业务影响大小（lift 是否值得全量上线）
+         - 数据质量风险提示（样本量是否足够 / 是否存在异常值）
+      3. 提供一段 launch_recommendation：建议全量上线 / 继续观察 / 拒绝上线，并附理由
+      4. 最终输出严格 JSON：{metrics, statistics, business_conclusion, launch_recommendation}
+
+conversation_and_interaction:
+  memory_test:
+    prompt: |-
+      生成一个记忆测试工作流，用于测试和评估用户的记忆能力。
+      要求：
+      1. 提供用户基本信息（如姓名、年龄、性别等）
+      2. 根据用户信息生成记忆测试问题（每一轮的问题不同）
+      3. 用户回答问题后，评估用户的记忆表现并给出反馈
+      5. 支持多轮对话
+  customer_service_chatbot:
+    prompt: |-
+      生成一个客户服务聊天机器人工作流，用于处理企业客户咨询。
+      要求：
+      1. 支持多轮对话理解客户意图
+      2. 自动分类咨询类型（产品、售后、账单等）
+      3. 提供标准话术库支持
+      4. 可查询知识库获取专业解答
+      5. 记录对话历史并生成服务报告
+  financial_advisor_agent:
+    prompt: |-
+      创建一个财务顾问Agent工作流，通过多轮对话了解用户的财务状况和投资目标。
+      要求：
+      1. 支持多轮对话收集用户收入、支出和风险偏好
+      2. 分析用户当前财务状况
+      3. 根据用户目标提供个性化投资建议
+      4. 输出结构化的财务规划报告
+  travel_plan_agent:
+    prompt: |-
+      生成一个旅行规划Agent工作流，通过多轮对话收集用户旅行需求，包括目的地、旅行时长和预算等信息。
+      要求：
+      1. 支持多轮对话交互
+      2. 收集必要旅行信息
+      3. 根据用户需求生成个性化旅行建议
+      4. 输出结构化旅行计划
+  negotiation_coach_bot:
+    prompt: |-
+      生成一个谈判模拟与教练工作流，让用户在指定的谈判场景中与机器人进行多轮博弈，并实时获得话术反馈和综合评估。
+      要求：
+      1. 用户在开始节点输入：
+         - scenario：谈判场景（下拉：租房谈降租 / 薪资谈判 / 供应商砍价 / 客户合同条款 / 二手交易议价）
+         - user_role：用户在场景中的身份（如"租客""候选人""采购经理"）
+         - user_goal：用户的目标（短文本，例如"月租从 8000 降到 7000，加电梯使用费"）
+         - difficulty：对手强度（下拉：容易 / 适中 / 强硬）
+         - rounds：计划进行的对话轮数（数字 3-10，默认 6）
+      2. 工作流先由大模型生成"对手画像"（counterpart_profile）：含身份、性格、利益诉求、底线（不公开给用户）、典型话术风格；该画像在整个对话过程中保持一致，不可中途改变立场
+      3. 每一轮：
+         - bot 以对手身份发起或回应
+         - 用户用文本输入自己的话术
+         - bot 在内部产出两段独立输出：
+            a) counterpart_reply：对手的下一句回应（贴合 counterpart_profile，可适度让步或反击）
+            b) coach_feedback：教练视角点评（仅在轮内反馈，对手不可知），不超过 80 字，指出本轮话术的得分（1-10）+ 至少 1 条改进建议 + 推荐的下一句话术示例
+      4. 全部轮次结束后输出综合评估：
+         - 是否达成 user_goal、达成度百分比
+         - 4 个维度评分（开局气势 / 信息收集 / 让步策略 / 收尾固化），每项 1-10 + 理由
+         - 3 条 BATNA 建议（即"如果谈崩了你应该有什么备选方案"）
+         - 复盘下次可改进的 top 3 话术片段（含 before / after 改写）
+      5. 最终输出包含 counterpart_profile、完整 dialogue（每轮含 user / counterpart_reply / coach_feedback / round_score）、final_evaluation 三个字段
+  healthcare_chatbot:
+    input_file: illnese.docx
+    prompt: |-
+      生成一个健康管理聊天机器人工作流，帮助慢病患者进行健康管理和日常答疑。
+      要求：
+      1. 获取包含患者基本信息、疾病信息和生活习惯的文件
+      2. 提供用药提醒和健康建议
+      3. 支持主动触达和关怀
+      4. 对聊天内容进行质量检查
+  task_decomposition:
+    prompt: |-
+      通过工作流实现将复杂任务进行拆解成子问题，逐步解答子问题，最后聚合答案得到最终答案。
+      要求：
+      1. 分析问题，提取问题的最终目的
+      2. 分解问题为简单子问题或步骤
+      3. 为每一个解题步骤提供简单清晰的名称，帮助理解解题过程的结构
+      4. 对每个步骤的任务进行简洁描述，确保问题解决的路径逐步清晰
+      5. 按照格式输出步骤和描述
+      6. 如果是简单问题，不要硬拆，按1个步骤处理
+  interview_simulator:
+    prompt: |-
+      生成一个模拟面试聊天机器人工作流，根据用户指定的岗位与轮次进行多轮提问与反馈。
+      要求：
+      1. 用户在开始节点输入：
+         - 目标岗位（短文本，例如"后端开发工程师 / 产品经理 / 数据分析师"）
+         - 面试题型偏好（多选：技术题 / 行为题 / 案例题）
+         - 计划轮数（数字 3-10，默认 5）
+      2. 每一轮：
+         - 机器人根据岗位与题型偏好抛出 1 个新问题
+         - 用户回答（多行文本）
+         - 机器人对答案进行打分（1-10 分）并给出不超过 80 字的反馈，包括：内容深度 / 结构清晰度 / 表达表现
+         - 若用户答案出现明显错误事实或安全风险（如代码注入 / 违规建议），需立即指出
+      3. 全部轮次结束后输出综合评估：总分、按维度的雷达图数据、3 条强项、3 条提升建议
+      4. 最终输出包含每轮 Q&A 与反馈的对话记录，以及综合评估结果；禁止跳过中间反馈，必须每轮都有反馈
+  language_tutor:
+    prompt: |-
+      生成一个口语 / 写作语言学习助手工作流，通过多轮对话帮助用户练习目标语言并给出纠错。
+      要求：
+      1. 用户在开始节点输入：
+         - 目标语言（下拉：英语 / 日语 / 法语 / 西班牙语 / 韩语）
+         - 语言水平（下拉：A1 / A2 / B1 / B2 / C1 / C2）
+         - 练习主题（短文本，例如"机场办理登机牌""向客户介绍产品"）
+      2. 每一轮：
+         - 助手以目标语言抛出一个开放问题或情景对话引导
+         - 用户用目标语言回答
+         - 助手输出三段内容：
+            a) corrections：用户原句的逐句纠错（指出语法 / 拼写 / 表达不自然处，每条含 before / after / 解释）
+            b) vocab_tips：本轮建议掌握的 3 个高频词或表达（含中文含义与例句）
+            c) follow_up：用目标语言继续追问下一个问题
+      3. 至少进行 3 轮对话，结束后输出一份学习报告：本次错误类型分布、推荐复习重点、整体水平评估
+      4. 助手所有回复中的目标语言内容必须地道、贴合用户当前水平，不能超纲使用过难词汇
+  legal_qna_assistant:
+    prompt: |-
+      生成一个法律咨询问答助手工作流，通过多轮对话厘清用户问题并给出"通俗法律解答"。
+      要求：
+      1. 工作流不替代专业律师，仅提供普法性回答，必须在最终回答末尾加入风险提示
+      2. 用户首轮提出一个法律问题（如"租房房东不退押金怎么办"）
+      3. 助手按以下流程推进：
+         a) 信息澄清：如缺少关键事实（如所在省份 / 合同条款 / 涉及金额），需要主动追问，最多追问 2 轮
+         b) 法律定性：识别问题所属法律领域（民事 / 刑事 / 行政 / 劳动 / 婚姻家庭 / 知识产权）
+         c) 法条检索：列出 1-3 条相关法律条款（条款名 + 简要原文），不可编造法条
+         d) 通俗解答：用不超过 200 字、避免法律术语堆砌的方式说明用户应如何处理
+         e) 行动清单：3-5 步可执行建议（如"先发送书面催告""保留聊天记录""向街道办申请调解"）
+         f) 风险提示：固定的免责声明 + 是否建议聘请律师
+      4. 最终输出包含完整对话历史、法律定性、引用法条、通俗解答、行动清单、风险提示六个字段
+      

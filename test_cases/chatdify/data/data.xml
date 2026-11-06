@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 测试用数据文件 -->
+<test_data>
+    <users>
+        <user id="1001" active="true">
+            <name>张三</name>
+            <email>zhangsan@example.com</email>
+            <roles>
+                <role>admin</role>
+                <role>user</role>
+            </roles>
+            <created_at>2023-07-20T08:30:00Z</created_at>
+        </user>
+
+        <user id="1002" active="false">
+            <name>李四</name>
+            <email>lisi@test.org</email>
+            <roles>
+                <role>guest</role>
+            </roles>
+            <created_at>2023-07-21T14:15:22Z</created_at>
+        </user>
+    </users>
+
+    <products>
+        <product sku="A123">
+            <name>测试商品A</name>
+            <price currency="CNY">99.99</price>
+            <stock>150</stock>
+        </product>
+        
+        <product sku="B456">
+            <name>示例商品B</name>
+            <price currency="USD">19.99</price>
+            <stock>0</stock>
+        </product>
+    </products>
+
+    <metadata>
+        <timestamp>2023-07-25T10:00:00+08:00</timestamp>
+        <version>1.0.0</version>
+        <description>测试用示例XML文件</description>
+    </metadata>
+</test_data>

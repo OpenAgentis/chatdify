@@ -1,0 +1,290 @@
+app:
+  description: 本工作流主要是使用excel表格提取(文件提取）以及通过echarts展示近5日上证指数
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: excel表格提取+echarts展示
+  use_icon_as_answer_icon: true
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1740472103530-source-1740472111460-target
+      source: '1740472103530'
+      sourceHandle: source
+      target: '1740472111460'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 1740472111460-source-1740473717276-target
+      source: '1740472111460'
+      sourceHandle: source
+      target: '1740473717276'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1740473717276-source-1740476771273-target
+      source: '1740473717276'
+      sourceHandle: source
+      target: '1740476771273'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: answer
+      id: 1740476771273-source-answer-target
+      source: '1740476771273'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: 文件名
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: file
+      height: 88
+      id: '1740472103530'
+      position:
+        x: -260.96512808648583
+        y: 246.99716857805686
+      positionAbsolute:
+        x: -260.96512808648583
+        y: 246.99716857805686
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#1740476771273.result#}}'
+        desc: ''
+        selected: true
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 101
+      id: answer
+      position:
+        x: 1017
+        y: 252
+      positionAbsolute:
+        x: 1017
+        y: 252
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: ''
+        is_array_file: false
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - '1740472103530'
+        - file
+      height: 90
+      id: '1740472111460'
+      position:
+        x: 82
+        y: 257
+      positionAbsolute:
+        x: 82
+        y: 257
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v3-241226
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - edition_type: basic
+          id: 2a959ee9-744e-4f76-a1d8-be5594785d6e
+          role: system
+          text: "你是一个文档提取专家，请根据用户上传文档内容{{#1740472111460.text#}}提取该表格里面的数据返回json格式数据。\n\
+            其中内容格式‘上证指数日线行情’、‘open’、‘high’、‘low’、‘close’、‘volume’字段返回信息，返回的结果信息以json格式返回\n\
+            \ 返回数据格式如下：\n{\n\"上证指数日线行情\": [\n{\n\"date\": \"2025-02-19 00:00:00\"\
+            ,\n\"open\": 3320.78,\n\"high\": 3352.09,\n\"low\": 3320.58,\n\"close\"\
+            : 3351.54,\n\"volume\": 50291300000\n},\n{\n\"date\": \"2025-02-20 00:00:00\"\
+            ,\n\"open\": 3347.59,\n\"high\": 3355.56,\n\"low\": 3338.03,\n\"close\"\
+            : 3350.78,\n\"volume\": 50435700000\n}\n]\n}\n"
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 96
+      id: '1740473717276'
+      position:
+        x: 384
+        y: 257
+      positionAbsolute:
+        x: 384
+        y: 257
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\nimport os\nimport re\n\ndef main(json_str: str) -> dict:\n\
+          \    try:\n        # 预处理：清理非 JSON 部分\n        json_match = re.search(r'\\\
+          {.*\\}', json_str, re.DOTALL)\n        if not json_match:\n            return\
+          \ {\"result\": \"Error: Invalid JSON format\"}\n        \n        # 提取合法的\
+          \ JSON 部分\n        cleaned_json_str = json_match.group(0)\n        \n  \
+          \      # 解析JSON数据\n        data = json.loads(cleaned_json_str)\n       \
+          \ filename = data.get(\"filename\", \"stock_chart.html\")\n        stock_data\
+          \ = data.get(\"上证指数日线行情\", [])\n        \n        # 准备数据格式\n        dates\
+          \ = [item['date'].split(' ')[0] for item in stock_data]  # 提取日期部分（去掉时间）\n\
+          \        open_prices = [item['open'] for item in stock_data]\n        close_prices\
+          \ = [item['close'] for item in stock_data]\n        low_prices = [item['low']\
+          \ for item in stock_data]\n        high_prices = [item['high'] for item\
+          \ in stock_data]\n        volumes = [item['volume'] / 1e8 for item in stock_data]\
+          \  # 转换为亿单位\n        \n        # 构建ECharts配置\n        echarts_config = {\n\
+          \            \"title\": {\n                \"text\": \"上证指数日线行情\"\n    \
+          \        },\n            \"legend\": {\n                \"data\": [\"开盘价\"\
+          , \"最高价\", \"最低价\", \"收盘价\", \"成交量\"]\n            },\n            \"tooltip\"\
+          : {},\n            \"dataset\": {\n                \"source\": [\n     \
+          \               [\"日期\", \"开盘价\", \"最高价\", \"最低价\", \"收盘价\", \"成交量\"],\n\
+          \                    *[[dates[i], open_prices[i], high_prices[i], low_prices[i],\
+          \ close_prices[i], volumes[i]] \n                      for i in range(len(dates))]\n\
+          \                ]\n            },\n            \"xAxis\": [\n         \
+          \       {\"type\": \"category\", \"gridIndex\": 0},\n                {\"\
+          type\": \"category\", \"gridIndex\": 1}\n            ],\n            \"\
+          yAxis\": [\n                {\n                    \"gridIndex\": 0,\n \
+          \                   \"name\": \"价格趋势（单位：点）\"\n                },\n     \
+          \           {\n                    \"gridIndex\": 1,\n                 \
+          \   \"name\": \"成交量（单位：亿）\"\n                }\n            ],\n       \
+          \     \"grid\": [\n                {\"bottom\": \"55%\"},\n            \
+          \    {\"top\": \"55%\"}\n            ],\n            \"series\": [\n   \
+          \             # 第一个网格中的折线图系列\n                {\"type\": \"line\", \"seriesLayoutBy\"\
+          : \"row\", \"name\": \"开盘价\"},\n                {\"type\": \"line\", \"\
+          seriesLayoutBy\": \"row\", \"name\": \"最高价\"},\n                {\"type\"\
+          : \"line\", \"seriesLayoutBy\": \"row\", \"name\": \"最低价\"},\n         \
+          \       {\"type\": \"line\", \"seriesLayoutBy\": \"row\", \"name\": \"收盘价\"\
+          },\n                # 第二个网格中的柱状图系列\n                {\"type\": \"bar\",\
+          \ \"xAxisIndex\": 1, \"yAxisIndex\": 1, \"name\": \"成交量\"}\n           \
+          \ ]\n        }\n        \n        # 生成输出文件\n        output = \"```echarts\\\
+          n\" + json.dumps(echarts_config, indent=2, ensure_ascii=False) + \"\\n```\"\
+          \n        \n        # 返回结果\n        return {\n            \"result\": output\n\
+          \        }\n    \n    except Exception as e:\n        return {\n       \
+          \     \"result\": f\"Error: {str(e)}\"\n        }"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: erchart代码转换生成
+        type: code
+        variables:
+        - value_selector:
+          - '1740473717276'
+          - text
+          variable: json_str
+      height: 52
+      id: '1740476771273'
+      position:
+        x: 693.5717319380653
+        y: 257
+      positionAbsolute:
+        x: 693.5717319380653
+        y: 257
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: -10.400499055005412
+      y: -15.625242345168317
+      zoom: 1.1665290443361072

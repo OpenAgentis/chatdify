@@ -1,0 +1,1076 @@
+nodes:
+- data:
+    desc: ''
+    selected: false
+    template: "<h1>{{ arg0 }}</h1>\r\n\r\n<div>{{ arg10 }}</div>\r\n\r\n<h2>{{ arg1}}</h2>\r\
+      \n<div>{{ arg5 }}</div>\r\n\r\n<h2>{{ arg2 }}</h2>\r\n<div>{{ arg6 }}</div>\r\
+      \n\r\n<h2>{{ arg3 }}</h2>\r\n<div>{{ arg7 }}</div>\r\n\r\n<h2>{{ arg4 }}</h2>\r\
+      \n<div>{{ arg8 }}</div>\r\n\r\n<div>{{ arg11 }}</div>"
+    title: 总结文档
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1739112773493'
+      - subtitle1
+      variable: arg1
+    - value_selector:
+      - '1739112773493'
+      - subtitle2
+      variable: arg2
+    - value_selector:
+      - '1739112773493'
+      - subtitle3
+      variable: arg3
+    - value_selector:
+      - '1739112773493'
+      - subtitle4
+      variable: arg4
+    - value_selector:
+      - llm
+      - text
+      variable: arg5
+    - value_selector:
+      - '17391136443240'
+      - text
+      variable: arg6
+    - value_selector:
+      - '17391136486630'
+      - text
+      variable: arg7
+    - value_selector:
+      - '17391136521390'
+      - text
+      variable: arg8
+    - value_selector:
+      - conversation
+      - research_theme
+      variable: arg0
+    - value_selector:
+      - '1739192479032'
+      - text
+      variable: arg10
+    - value_selector:
+      - '1739193987241'
+      - text
+      variable: arg11
+  id: '1739113756598'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '{{ basic_card }}
+
+      {{ text }}
+
+      {{ image }}
+
+      {# {{ line }} #}
+
+      {# {{ qrcode }} #}
+
+      {{ blocks }}'
+    title: 请求体合并 - 1
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721651774843'
+      - output
+      variable: basic_card
+    - value_selector:
+      - '1721651840885'
+      - output
+      variable: text
+    - value_selector:
+      - '1721652076777'
+      - output
+      variable: image
+    - value_selector:
+      - '1721652199770'
+      - output
+      variable: line
+    - value_selector:
+      - '1721652331948'
+      - output
+      variable: qrcode
+    - value_selector:
+      - '1721652404241'
+      - output
+      variable: blocks
+  id: '1721652505347'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"texts\": [\n        {\n            \"x\": 80,\n            \"\
+      y\": 120,\n            \"text\": \"{{ content }}\",\n            \"width\":\
+      \ 920,\n            \"font\": \"Alibaba-PuHuiTi-Heavy\",\n            \"fontSize\"\
+      : \"{{ font_size|float }}\",\n            \"lineHeight\": 24,\n            \"\
+      lineSpacing\": 1.3,\n            \"color\": \"{{ detail_color }}\",\n      \
+      \      \"textAlign\": \"left\",\n            \"zIndex\": 1\n        },\n   \
+      \     {\n            \"x\": 540,\n            \"y\": 1240,\n            \"text\"\
+      : \"{{ your_name }}\",\n            \"width\": 800,\n            \"font\": \"\
+      Alibaba-PuHuiTi-Heavy\",\n            \"fontSize\": 60,\n            \"lineHeight\"\
+      : 24,\n            \"lineSpacing\": 1.3,\n            \"color\": \"{{ name_color\
+      \ }}\",\n            \"textAlign\": \"center\",\n            \"zIndex\": 1\n\
+      \        }\n    ],\n"
+    title: 小红书 / 微博封面图的文本
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721697843763'
+      - text
+      variable: content
+    - value_selector:
+      - '1721690415426'
+      - output
+      variable: your_name
+    - value_selector:
+      - '1721696385127'
+      - output
+      variable: detail_color
+    - value_selector:
+      - '1721696847822'
+      - output
+      variable: name_color
+    - value_selector:
+      - '1721698170033'
+      - output
+      variable: font_size
+  id: '1721651840885'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"texts\": [\n        {\n            \"x\": 240,\n            \"\
+      y\": 220,\n            \"text\": \"{{ content }}\",\n            \"width\":\
+      \ 1440,\n            \"font\": \"Alibaba-PuHuiTi-Heavy\",\n            \"fontSize\"\
+      : \"{{ font_size|float }}\",\n            \"lineHeight\": 24,\n            \"\
+      lineSpacing\": 1.3,\n            \"color\": \"{{ detail_color }}\",\n      \
+      \      \"textAlign\": \"left\",\n            \"zIndex\": 1\n        },\n   \
+      \     {\n            \"x\": 960,\n            \"y\": 860,\n            \"text\"\
+      : \"{{ your_name }}\",\n            \"width\": 800,\n            \"font\": \"\
+      Alibaba-PuHuiTi-Heavy\",\n            \"fontSize\": 60,\n            \"lineHeight\"\
+      : 24,\n            \"lineSpacing\": 1.3,\n            \"color\": \"{{ name_color\
+      \ }}\",\n            \"textAlign\": \"center\",\n            \"zIndex\": 1\n\
+      \        }\n    ],\n"
+    title: Bilibili / Youtube 视频封面的文本
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721697843763'
+      - text
+      variable: content
+    - value_selector:
+      - '1721690415426'
+      - output
+      variable: your_name
+    - value_selector:
+      - '1721696385127'
+      - output
+      variable: detail_color
+    - value_selector:
+      - '1721696847822'
+      - output
+      variable: name_color
+    - value_selector:
+      - '1721698170033'
+      - output
+      variable: font_size
+  id: '1721725416818'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "<div style=\"width: 600px 100%; margin: 0px auto; padding: 0px; font-family:\
+      \ '隶书'; font-size: 2rem; border-radius: 12px; text-align: center;\">\r\n   \
+      \ <div style=\"background-color: red; text-align: center; background-size: 95px;\
+      \ background-repeat: repeat-x; margin: 0px auto; padding: 0px; display: inline-block;\
+      \ height: 45px;\">\r\n        <span style=\"margin-left: 15px; margin-right:\
+      \ 15px;\">{{ reversed_banner }}</span>\r\n    </div>\r\n    <div style=\"position:\
+      \ absolute; top: 125px; left: 50%; margin: 10px auto; transform: translate(-50%,\
+      \ -50%) rotate(45deg); width: 45px; height: 45px; background-color: red; background-size:\
+      \ 95px;\">\r\n        <span style=\"position: absolute; top: 0px; left: 5px;\
+      \ transform: rotate(135deg);\">{{ summary }}</span>\r\n    </div>\r\n    <div\
+      \ style=\"min-width: 200px; max-width: 500px; width: 35%; margin: 0px auto;\
+      \ padding: 0px;\">\r\n        <div style=\"background-color: red; background-size:\
+      \ 95px; text-align: center; float: left; width: 45px;\">\r\n            {{ bottom\
+      \ }}\r\n        </div>\r\n        <div style=\"background-color: red; background-size:\
+      \ 95px; text-align: center; float: right; width: 45px;\">\r\n            {{\
+      \ top }}\r\n        </div>\r\n    </div>\r\n</div>"
+    title: 模板转换
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1737014565681'
+      - top
+      variable: top
+    - value_selector:
+      - '1737014565681'
+      - bottom
+      variable: bottom
+    - value_selector:
+      - '1737014565681'
+      - banner
+      variable: banner
+    - value_selector:
+      - '1737014565681'
+      - reversed_banner
+      variable: reversed_banner
+    - value_selector:
+      - '1737014565681'
+      - summary
+      variable: summary
+  id: '1737015751556'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "{{ arg1 }}\r\n\r\n## 章节速览\r\n{{arg2}}\r\n\r\n## 说话人总结\r\n{{arg3}}\r\
+      \n\r\n## 纪要\r\n{{arg4}}"
+    title: 模板转换
+    type: template-transform
+    variables:
+    - value_selector:
+      - '17441028021120'
+      - text
+      variable: arg1
+    - value_selector:
+      - '1744102698778'
+      - text
+      variable: arg2
+    - value_selector:
+      - '17441027628630'
+      - text
+      variable: arg3
+    - value_selector:
+      - '17441029309130'
+      - text
+      variable: arg4
+  id: '1744107784971'
+  selected: false
+  type: custom
+- data:
+    desc: 将用户输出转换为prompt
+    selected: false
+    template: "Engage in a conversation about the research paper based on the following\
+      \ inputs and instructions:\r\n\r\n<paper_info>\r\n{{ last_record }}\r\n</paper_info>\r\
+      \n\r\nInteraction Guidelines:\r\n\r\n1. Carefully analyze the user's query:\r\
+      \n   <user_query>\r\n   {{ query }}\r\n   </user_query>\r\n\r\n2. Determine\
+      \ the specific aspect of the paper the query relates to (e.g., research question,\
+      \ methodology, results, implications).\r\n\r\n\r\n3. Formulate a response based\
+      \ on the information provided in the paper summary, methodology analysis, and\
+      \ evaluation.\r\n\r\n\r\n4. If the query requires information beyond what's\
+      \ provided, state this limitation clearly.\r\n\r\n\r\n5. Offer additional insights\
+      \ or explanations that might be relevant to the user's question, drawing from\
+      \ your understanding of the research context.\r\n\r\n\r\nResponse Strategies:\r\
+      \n\r\n\r\n1. For questions about methodology:\r\n   - Refer to the methodology\
+      \ analysis for detailed explanations.\r\n   - Explain the rationale behind the\
+      \ chosen methods if discussed.\r\n   - Highlight strengths and limitations of\
+      \ the methodology.\r\n\r\n\r\n2. For questions about results and findings:\r\
+      \n   - Provide clear, concise summaries of the key findings.\r\n   - Explain\
+      \ the significance of the results in the context of the research question.\r\
+      \n   - Mention any limitations or caveats associated with the findings.\r\n\r\
+      \n\r\n3. For questions about implications or impact:\r\n   - Discuss both theoretical\
+      \ and practical implications of the research.\r\n   - Relate the findings to\
+      \ broader issues in the field if applicable.\r\n   - Mention any future research\
+      \ directions suggested by the paper.\r\n\r\n\r\n4. For comparative questions:\r\
+      \n   - If the information is available, compare aspects of this paper to other\
+      \ known research.\r\n   - If not available, clearly state that such comparison\
+      \ would require additional information.\r\n\r\n\r\n5. For technical or specialized\
+      \ questions:\r\n   - Provide explanations that balance accuracy with accessibility.\r\
+      \n   - Define technical terms when first used.\r\n   - Use analogies or examples\
+      \ to clarify complex concepts when appropriate.\r\n\r\n\r\nLanguage and Expression:\r\
+      \n\r\n\r\n- Use clear, concise academic language.\r\n- Maintain a balance between\
+      \ scholarly rigor and accessibility.\r\n- When appropriate, use topic sentences\
+      \ to structure your response clearly.\r\n\r\n\r\nHandling Limitations:\r\n\r\
+      \n\r\n- If a question goes beyond the scope of the provided information, clearly\
+      \ state this limitation.\r\n- Suggest general directions for finding such information\
+      \ without making unfounded claims.\r\n- Be honest about the boundaries of your\
+      \ knowledge based on the given paper analysis.\r\n\r\n\r\nOutput Language:\r\
+      \nGenerate the response in the following language:\r\n<output_language>\r\n\
+      {{ language }}\r\n</output_language>\r\n\r\n\r\nTranslation Instructions:\r\n\
+      - If the output language is not English, translate all parts except:\r\n  a)\
+      \ Technical terms (provide translations in parentheses upon first use)\r\n \
+      \ b) Proper nouns (e.g., names of theories, methods, or authors)\r\n- Maintain\
+      \ the academic tone and technical accuracy in the translation.\r\n\r\n\r\nFinal\
+      \ Reminders:\r\n1. Strive for accuracy in all your responses.\r\n2. Encourage\
+      \ deeper understanding by suggesting related aspects the user might find interesting.\r\
+      \n3. If a query is ambiguous, ask for clarification before providing a response.\r\
+      \n4. Maintain an objective tone, particularly when discussing the paper's strengths\
+      \ and limitations.\r\n5. If appropriate, suggest areas where further research\
+      \ might be beneficial.\r\n6. Your responses should be human reading friendly\
+      \ and the display form and render will be markdown\r\n\r\n\r\nYour goal is to\
+      \ facilitate a productive, insightful dialogue about the research paper, enhancing\
+      \ the user's understanding and encouraging critical thinking about the research."
+    title: 格式化输入
+    type: template-transform
+    variables:
+    - value_selector:
+      - conversation
+      - language
+      variable: language
+    - value_selector:
+      - sys
+      - query
+      variable: query
+    - value_selector:
+      - '1729478231227'
+      - last_record
+      variable: last_record
+  id: '1729478682201'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "<paper_summary>\r\n{{ text }}\r\n</paper_summary>\r\n\r\n<methodology_analysis>\r\
+      \n{{ text_1 }}\r\n</methodology_analysis>\r\n\r\n<paper_evaluation>\r\n{{ text_2\
+      \ }}\r\n</paper_evaluation>"
+    title: 汇总精读结果
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1729477002992'
+      - text
+      variable: text
+    - value_selector:
+      - '1729477065415'
+      - text
+      variable: text_1
+    - value_selector:
+      - '1729477130336'
+      - text
+      variable: text_2
+  id: '1729477818154'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\r\n<svg\
+      \ width=\"800\" height=\"1732\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"\
+      0 0 400 866\" style=\"background-color: #f9f9f9;\">\r\n  <!-- 标题 -->\r\n  <text\
+      \ x=\"50%\" y=\"10%\" text-anchor=\"middle\" font-size=\"32\" font-family=\"\
+      Serif\" font-weight=\"bold\" fill=\"#000\">\r\n    {{topic}}\r\n  </text>\r\n\
+      \  \r\n  <!-- 横线 -->\r\n  <line x1=\"10%\" x2=\"90%\" y1=\"15%\" y2=\"15%\"\
+      \ stroke=\"#aaa\" stroke-width=\"1\" />\r\n  \r\n  <!-- 副标题 -->\r\n  <text x=\"\
+      50%\" y=\"20%\" text-anchor=\"middle\" font-size=\"16\" font-family=\"Arial\"\
+      \ fill=\"#555\">\r\n    {{text}}\r\n  </text>\r\n  \r\n  <!-- 描述文字 -->\r\n \
+      \ <text x=\"50%\" y=\"35%\" text-anchor=\"middle\" font-size=\"18\" font-family=\"\
+      Serif\" font-style=\"italic\" fill=\"#000\">\r\n    {{result}}\r\n  </text>\r\
+      \n\r\n  <!-- 波浪曲线 -->\r\n  <path d=\"M 30 400 Q 110 300 190 400 T 350 400\"\
+      \ fill=\"none\" stroke=\"red\" stroke-width=\"2\" />\r\n\r\n  <!-- 点 -->\r\n\
+      \  <circle cx=\"80\" cy=\"350\" r=\"5\" fill=\"#555\" />\r\n  <circle cx=\"\
+      160\" cy=\"400\" r=\"5\" fill=\"#555\" />\r\n  <circle cx=\"240\" cy=\"350\"\
+      \ r=\"5\" fill=\"#555\" />\r\n\r\n  <!-- 方块 -->\r\n  <rect x=\"310\" y=\"380\"\
+      \ width=\"20\" height=\"20\" fill=\"#000\" />\r\n\r\n  \r\n  <!-- 图标占位符 -->\r\
+      \n  <!--<g transform=\"translate(50, 500)\">\r\n    <rect x=\"0\" y=\"0\" width=\"\
+      40\" height=\"40\" fill=\"#ddd\" />\r\n    <rect x=\"50\" y=\"0\" width=\"40\"\
+      \ height=\"40\" fill=\"#ddd\" />\r\n    <rect x=\"100\" y=\"0\" width=\"40\"\
+      \ height=\"40\" fill=\"#ddd\" />\r\n    <rect x=\"150\" y=\"0\" width=\"40\"\
+      \ height=\"40\" fill=\"#ddd\" />\r\n    <rect x=\"200\" y=\"0\" width=\"40\"\
+      \ height=\"40\" fill=\"#ddd\" />\r\n    <rect x=\"250\" y=\"0\" width=\"40\"\
+      \ height=\"40\" fill=\"#ddd\" />\r\n  </g>\r\n   -->\r\n  \r\n  <!-- 脚注 -->\r\
+      \n  <text x=\"50%\" y=\"95%\" text-anchor=\"middle\" font-size=\"12\" font-family=\"\
+      Arial\" fill=\"#888\">\r\n    瞎说新语 BY a@antior.cn\r\n  </text>\r\n</svg>\r\n"
+    title: 模板转换
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1732361957157'
+      - result
+      variable: result
+    - value_selector:
+      - sys
+      - query
+      variable: topic
+    - value_selector:
+      - '1732362896572'
+      - text
+      variable: text
+  id: '1732362131496'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '{{ basic_card_2 }}
+
+      {{ block }}
+
+      {{ content }}'
+    title: 请求体合并 - 2
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721662079362'
+      - output
+      variable: basic_card_2
+    - value_selector:
+      - '1721662105551'
+      - output
+      variable: content
+    - value_selector:
+      - '1721694335783'
+      - output
+      variable: block
+  id: '1721662828166'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '{{ basic_card_2 }}
+
+      {{ block }}
+
+      {{ content }}'
+    title: 请求体合并 - 4
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721726329343'
+      - output
+      variable: basic_card_2
+    - value_selector:
+      - '1721726534849'
+      - output
+      variable: content
+    - value_selector:
+      - '1721726352414'
+      - output
+      variable: block
+  id: '1721726637683'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    isInIteration: true
+    iteration_id: '1716911333343'
+    selected: false
+    template: '{{ arg1 }}\SP{{ text }}'
+    title: Combine URL and Summary
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1716911333343'
+      - item
+      variable: arg1
+    - value_selector:
+      - '1716959261724'
+      - text
+      variable: text
+  extent: parent
+  id: '1720758555344'
+  parentId: '1716911333343'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    desc: ''
+    selected: false
+    template: '{{ arg1 }}
+
+      {{ arg2 }}'
+    title: 模版拼接
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1727675554894'
+      - text
+      variable: arg1
+    - value_selector:
+      - '1727675911704'
+      - text
+      variable: arg2
+  id: '1729055989670'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '属于 {{ arg1 }} 的问题
+
+      结果：
+
+      {{ arg2[0].content }}
+
+      '
+    title: Template 2
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1720795163496'
+      - class_name
+      variable: arg1
+    - value_selector:
+      - '1720800425522'
+      - result
+      variable: arg2
+  id: '1720796109721'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"images\": [\n        {\n            \"x\": 0,\n            \"\
+      y\": 0,\n            \"width\": 1080,\n            \"height\": 1440,\n     \
+      \       \"url\": \"{{ background_image }}\",\n            \"borderColor\": \"\
+      #000000\",\n            \"borderWidth\": 0,\n            \"borderRadius\": 0,\n\
+      \            \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\"\
+      : 0,\n            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\"\
+      : 0,\n            \"zIndex\": 0\n        },\n        {\n            \"x\": 440,\n\
+      \            \"y\": 1020,\n            \"width\": 200,\n            \"height\"\
+      : 200,\n            \"url\": \"{{ avatar_url }}\",\n            \"borderColor\"\
+      : \"#000000\",\n            \"borderWidth\": 0,\n            \"borderRadius\"\
+      : 100,\n            \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\"\
+      : 0,\n            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\"\
+      : 0,\n            \"zIndex\": 1\n        }\n    ],\n"
+    title: 小红书 / 微博封面图的图片
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721690435497'
+      - output
+      variable: avatar_url
+    - value_selector:
+      - '1721690524892'
+      - output
+      variable: background_image
+  id: '1721652076777'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"images\": [\n        {\n            \"x\": 0,\n            \"\
+      y\": 0,\n            \"width\": 1080,\n            \"height\": 1440,\n     \
+      \       \"url\": \"{{ output }}\",\n            \"borderColor\": \"#000000\"\
+      ,\n            \"borderWidth\": 0,\n            \"borderRadius\": 0,\n     \
+      \       \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\": 0,\n\
+      \            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\"\
+      : 0,\n            \"zIndex\": 0\n        },\n        {\n            \"x\": 90,\n\
+      \            \"y\": 120,\n            \"width\": 900,\n            \"height\"\
+      : 1200,\n            \"url\": \"{{ card_image_url }}\",\n            \"borderColor\"\
+      : \"#000000\",\n            \"borderWidth\": 16,\n            \"borderRadius\"\
+      : 24,\n            \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\"\
+      : 0,\n            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\"\
+      : 0,\n            \"zIndex\": 2\n        }\n    ]\n}"
+    title: 渐变背景 + 内层卡片嵌套
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721662209718'
+      - image_1_url
+      variable: card_image_url
+    - value_selector:
+      - '1721696219141'
+      - output
+      variable: output
+  id: '1721662105551'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"images\": [\n        {\n            \"x\": 0,\n            \"\
+      y\": 0,\n            \"width\": 1920,\n            \"height\": 1080,\n     \
+      \       \"url\": \"{{ background_image }}\",\n            \"borderColor\": \"\
+      #000000\",\n            \"borderWidth\": 0,\n            \"borderRadius\": 0,\n\
+      \            \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\"\
+      : 0,\n            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\"\
+      : 0,\n            \"zIndex\": 0\n        },\n        {\n            \"x\": 860,\n\
+      \            \"y\": 660,\n            \"width\": 200,\n            \"height\"\
+      : 200,\n            \"url\": \"{{ avatar_url }}\",\n            \"borderColor\"\
+      : \"#000000\",\n            \"borderWidth\": 0,\n            \"borderRadius\"\
+      : 100,\n            \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\"\
+      : 0,\n            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\"\
+      : 0,\n            \"zIndex\": 1\n        }\n    ],\n"
+    title: Bilibili / Youtube 视频封面的图片
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721690435497'
+      - output
+      variable: avatar_url
+    - value_selector:
+      - '1721690524892'
+      - output
+      variable: background_image
+  id: '1721725710609'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"images\": [\n        {\n            \"x\": 0,\n            \"\
+      y\": 0,\n            \"width\": 1080,\n            \"height\": 1440,\n     \
+      \       \"url\": \"{{ output }}\",\n            \"borderColor\": \"#000000\"\
+      ,\n            \"borderWidth\": 0,\n            \"borderRadius\": 0,\n     \
+      \       \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\": 0,\n\
+      \            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\"\
+      : 0,\n            \"zIndex\": 0\n        },\n        {\n            \"x\": 90,\n\
+      \            \"y\": 120,\n            \"width\": 900,\n            \"height\"\
+      : 1200,\n            \"url\": \"{{ card_image_url }}\",\n            \"borderColor\"\
+      : \"#000000\",\n            \"borderWidth\": 16,\n            \"borderRadius\"\
+      : 24,\n            \"borderTopLeftRadius\": 0,\n            \"borderTopRightRadius\"\
+      : 0,\n            \"borderBottomLeftRadius\": 0,\n            \"borderBottomRightRadius\"\
+      : 0,\n            \"zIndex\": 2\n        }\n    ]\n}"
+    title: 渐变背景 + 内层卡片嵌套 - 2
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721726279422'
+      - image_3_url
+      variable: card_image_url
+    - value_selector:
+      - '1721696219141'
+      - output
+      variable: output
+  id: '1721726534849'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "{\n    \"width\": 300,\n    \"height\": 800,\n    \"backgroundColor\"\
+      : \"#E0E0E0\",\n    \"texts\":[\n        {\n            \"x\": 50,\n       \
+      \     \"y\": 80,\n            \"text\": \"{{ author }}\",\n            \"font\"\
+      : \"SourceHanSansSC-Normal\",\n            \"fontSize\": 22,\n            \"\
+      color\": \"#94C0FA\",\n            \"width\": 100,\n            \"textAlign\"\
+      : \"left\"\n        },\n        {\n            \"x\": 50,\n            \"y\"\
+      : 150,\n            \"text\": \"{{ body_text }}\",\n            \"font\": \"\
+      SourceHanSansSC-Bold\",\n            \"fontSize\": 36,\n            \"color\"\
+      : \"#0069ED\",\n            \"width\": 200,\n            \"textAlign\": \"left\"\
+      \n        }\n    ],\n    \"lines\":[\n        {\n            \"startX\": 50,\n\
+      \            \"startY\": 110,\n            \"endX\": 250,\n            \"endY\"\
+      : 110,\n            \"width\": 1,\n            \"color\": \"#A4BADF\",\n   \
+      \         \"zIndex\": 1\n        },\n        {\n            \"startX\": 50,\n\
+      \            \"startY\": 720,\n            \"endX\": 250,\n            \"endY\"\
+      : 720,\n            \"width\": 1,\n            \"color\": \"#A4BADF\",\n   \
+      \         \"zIndex\": 1\n        }\n    ]\n}\n"
+    title: Template
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1721710272051'
+      - author
+      variable: author
+    - value_selector:
+      - '1721710272051'
+      - body_text
+      variable: body_text
+  id: '1721731659123'
+  selected: true
+  type: custom
+- data:
+    desc: ''
+    isInIteration: true
+    iteration_id: '1731576069313'
+    selected: false
+    template: '{{ arg1.url }}'
+    title: 模板转换
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1731576069313'
+      - item
+      variable: arg1
+  id: '1731576098857'
+  parentId: '1731576069313'
+  selected: false
+  type: custom
+  zIndex: 1002
+- data:
+    desc: ''
+    selected: false
+    template: '{{ arg1 | join("\n==============\n") }}'
+    title: 模板转换 2
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1731576069313'
+      - output
+      variable: arg1
+  id: '1731576295463'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "{% for section in output %}\r\n\r\n{{ section }}\r\n\r\n----------------------------------\r\
+      \n\r\n{% endfor %}"
+    title: 输出完整文章
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1719046938333'
+      - output
+      variable: output
+  id: '1719054341069'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: 抱歉网页{{ url }}内容获取失败了
+    title: 模板转换 2
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1718957126125'
+      - url
+      variable: url
+  id: '1719061473923'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '![封面图]({{ arg1 }})'
+    title: 模板转换
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1736694050685'
+      - result
+      variable: arg1
+  id: '1736694293233'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: 你的问题 {{ arg1 }} 不属于dify文档的相关内容，请重新提问。
+    title: Template
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1720794829558'
+      - input
+      variable: arg1
+  id: '1720795972410'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: 用户的问题是：{{ arg1 }}
+    title: 用户问题
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1720794829558'
+      - input
+      variable: arg1
+  id: '1720797295568'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '|URL|Summary|
+
+      |---|---|
+
+      {% for data in arg1 -%}
+
+      |{{data.url}}|{{data.text}}|
+
+      {% endfor -%}'
+    title: Result in Table
+    type: template-transform
+    variables:
+    - value_selector:
+      - '1720759755103'
+      - result
+      variable: arg1
+  id: '1720761482451'
+  selected: false
+  type: custom
+- data:
+    desc: await
+    selected: false
+    template: Made by Dify
+    title: 模板转换
+    type: template-transform
+    variables: []
+  id: '1729477141668'
+  selected: false
+  type: custom
+- data:
+    desc: await
+    selected: false
+    template: Made by Dify
+    title: Template
+    type: template-transform
+    variables: []
+  id: '1729480535118'
+  selected: false
+  type: custom
+- data:
+    desc: 不要添加太多没必要的词
+    selected: false
+    template: OpenAI, Anthropic
+    title: 一般专有名词维护表
+    type: template-transform
+    variables: []
+  id: '1721690653676'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "<form data-format=\"json\">\n  <label for=\"username\">Username:</label>\n\
+      \  <input type=\"text\" name=\"username\" />\n  <label for=\"password\">Password:</label>\n\
+      \  <input type=\"password\" name=\"password\" />\n  <button data-size=\"small\"\
+      \ data-variant=\"primary\">Login</button>\n</form>"
+    title: 登录表单
+    type: template-transform
+    variables: []
+  id: '1730163641212'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "{\n    \"width\": 1080,\n    \"height\": 1440,\n    \"backgroundColor\"\
+      : \"#ffffff\",\n    \"borderColor\": \"#ffffff\",\n    \"borderWidth\": 0,\n\
+      \    \"borderRadius\": 0,\n    \"borderTopLeftRadius\": 0,\n    \"borderTopRightRadius\"\
+      : 0,\n    \"borderBottomLeftRadius\": 0,\n    \"borderBottomRightRadius\": 0,\n"
+    title: 小红书 / 微博封面图的基本设置
+    type: template-transform
+    variables: []
+  id: '1721651774843'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"lines\": [\n        {\n            \"startX\": 30,\n        \
+      \    \"startY\": 720,\n            \"endX\": 1050,\n            \"endY\": 720,\n\
+      \            \"width\": 1,\n            \"color\": \"#E1E1E1\",\n          \
+      \  \"zIndex\": 1\n        }\n    ],\n"
+    title: 小红书 / 微博封面图的线条
+    type: template-transform
+    variables: []
+  id: '1721652199770'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"qrcodes\": [\n        {\n            \"x\": 440,\n          \
+      \  \"y\": 726,\n            \"size\": 200,\n            \"content\": \"https://catjourney.life\"\
+      ,\n            \"foregroundColor\": \"#000000\",\n            \"backgroundColor\"\
+      : \"#FFFFFF\",\n            \"zIndex\": 1\n        }\n    ],\n"
+    title: 小红书 / 微博封面图的二维码
+    type: template-transform
+    variables: []
+  id: '1721652331948'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"blocks\": [\n        {\n            \"x\": 235,\n           \
+      \ \"y\": 268,\n            \"width\": 0,\n            \"height\": 0,\n     \
+      \       \"backgroundColor\": \"#FFFFFF\",\n            \"borderColor\": \"#FFFFFF\"\
+      \n        }\n    ]\n}"
+    title: 小红书 / 微博封面图的矩形修饰
+    type: template-transform
+    variables: []
+  id: '1721652404241'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "{\n    \"width\": 1080,\n    \"height\": 1440,\n    \"backgroundColor\"\
+      : \"#ffffff\",\n    \"borderColor\": \"#ffffff\",\n    \"borderWidth\": 0,\n\
+      \    \"borderRadius\": 0,\n    \"borderTopLeftRadius\": 0,\n    \"borderTopRightRadius\"\
+      : 0,\n    \"borderBottomLeftRadius\": 0,\n    \"borderBottomRightRadius\": 0,\n"
+    title: 卡片嵌套 - 渐变背景
+    type: template-transform
+    variables: []
+  id: '1721662079362'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: 归藏@op7418
+    title: 你的名字
+    type: template-transform
+    variables: []
+  id: '1721690415426'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: https://pic.imgdb.cn/item/669f0a69d9c307b7e97d445a.png
+    title: 你的头像 url
+    type: template-transform
+    variables: []
+  id: '1721690435497'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: https://img.tukuppt.com/bg_grid/00/08/82/jf94HcBCEP.jpg!/fh/350
+    title: 背景图片 url
+    type: template-transform
+    variables: []
+  id: '1721690524892'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"blocks\": [\n        {\n            \"x\": 120,\n           \
+      \ \"y\": 150,\n            \"width\": 900,\n            \"height\": 1200,\n\
+      \            \"backgroundColor\": \"#000000\",\n            \"borderColor\"\
+      : \"#000000\",\n            \"borderWidth\": 16,\n            \"borderRadius\"\
+      : 24,\n            \"zIndex\":1\n        }\n    ],"
+    title: 矩形
+    type: template-transform
+    variables: []
+  id: '1721694335783'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: https://framerusercontent.com/images/JOvrseuQKRFSf0TBU7oMiRfkkg.png
+    title: 渐变背景 Url
+    type: template-transform
+    variables: []
+  id: '1721696219141'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '#000000'
+    title: 正文颜色
+    type: template-transform
+    variables: []
+  id: '1721696385127'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '#000000'
+    title: 名字颜色
+    type: template-transform
+    variables: []
+  id: '1721696847822'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: '150'
+    title: 字体大小
+    type: template-transform
+    variables: []
+  id: '1721698170033'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: 好耶
+    title: 个人偏好小卡片
+    type: template-transform
+    variables: []
+  id: '1721707099211'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "{\n    \"width\": 1920,\n    \"height\": 1080,\n    \"backgroundColor\"\
+      : \"#ffffff\",\n    \"borderColor\": \"#ffffff\",\n    \"borderWidth\": 0,\n\
+      \    \"borderRadius\": 0,\n    \"borderTopLeftRadius\": 0,\n    \"borderTopRightRadius\"\
+      : 0,\n    \"borderBottomLeftRadius\": 0,\n    \"borderBottomRightRadius\": 0,\n"
+    title: Bilibili / Youtube 视频封面的基本设置
+    type: template-transform
+    variables: []
+  id: '1721725359431'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"lines\": [\n        {\n            \"startX\": 30,\n        \
+      \    \"startY\": 720,\n            \"endX\": 1050,\n            \"endY\": 720,\n\
+      \            \"width\": 1,\n            \"color\": \"#E1E1E1\",\n          \
+      \  \"zIndex\": 1\n        }\n    ],\n"
+    title: Bilibili / Youtube 视频封面的线条
+    type: template-transform
+    variables: []
+  id: '1721725911399'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"qrcodes\": [\n        {\n            \"x\": 440,\n          \
+      \  \"y\": 726,\n            \"size\": 200,\n            \"content\": \"https://catjourney.life\"\
+      ,\n            \"foregroundColor\": \"#000000\",\n            \"backgroundColor\"\
+      : \"#FFFFFF\",\n            \"zIndex\": 1\n        }\n    ],\n"
+    title: Bilibili / Youtube 视频封面的二维码
+    type: template-transform
+    variables: []
+  id: '1721725922438'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"blocks\": [\n        {\n            \"x\": 235,\n           \
+      \ \"y\": 268,\n            \"width\": 0,\n            \"height\": 0,\n     \
+      \       \"backgroundColor\": \"#FFFFFF\",\n            \"borderColor\": \"#FFFFFF\"\
+      \n        }\n    ]\n}"
+    title: Bilibili / Youtube 视频封面的矩形
+    type: template-transform
+    variables: []
+  id: '1721725937530'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "{\n    \"width\": 1920,\n    \"height\": 1080,\n    \"backgroundColor\"\
+      : \"#ffffff\",\n    \"borderColor\": \"#ffffff\",\n    \"borderWidth\": 0,\n\
+      \    \"borderRadius\": 0,\n    \"borderTopLeftRadius\": 0,\n    \"borderTopRightRadius\"\
+      : 0,\n    \"borderBottomLeftRadius\": 0,\n    \"borderBottomRightRadius\": 0,\n"
+    title: 卡片嵌套 - 渐变背景 - 2
+    type: template-transform
+    variables: []
+  id: '1721726329343'
+  selected: false
+  type: custom
+- data:
+    desc: ''
+    selected: false
+    template: "    \"blocks\": [\n        {\n            \"x\": 190,\n           \
+      \ \"y\": 210,\n            \"width\": 1600,\n            \"height\": 900,\n\
+      \            \"backgroundColor\": \"#000000\",\n            \"borderColor\"\
+      : \"#000000\",\n            \"borderWidth\": 16,\n            \"borderRadius\"\
+      : 24,\n            \"zIndex\":1\n        }\n    ],"
+    title: 矩形 - 2
+    type: template-transform
+    variables: []
+  id: '1721726352414'
+  selected: false
+  type: custom

@@ -1,0 +1,494 @@
+app:
+  description: ''
+  icon: ''
+  icon_background: '#FFFFFF'
+  mode: workflow
+  name: email_assistant
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/volcengine_maas:0.0.24@d99937d2f1cef247df06e0341558416c768b31bd820af745d2db41d0a5c32a46
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: question-classifier
+      id: 10000001-source-10000002-target
+      source: '10000001'
+      sourceHandle: source
+      target: '10000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 10000002-1-10000003-target
+      source: '10000002'
+      sourceHandle: '1'
+      target: '10000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 10000002-2-10000004-target
+      source: '10000002'
+      sourceHandle: '2'
+      target: '10000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 10000002-3-10000005-target
+      source: '10000002'
+      sourceHandle: '3'
+      target: '10000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 10000002-4-10000006-target
+      source: '10000002'
+      sourceHandle: '4'
+      target: '10000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000003-source-10000007-target
+      source: '10000003'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000004-source-10000007-target
+      source: '10000004'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000005-source-10000007-target
+      source: '10000005'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 10000006-source-10000007-target
+      source: '10000006'
+      sourceHandle: source
+      target: '10000007'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: 接收用户输入的邮件内容和请求类型
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 邮件助手输入
+        type: start
+        variables:
+        - label: 邮件内容
+          max_length: 99999
+          required: true
+          type: paragraph
+          variable: content
+        - label: 请求类型
+          options:
+          - 扩写
+          - 缩写
+          - 风格优化
+          - 写邮件
+          required: true
+          type: select
+          variable: request_type
+        version: '1'
+      height: 144
+      id: '10000001'
+      parentId: null
+      position:
+        x: 30
+        y: 346
+      positionAbsolute:
+        x: 30
+        y: 346
+      selected: false
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        classes:
+        - id: '1'
+          name: 扩写
+        - id: '2'
+          name: 缩写
+        - id: '3'
+          name: 风格优化
+        - id: '4'
+          name: 写邮件
+        desc: 根据用户请求类型进行分类，确定后续处理流程
+        instruction: '请根据用户选择的请求类型进行分类，返回对应的分类ID：
+
+          1. 扩写
+
+          2. 缩写
+
+          3. 风格优化
+
+          4. 写邮件
+
+
+          确保准确识别请求类型并返回有效分类ID'
+        instructions: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        query_variable_selector:
+        - '10000001'
+        - request_type
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: true
+        title: 邮件请求分类器
+        type: question-classifier
+        version: '1'
+      height: 292
+      id: '10000002'
+      parentId: null
+      position:
+        x: 334
+        y: 346
+      positionAbsolute:
+        x: 334
+        y: 346
+      selected: true
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的邮件写作助手，擅长对邮件内容进行扩写。你的任务是根据原始邮件内容，在保持原意的基础上增加细节和丰富度，使邮件更加完整和专业。扩写时要确保逻辑连贯，语气得体，并适当增加必要的背景信息或解释。
+        - role: user
+          text: '请对以下邮件内容进行扩写，保持原意的同时增加细节和丰富度：
+
+
+            {{#10000001.content#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 邮件扩写
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 90
+      id: '10000003'
+      parentId: null
+      position:
+        x: 638
+        y: 346
+      positionAbsolute:
+        x: 638
+        y: 346
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的邮件写作助手，擅长对邮件内容进行精简。你的任务是根据原始邮件内容，提取核心信息并生成简洁版本，在保留所有关键信息的同时减少字数。确保精简后的邮件内容清晰、准确且完整。
+        - role: user
+          text: '请对以下邮件内容进行精简，保留所有关键信息的同时减少字数：
+
+
+            {{#10000001.content#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 邮件缩写
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 90
+      id: '10000004'
+      parentId: null
+      position:
+        x: 638
+        y: 476
+      positionAbsolute:
+        x: 638
+        y: 476
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据专业、友好或正式等不同风格要求重写邮件
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的邮件写作助手，擅长根据不同的风格要求优化邮件内容。你的任务是根据原始邮件内容，在保持原意的基础上，按照指定的风格（专业、友好或正式）重写邮件。确保调整语气和表达方式，同时保留所有关键信息。
+        - role: user
+          text: '请根据以下风格要求优化邮件内容：
+
+
+            风格要求：{{#10000002.class_name#}}
+
+
+            邮件内容：
+
+            {{#10000001.content#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 邮件风格优化
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 134
+      id: '10000005'
+      parentId: null
+      position:
+        x: 638
+        y: 606
+      positionAbsolute:
+        x: 638
+        y: 606
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 根据用户提供的关键点和要求从头撰写新邮件
+        model:
+          completion_params:
+            temperature: 0.2
+            top_p: 0.6
+          mode: chat
+          name: deepseek-v3-250324
+          provider: langgenius/volcengine_maas/volcengine_maas
+        prompt_template:
+        - role: system
+          text: 你是一位专业的邮件写作助手，擅长撰写各种类型的商务邮件。请根据用户提供的关键点和要求，生成一封结构清晰、内容完整、符合邮件格式的专业邮件。邮件应包括适当的问候语、正文内容和结尾礼貌用语。
+        - role: user
+          text: '请根据以下关键点和要求撰写一封完整的邮件：
+
+
+            邮件主题：{{#10000001.content#}}
+
+
+            收件人信息：{{#10000002.class_name#}}
+
+
+            具体要求：{{#10000001.request_type#}}'
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 邮件撰写
+        type: llm
+        variables: []
+        version: '1'
+        vision:
+          configs:
+            detail: high
+            variable_selector: []
+          enabled: false
+      height: 134
+      id: '10000006'
+      parentId: null
+      position:
+        x: 638
+        y: 780
+      positionAbsolute:
+        x: 638
+        y: 780
+      type: custom
+      width: 244
+      zIndex: 1
+    - data:
+        desc: 向用户展示最终处理结果
+        output_type: object
+        outputs:
+        - value_selector:
+          - '10000003'
+          - text
+          variable: expanded_email
+        - value_selector:
+          - '10000004'
+          - text
+          variable: condensed_email
+        - value_selector:
+          - '10000005'
+          - text
+          variable: styled_email
+        - value_selector:
+          - '10000006'
+          - text
+          variable: new_email
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 0
+        selected: false
+        title: 邮件处理结果
+        type: end
+        version: '1'
+      height: 196
+      id: '10000007'
+      parentId: null
+      position:
+        x: 942
+        y: 476
+      positionAbsolute:
+        x: 942
+        y: 476
+      type: custom
+      width: 244
+      zIndex: 1
+    viewport:
+      x: 215.20000000000005
+      y: 50.19999999999999
+      zoom: 0.7
