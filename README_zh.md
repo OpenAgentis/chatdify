@@ -9,7 +9,7 @@
 ```bash
 git clone --recurse-submodules --shallow-submodules https://github.com/OpenAgentis/chatdify.git
 cd chatdify && pip install -e ".[dify]"
-chatdify init                                   
+chatdify init         # 配置LLM                          
 chatdify generate "把用户输入的文本翻译成指定语言的文本" -o translate.yml
 ```
 
